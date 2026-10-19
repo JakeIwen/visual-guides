@@ -15,11 +15,13 @@
   <a href="#page">The page</a>
   <a href="#keep">Keep running</a>
   <a href="#find">Find sessions</a>
+<a href="#transcripts">Search transcripts</a>
   <a href="#details">Details</a>
   <a href="#bulk">Several at once</a>
   <a href="#new">New session</a>
   <a href="#delete">Delete and restore</a>
   <a href="#codex">Codex sessions</a>
+  <a href="#mac">Mac sessions</a>
   <a href="#cli">From a shell</a>
   <a href="#service">Where it lives</a>
   <a href="#troubleshooting">Troubleshooting</a>
@@ -29,12 +31,12 @@
 <main>
 <h1>LLM Switchboard</h1>
 <dl class="facts">
-  <dt>Use</dt><dd>Keep chosen Claude Code sessions running on vanpi with Remote Control on, so the phone can always reach them, and manage every Claude Code and Codex session on the Pi in one place: search, rename, fork, move, delete with undo, start new ones.</dd>
+  <dt>Use</dt><dd>Keep chosen Claude Code sessions running on vanpi with Remote Control on, so the phone can always reach them, and manage every Claude Code and Codex session on the Pi in one place: search (inside transcripts too), rename, fork, move, delete with undo, start new ones. The Mac's sessions show too while it is awake, pushed from the Mac.</dd>
   <dt>Open</dt><dd><a href="http://vanpi:8777">vanpi:8777</a> over Tailscale only (the Pi's MagicDNS name or <code>tailscale ip -4</code> address), or <code>127.0.0.1:8777</code> on the Pi itself. Not from the van LAN. No login; anyone on the tailnet can use it.</dd>
   <dt>Kind</dt><dd>A user systemd service on the Pi (<code>llm-switchboard</code>): a supervisor that runs sessions in tmux, plus this web page and a CLI. Python standard library, no build step.</dd>
   <dt>Source</dt><dd><code>~/dev/llm-switchboard</code> on the Pi · <code>JakeIwen/llm-switchboard</code> (private). The service runs from that checkout.</dd>
-  <dt>Status</dt><dd><span class="tag ok">In daily use</span> Codex support added 2026-10-15 on an API Codex marks experimental.</dd>
-  <dt>Updated</dt><dd>2026-10-17</dd>
+  <dt>Status</dt><dd><span class="tag ok">In daily use</span> Codex support added 2026-10-15 on an API Codex marks experimental. Mac sessions added 2026-10-18; transcript search 2026-10-19.</dd>
+  <dt>Updated</dt><dd>2026-10-19</dd>
 </dl>
 
 <section id="page">
@@ -83,7 +85,7 @@
     <div class="m-bulk"><b>2 selected</b><span class="m-btn">Keep running</span><span class="m-btn">Stop keeping</span><span class="m-btn">Move to folder…</span><span class="m-btn danger">Delete</span><span class="m-btn">Select all</span><span class="m-btn">✕</span><span class="k">13</span></div>
   </div>
   <ol class="callouts">
-    <li><span class="k">1</span><span>Host, how many sessions are kept running, and how many of those currently have Remote Control connected.</span></li>
+    <li><span class="k">1</span><span>Host, how many sessions are kept running, and how many of those currently have Remote Control connected. Once the Mac has pushed, also <code>m4mac: online</code> or <code>offline, last seen HH:MM</code> (<a href="#mac">Mac sessions</a>).</span></li>
     <li><span class="k">2</span><span>Start a session in an existing folder (<a href="#new">New session</a>). Key: <kbd>n</kbd>.</span></li>
     <li><span class="k">3</span><span>Search; <strong>?</strong> opens the syntax. Every word must match; see <a href="#find">Find sessions</a>.</span></li>
     <li><span class="k">4</span><span>Two filters: <strong>All / Kept running / Open now</strong> (open in any claude process, including SSH terminals) and <strong>All tools / Claude / Codex</strong>. The tool switch is remembered per browser and hidden when Codex support is off.</span></li>
@@ -139,6 +141,23 @@
     <tr><td class="lead-cell"><code>age:&lt;2d</code> · <code>age:&gt;1w</code></td><td data-label="Matches">Last activity newer or older than that; units m, h, d, w.</td></tr>
   </tbody></table></div>
   <p class="small">An unparseable term shows a message under the toolbar instead of matching nothing. <kbd>/</kbd> jumps to the search box from anywhere on the page.</p>
+  <h3 id="transcripts">Search inside transcripts</h3>
+  <p><strong>Transcripts</strong>, next to the search box, switches it to searching what was said in the Pi's Claude Code and Codex sessions, both tools in one list, newest match first. Type a query and press <kbd>Enter</kbd>; <kbd>Esc</kbd>, the button again, or clearing the box goes back to the session list as it was. The folder chips, filters and sort are hidden meanwhile.</p>
+  <ul class="plain-list">
+    <li>Each result shows the session, how many records match, when the latest one was, and its text around the match.</li>
+    <li><strong>Open matches</strong> lists up to a dozen matches with the record before and after each, labelled You, Reply or Tool, and a copyable <code>claudepd --resume</code> or <code>codexp resume</code> line.</li>
+    <li>Mac sessions appear only when the words are in their title or folder ("title/folder match only"), with their resume command: their text never leaves the Mac.</li>
+    <li>The line under the toolbar says how many sessions the index holds and when it last caught up.</li>
+  </ul>
+  <div class="table-wrap"><table class="stack"><thead><tr><th>Term</th><th>Matches</th></tr></thead><tbody>
+    <tr><td class="lead-cell"><code>word another</code> · <code>"two words"</code></td><td data-label="Matches">All the words in one record (a prompt, a reply, a tool result), or an exact phrase. Whole words, case and accents ignored.</td></tr>
+    <tr><td class="lead-cell"><code>-word</code> · <code>-"a phrase"</code></td><td data-label="Matches">Leaves out sessions where it appears anywhere.</td></tr>
+    <tr><td class="lead-cell"><code>tool:claude</code> · <code>tool:codex</code></td><td data-label="Matches">One tool only.</td></tr>
+    <tr><td class="lead-cell"><code>dir:obd</code></td><td data-label="Matches">Part of the session's folder.</td></tr>
+    <tr><td class="lead-cell"><code>by:me</code> · <code>by:reply</code> · <code>by:tool</code></td><td data-label="Matches">Only your prompts; only replies and thinking; only tool output. Codex's labels are a best guess from its record types.</td></tr>
+    <tr><td class="lead-cell"><code>age:&lt;2d</code> · <code>after:2026-10-01</code> · <code>before:2026-10-18</code></td><td data-label="Matches">By the session's last activity.</td></tr>
+  </tbody></table></div>
+  <p class="small">The index lives on the Pi and updates itself every 30 seconds at low priority, reading only what was added. Its first build reads every transcript and can take an hour or more; searches find nothing until it finishes. A query that would take over 5 seconds is stopped: add a rarer word or a phrase. What counts as conversation text follows the <code>claudesearch</code> and <code>codexsearch</code> shell scripts, except that Codex's encrypted reasoning and pasted images are left out.</p>
   <h3>Sort</h3>
   <p>The drop-down at the end of the toolbar orders whatever the search and filters leave. Ties keep the previous order, so "Folder, then recent" lists each folder's sessions newest first.</p>
   <div class="table-wrap"><table class="stack"><thead><tr><th>Order</th><th>Use it for</th></tr></thead><tbody>
@@ -226,6 +245,51 @@ llm-switchboard new ~/dev/can-fd "decoder cleanup" --codex "tidy the DBC loader 
   <p class="small">Same-name rule across both: a Codex session cannot take a Claude session's name in the same folder, or the other way round. Short ids are the last 8 characters for Codex (its ids are time-ordered, so the first 8 collide) and the first 8 for Claude.</p>
 </section>
 
+<section id="mac">
+  <h2>Mac sessions</h2>
+  <p>The Mac's Claude Code and Codex sessions appear in the same list, tagged <strong>Mac</strong>, while the Mac is awake. The Mac does the work: a launchd job there runs the same package, computes its own rows every 10 seconds and pushes them to the Pi over SSH with a key of its own, which the Pi accepts for one command only. The Mac opens no port and runs no web page, and the Pi has no way into the Mac.</p>
+  <div class="mock" aria-label="Mock-up of a Mac row">
+    <div class="m-card">
+      <div class="m-row"><span class="m-check"></span><span class="m-tool">Mac</span>
+        <div class="m-main"><div class="m-title">Telemetry dashboard layout</div>
+          <div class="m-meta"><u>/Users/…/dev/obd-things</u><span>12m ago</span><code>5e0d41b2</code><span>2.1 MB</span></div>
+          <div class="m-badges"><span class="m-badge info">m4mac · online · Claude</span></div></div>
+        <div class="m-side"><span>▴</span><span>×</span></div></div>
+      <div class="m-panel">
+        <div><label>Title</label><div class="m-line"><span class="m-input">Telemetry dashboard layout</span><span class="m-btn">Rename</span></div></div>
+        <div><label>Working folder on the Mac</label><div class="m-line"><span class="m-input">/Users/…/dev/obd-things</span><span class="m-btn">Move</span></div></div>
+        <div class="m-actions"><span class="m-btn">Fork on the Mac…</span><span class="m-btn">Fork onto the Pi…</span><span class="m-btn">Delete</span></div>
+        <div><label>Resume in a shell on the Mac</label><div class="m-line"><span class="m-cmd">cd -- /Users/…/dev/obd-things &amp;&amp; claude --resume 5e0d41b2-…</span><span class="m-btn">Copy</span></div></div>
+      </div>
+    </div>
+  </div>
+  <ul class="plain-list">
+    <li><strong>Online or not</strong> is judged only from the last push. After 35 seconds without one, the header says <code>m4mac: offline, last seen HH:MM</code>, the Mac's rows grey out, and their actions are disabled until it pushes again. Nothing pings the Mac.</li>
+    <li><strong>What crosses:</strong> ids, titles, folder, times, size and whether the session is open or busy. Prompts, replies and terminal screens stay on the Mac, so a Mac row has no Recent messages, Terminal screen, keep-running switch or Restart, the search box matches it by title and folder only, and a session with no title shows as <code>(untitled)</code> rather than its first prompt.</li>
+    <li><strong>Actions are queued</strong>, and the Mac runs them on its next push after checking them itself: <strong>Rename</strong>, <strong>Move</strong>, <strong>Fork on the Mac…</strong> (never started or kept running), <strong>Delete</strong> to the Mac's own trash, and <strong>Restore</strong> from Recently deleted. Nothing that starts a process or sends a prompt can be queued. The Mac refuses a session that is open in a claude process there, or a Codex session working on a turn.</li>
+    <li><strong>Fork onto the Pi…</strong> (Claude sessions only) is the one way a conversation leaves the Mac. The Mac posts a notification, logs the upload and sends that one transcript (at most 16 MiB, 10 uploads an hour). It becomes a new Pi session, not running, in the Pi folder with the same path under the home folder (<code>~/dev/obd-things</code> on the Mac goes to <code>~/dev/obd-things</code> on the Pi), which must already exist there. Its name must be free in that folder.</li>
+    <li><strong>Mac Codex sessions</strong> need the Codex daemon running on the Mac for any action; without it they are listed from disk, read-only. They have no Move and no Fork onto the Pi.</li>
+    <li>The resume command uses plain <code>claude --resume</code> or <code>codex resume</code>, to paste into a shell on the Mac.</li>
+  </ul>
+  <h3>Action status</h3>
+  <p>A box above the list shows the last ten minutes of Mac actions, each with its state:</p>
+  <div class="table-wrap"><table class="stack"><thead><tr><th>State</th><th>Meaning</th></tr></thead><tbody>
+    <tr><td class="lead-cell">queued</td><td data-label="Meaning">Waiting for the Mac's next push.</td></tr>
+    <tr><td class="lead-cell">queued (delivered; awaiting result)</td><td data-label="Meaning">The Mac has it; its result comes back within seconds.</td></tr>
+    <tr><td class="lead-cell">done</td><td data-label="Meaning">The Mac did it. A fork names the new session's id.</td></tr>
+    <tr><td class="lead-cell">failed</td><td data-label="Meaning">The Mac (or, for Fork onto the Pi, the Pi) refused it; the reason follows.</td></tr>
+    <tr><td class="lead-cell">expired</td><td data-label="Meaning">60 seconds passed. "Nothing ran on the Mac" if it was never delivered; "outcome unknown" if the Mac got it but no answer came back, so check before retrying. An action is never sent twice.</td></tr>
+  </tbody></table></div>
+  <p class="small">One action per Mac session at a time. <strong>Keep running</strong> and <strong>Stop keeping</strong> in the bar skip Mac rows; Move and Delete there queue them. <strong>Empty Pi trash now</strong> leaves the Mac's trash alone; it empties itself after 30 days.</p>
+  <h3>Setting up the Mac</h3>
+  <p>On the Mac, with Homebrew's Python 3.11 or newer, clone the repo and run its setup script. It creates the key <code>~/.ssh/llm-switchboard-m4mac</code>, installs it on the Pi with <code>host-authorize</code> over the Mac's normal SSH login to <code>vanpi</code>, pushes once, and loads the launchd job <code>dev.llm-switchboard.host-agent</code>.</p>
+  <div class="code"><pre><code>git clone https://github.com/JakeIwen/llm-switchboard.git ~/dev/llm-switchboard
+bash ~/dev/llm-switchboard/scripts/setup-mac.sh
+cd ~/dev/llm-switchboard &amp;&amp; /opt/homebrew/bin/python3 -m llm_switchboard host-install --unload   # stop it
+tail -f ~/Library/Logs/llm-switchboard/agent-error.log</code></pre></div>
+  <p class="small">The key's line in the Pi's <code>~/.ssh/authorized_keys</code> is <code>restrict,command="…/bin/llm-switchboard host-exchange m4mac" …</code>: no shell, no terminal, no forwarding. Each push is one <code>ssh</code> run carrying JSON both ways, over a shared connection so it stays cheap. After Homebrew upgrades Python to a new version, run <code>host-install</code> again.</p>
+</section>
+
 <section id="cli">
   <h2>From a shell</h2>
   <p>Everything the page does, from any shell on the Pi. Ids can be any unique prefix; Codex sessions also go by the short id <code>list</code> shows.</p>
@@ -239,7 +303,11 @@ llm-switchboard new --list
 llm-switchboard new ~/dev/obd-things "what it's for"
 llm-switchboard new ~/dev/obd-things "logger" --codex "add a logger"
 llm-switchboard fork c96934f7 "try another approach" [--folder ~/dev] [--keep]
+llm-switchboard search 'can decoder by:me'      # transcript search; same terms as the page
+llm-switchboard search 'can decoder' --session codex:019f   # one result's matches in context
+llm-switchboard index                # catch the transcript index up now
 llm-switchboard stop-all             # kill the tmux server and every session in it
+llm-switchboard host-authorize m4mac &lt; key.pub   # install a Mac's restricted key (the setup script runs it over SSH)
 journalctl --user -u llm-switchboard -f</code></pre></div>
 </section>
 
@@ -248,7 +316,8 @@ journalctl --user -u llm-switchboard -f</code></pre></div>
   <ul class="plain-list">
     <li>Checkout <code>~/dev/llm-switchboard</code>; the service runs <code>bin/llm-switchboard serve</code> from it, so a code change needs <code>systemctl --user restart llm-switchboard</code>. Running sessions are untouched: the tmux server is in its own systemd scope and the restarted supervisor adopts the windows.</li>
     <li>User unit <code>llm-switchboard</code>, started at boot through <code>loginctl enable-linger pi</code>. Port 8777, on localhost and the Tailscale address only; it answers only localhost and Tailscale peers, and binds the Tailscale address once Tailscale is up. <code>serve --host ADDR</code> (repeatable, <code>tailscale</code> for that address) changes where it listens.</li>
-    <li>State: <code>~/.config/llm-switchboard/sessions.json</code> (enabled sessions) and <code>codex-trash.json</code> (Codex sessions deleted here); trash in <code>~/.local/share/llm-switchboard/trash/</code>.</li>
+    <li>State: <code>~/.config/llm-switchboard/sessions.json</code> (enabled sessions) and <code>codex-trash.json</code> (Codex sessions deleted here); trash in <code>~/.local/share/llm-switchboard/trash/</code>; what the Mac last pushed, and its action queue, in <code>~/.local/share/llm-switchboard/hosts/m4mac.json</code>; the transcript search index in <code>~/.local/share/llm-switchboard/transcript-search.sqlite3</code> (safe to delete; it rebuilds).</li>
+    <li>On the Mac: the launchd job <code>~/Library/LaunchAgents/dev.llm-switchboard.host-agent.plist</code>, logs (including every upload) in <code>~/Library/Logs/llm-switchboard/</code>, its record of actions run and the upload quota in <code>~/.config/llm-switchboard/</code>, its trash in <code>~/.local/share/llm-switchboard/trash/</code>.</li>
     <li>Sessions are the same files Claude Code uses, <code>~/.claude/projects/*/*.jsonl</code>, read in place; Codex sessions come from the daemon socket under <code>~/.codex/app-server-control/</code>.</li>
     <li>Tests: <code>python3 -m unittest discover -s tests</code> and <code>tests/browser/run.sh</code> (headless Chromium against a fake home and a fake Codex daemon). The repo's AGENTS.md asks for this guide to be updated with any change in behaviour.</li>
   </ul>
@@ -266,6 +335,10 @@ journalctl --user -u llm-switchboard -f</code></pre></div>
     <tr><td class="lead-cell">"already has a session named …"</td><td data-label="Fix">Names are unique per folder across both tools. Pick another name, or rename the other one.</td></tr>
     <tr><td class="lead-cell">"Codex sessions unavailable: …"</td><td data-label="Fix">The daemon is not running or its API changed. <code>codex app-server daemon start</code>; if it is running, Codex updated itself and the client needs a fix. The Claude side keeps working meanwhile.</td></tr>
     <tr><td class="lead-cell">A Codex delete will not go through</td><td data-label="Fix">It is working on a turn; wait for <strong>Working</strong> to clear. If it is already in Recently deleted and refuses to purge, a fork still points at it and it stays archived in Codex, which is harmless.</td></tr>
+    <tr><td class="lead-cell">Mac rows missing or offline</td><td data-label="Fix">On the Mac: <code>launchctl print gui/$(id -u)/dev.llm-switchboard.host-agent</code> and <code>tail ~/Library/Logs/llm-switchboard/agent-error.log</code>. "Permission denied (publickey)" means the key line is missing on the Pi: run the setup script again. A Mac asleep or off the network simply shows as offline.</td></tr>
+    <tr><td class="lead-cell">A Mac action failed or expired</td><td data-label="Fix">The status box gives the reason: the session is open on the Mac, the name is taken, the folder does not exist there, or the Mac went to sleep before the push. "Outcome unknown" means the Mac got it but its answer was lost: look at the row after the next push before retrying.</td></tr>
+    <tr><td class="lead-cell">Fork onto the Pi refused</td><td data-label="Fix">The same folder must exist on the Pi (<code>mkdir</code> it, or move the session on the Mac first), the name must be free there, the transcript under 16 MiB, and fewer than 10 uploads in the last hour. The Mac refuses the upload if it cannot post its notification.</td></tr>
+    <tr><td class="lead-cell">Transcript search finds nothing</td><td data-label="Fix">Look at the line under the toolbar. "not built yet" or "updating" with no sessions: the first build is still running. "index error": <code>llm-switchboard index</code> shows the error in a shell. Remember all the words must be in one record, and words match whole (<code>decod</code> will not find <code>decoder</code>).</td></tr>
     <tr><td class="lead-cell">A new Codex session never appears</td><td data-label="Fix">Codex only saves a session after its first message is accepted. Check the daemon is up with <code>codex app-server daemon version</code>, and the page for a "Codex sessions unavailable" line.</td></tr>
   </tbody></table></div>
 </section>
