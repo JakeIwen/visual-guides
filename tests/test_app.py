@@ -212,14 +212,16 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(transport.commands, [])
 
     def test_ambiguous_transport_failure_still_starts_rate_limit(self) -> None:
+        # The send outlasts the interval, so only a cooldown restarted after
+        # the failure refuses the retry. The margin absorbs a loaded machine.
         transport = FakeTransport(
-            RuntimeError("uncertain send"), delay_seconds=0.03
+            RuntimeError("uncertain send"), delay_seconds=1.0
         )
         config = self.config(
             hardware_enabled=True,
             token="valid-token-that-is-long-enough",
             transport=transport,
-            min_transmit_interval=0.02,
+            min_transmit_interval=0.5,
         )
         headers = {
             "Content-Type": "application/json",
