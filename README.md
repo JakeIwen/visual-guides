@@ -19,6 +19,9 @@ This standalone repository retains the guide history extracted from
   Static reference only; it reads no captures.
 - [Claude /clean](http://vanpi.lan:8791/guides/clean-output.html): the
   clean-output Claude Code mod: usage, before/after output, adding filters.
+- [llmrestore](http://vanpi.lan:8791/guides/llmrestore.html): reopening Claude
+  Code and Codex sessions after a reboot, the restore window, Pi sessions from
+  the Mac and the snapshot cron.
 
 Python 3.10+ standard library only; no npm build, external fonts, or CDN.
 Node is used for JavaScript checks and optional npm command aliases.

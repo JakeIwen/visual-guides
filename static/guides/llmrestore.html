@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>llmrestore · Visual Guides</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Visual Guides &amp; Documentation</a><span aria-hidden="true">/</span><span aria-current="page">llmrestore</span></nav>
+<div class="page">
+<nav class="toc" aria-label="Sections">
+  <a href="#usage">Usage</a>
+  <a href="#output">Reading the output</a>
+  <a href="#window">How far back</a>
+  <a href="#skips">What it never reopens</a>
+  <a href="#terminals">Where sessions open</a>
+  <a href="#pi">Pi sessions from the Mac</a>
+  <a href="#cron">The snapshot cron</a>
+  <a href="#commands">The resume command</a>
+  <a href="#files">Where it lives</a>
+  <a href="#limits">Limits</a>
+  <a href="#troubleshooting">Troubleshooting</a>
+  <a href="https://github.com/JakeIwen/visual-guides/blob/main/static/guides/llmrestore.html">Source</a>
+  <a href="https://github.com/JakeIwen/visual-guides/commits/main/static/guides/llmrestore.html">History</a>
+</nav>
+<main>
+<h1>llmrestore</h1>
+<dl class="facts">
+  <dt>Use</dt><dd>After a reboot (or after closing terminals by hand), reopen every Claude Code and Codex session that was open, each resumed in its own folder with its original options.</dd>
+  <dt>Command</dt><dd><code>llmrestore</code>, an alias in <code>~/.zshrc</code> on the Mac and <code>~/.bashrc</code>/<code>~/.zshrc</code> on the Pi.</dd>
+  <dt>Source</dt><dd><code>~/dev/scripts/shared/sh/llm_restore.py</code> (one file, standard library only). The Pi runs a copy at <code>/home/pi/scripts/llm_restore.py</code>.</dd>
+  <dt>Records</dt><dd>A cron job snapshots the open sessions every minute on both hosts.</dd>
+  <dt>Safety</dt><dd>Never opens a session that is already open, was launched in the last 2 minutes, or is kept running by LLM Switchboard. <code>-n</code> previews without opening anything.</dd>
+  <dt>Status</dt><dd><span class="tag ok">Snapshots running on both hosts · 34 tests pass</span> Restores verified with dry runs against real sessions and test launches; the first real post-reboot restore is still to come.</dd>
+  <dt>Updated</dt><dd>2026-10-19</dd>
+</dl>
+
+<section id="usage">
+  <h2>Usage</h2>
+  <div class="table-wrap"><table><thead><tr><th>Command</th><th>Does</th></tr></thead><tbody>
+    <tr><td><code>llmrestore</code></td><td>Reopen the recorded sessions that aren't open now.</td></tr>
+    <tr><td><code>llmrestore -n</code></td><td>Dry run: print what it would open and skip, and open nothing. Also <code>--dry-run</code>.</td></tr>
+    <tr><td><code>llmrestore -m 45</code></td><td>Also reopen sessions closed up to 45 minutes before the last snapshot. Default 30, max 1440. Also <code>--minutes</code>.</td></tr>
+    <tr><td><code>llmrestore -H 2</code></td><td>The same window in hours; decimals work (<code>-H 1.5</code>). Max 24. Use <code>-m</code> or <code>-H</code>, not both.</td></tr>
+    <tr><td><code>llmrestore --force</code></td><td>Reopen even sessions launched in the last 2 minutes.</td></tr>
+    <tr><td><code>llmrestore --pi</code></td><td>On the Mac: reopen the Pi's sessions as iTerm tabs over SSH. See <a href="#pi">Pi sessions from the Mac</a>.</td></tr>
+    <tr><td><code>llmrestore --cron</code></td><td>Status: whether snapshots are on, the last snapshot, and how many sessions a restore would reopen.</td></tr>
+    <tr><td><code>llmrestore --cron off</code> / <code>on</code></td><td>Pause or resume the every-minute snapshot.</td></tr>
+    <tr><td><code>llmrestore --snapshot</code></td><td>Record the open sessions right now, without waiting for the cron minute.</td></tr>
+    <tr><td><code>llmrestore -h</code></td><td>The flag list.</td></tr>
+  </tbody></table></div>
+  <p>Flags combine: <code>llmrestore --pi -H 2 -n</code> previews the Pi's sessions from the last two hours.</p>
+  <p class="small">Run a dry run first after a reboot if you closed some sessions on purpose before shutting down; the window below decides whether they come back.</p>
+</section>
+
+<section id="output">
+  <h2>Reading the output</h2>
+  <p>Each recorded session gets one line: <code>skip</code> with the reason, or <code>open</code> (<code>would open</code> in a dry run) with when it was last seen and the exact command that resumes it.</p>
+  <div class="code"><pre><code>$ llmrestore -n
+skip  claude api-3f: already open
+skip  claude notes-61: kept running by llm-switchboard
+skip  claude scratch-f2: transcript not found
+would open  claude api-d3  (open at 2026-10-18 23:41)
+      cd -- /Users/jacobr/dev/api &amp;&amp; command claude --permission-mode bypassPermissions --resume 2b9c…
+would open  codex Fix the import  (closed 4m before the last snapshot, last seen 2026-10-18 23:37)
+      cd -- /Users/jacobr/dev/site &amp;&amp; command codex -s workspace-write resume 019a…
+(3 closed more than 30 minutes before the last snapshot; widen with -m or -H)</code></pre></div>
+  <p class="small">Illustrative names and ids; the format is the tool's. A session is labelled by its title, or its id when it has none.</p>
+  <div class="table-wrap"><table><thead><tr><th>Wording</th><th>Means</th></tr></thead><tbody>
+    <tr><td><code>open at …</code></td><td>The session was still open in the last snapshot. After a reboot that is the usual case: the last snapshot before shutdown.</td></tr>
+    <tr><td><code>closed 4m before the last snapshot</code></td><td>It had already closed when that snapshot ran. Shutdown closes terminals one by one, so these are normal too.</td></tr>
+    <tr><td><code>(3 closed more than 30 minutes …)</code></td><td>Older sessions are still recorded (for 24 hours) but outside the window. Rerun with <code>-H 2</code> or similar to include them.</td></tr>
+    <tr><td><code>Opened as tabs of a new iTerm window.</code></td><td>Mac result line after a real run.</td></tr>
+    <tr><td><code>Attach with: tmux attach -t llmrestore</code></td><td>Pi result line after a real run.</td></tr>
+    <tr><td><code>Nothing to reopen.</code></td><td>Every recorded session in the window is open or skipped.</td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="window">
+  <h2>How far back</h2>
+  <p>A snapshot keeps every session for 24 hours after it was last seen open, so the minute-by-minute record never empties when terminals close, whether that is the OS quitting them during a restart or you closing them by hand first. The restore then chooses what to reopen by when each session closed, measured from the last snapshot rather than from now:</p>
+  <div class="code"><pre><code>23:05  you close the api session            (recorded, last seen 23:04)
+23:30  you close the rest by hand           (recorded, last seen 23:29)
+23:31  last snapshot before shutdown        ← the window is measured back from here
+       … machine off overnight …
+08:00  llmrestore                           → reopens the 23:29 sessions (2m before)
+       llmrestore -H 1                      → also the api session     (27m before)</code></pre></div>
+  <ul class="plain-list">
+    <li>The list is the current boot's snapshot plus the previous boot's last one. Right after a reboot that is the previous boot's list; a session you have already reopened by hand shows as <code>already open</code>.</li>
+    <li>After a real restore (not a dry run), the previous boot's list is retired: sessions you close afterwards stay closed on the next run. Five boots of snapshots are kept on disk.</li>
+    <li>Sessions closed more than 24 hours before the last snapshot are gone from the record, which is why <code>-H</code> stops at 24.</li>
+  </ul>
+</section>
+
+<section id="skips">
+  <h2>What it never reopens</h2>
+  <div class="table-wrap"><table><thead><tr><th>Skip reason</th><th>Why</th></tr></thead><tbody>
+    <tr><td><code>already open</code></td><td>A live Claude or Codex process already shows that session. Checked at restore time, so running <code>llmrestore</code> twice opens nothing the second time.</td></tr>
+    <tr><td><code>launched under 120s ago (--force to reopen)</code></td><td>A previous run started it moments ago and it hasn't registered yet. Stops a double run from opening everything twice.</td></tr>
+    <tr><td><code>kept running by llm-switchboard</code></td><td>On the Pi, LLM Switchboard restarts its own sessions; llmrestore leaves them to it and never lists the sessions it started.</td></tr>
+    <tr><td><code>transcript not found</code></td><td>The session's transcript file is gone, so a resume would fail.</td></tr>
+  </tbody></table></div>
+  <p class="small">Only interactive terminal sessions are recorded: VS Code Claude sessions, <code>claude -p</code>, <code>codex exec</code> and the Codex app server are ignored.</p>
+</section>
+
+<section id="terminals">
+  <h2>Where sessions open</h2>
+  <ul class="plain-list">
+    <li><strong>Mac:</strong> one new iTerm window, one tab per session. The original window and tab layout isn't reproduced.</li>
+    <li><strong>Pi (run on the Pi):</strong> one tmux session named <code>llmrestore</code>, one window per session named after it. Attach with <code>tmux attach -t llmrestore</code>; a later run adds windows to the same session.</li>
+    <li>Each tab runs the session's resume command in a normal login shell, so when the session exits you are left at a prompt in its folder.</li>
+  </ul>
+</section>
+
+<section id="pi">
+  <h2>Pi sessions from the Mac</h2>
+  <p><code>llmrestore --pi</code> on the Mac asks the Pi which of its sessions to reopen, then opens each as an iTerm tab that SSHes to the Pi and resumes it there, like the SSH tabs they first ran in.</p>
+  <ul class="plain-list">
+    <li>The Pi decides: it applies the window, the already-open check and the switchboard skip against its own processes, and prints its report in your Mac terminal.</li>
+    <li>Each tab runs <code>ssh -t vanpi</code> and, after the session exits, leaves a Pi shell open.</li>
+    <li>The SSH host is <code>vanpi</code> from <code>~/.ssh/config</code> (LAN when reachable, else Tailscale). Set <code>LLM_RESTORE_PI_HOST</code> to use another.</li>
+    <li>Pi sessions opened this way count as open on the Pi, so a later <code>--pi</code> or a tmux restore on the Pi won't duplicate them.</li>
+  </ul>
+</section>
+
+<section id="cron">
+  <h2>The snapshot cron</h2>
+  <p>A managed block in each host's user crontab runs a snapshot every minute. It is part of the tracked crontab files (<code>macbook/crontab</code>, <code>pi/crontab_pi</code> in the scripts repo), so reinstalling either one keeps it.</p>
+  <div class="code"><pre><code>$ llmrestore --cron
+Snapshot cron: ON (every minute)
+Last snapshot: 2026-10-18 23:39, 8 session(s) open
+Restore list: 13 session(s) open or closed within 30 minutes of the last snapshot (18 older, up to 24h) in /Users/jacobr/.local/state/llm-restore/restore</code></pre></div>
+  <ul class="plain-list">
+    <li><code>--cron off</code> pauses snapshots with a flag file and leaves the crontab line alone; reinstalling a crontab can't flip it either way. <code>--cron on</code> clears the flag, takes a snapshot at once, and puts the crontab line back if it is missing or out of date.</li>
+    <li><code>--cron -m 45</code> or <code>-H 2</code> makes the status count sessions within that window instead of 30 minutes.</li>
+    <li>A snapshot that finds a restore in progress skips that minute. Cron doesn't run while the Mac sleeps; the last snapshot before sleep stands.</li>
+    <li>Errors from the cron runs go to <code>~/.local/state/llm-restore/cron.log</code>; the status line <code>Errors were logged to …</code> appears when it isn't empty.</li>
+  </ul>
+</section>
+
+<section id="commands">
+  <h2>The resume command</h2>
+  <p>Every command starts with <code>cd -- &lt;folder&gt; &amp;&amp; command</code>: the session reopens where it ran, and <code>command</code> bypasses shell functions such as a <code>codex</code> wrapper that adds its own flags, so the session's recorded options are used as they were.</p>
+  <div class="table-wrap"><table><thead><tr><th>Tool</th><th>Kept</th><th>Dropped</th></tr></thead><tbody>
+    <tr><td>Claude Code</td><td>Permission mode, model, effort, settings, agents, system prompts, plugin dirs, added dirs, allowed/disallowed tools, MCP config, <code>--remote-control</code>, <code>--chrome</code>, <code>--dangerously-skip-permissions</code> and similar session-wide flags. Ends with <code>--resume &lt;id&gt;</code>.</td><td>The original <code>--resume</code>/<code>--continue</code>/<code>--session-id</code>, worktree and cloud modes, the initial prompt, and any option it doesn't recognise.</td></tr>
+    <tr><td>Codex</td><td><code>-c</code>, <code>--enable</code>/<code>--disable</code>, model, profile, sandbox, approval policy, added dirs, remote options, and unknown boolean flags. Ends with <code>resume &lt;id&gt;</code>.</td><td><code>--cd</code>, images, <code>--last</code>/<code>--all</code>, worktree, and the initial prompt.</td></tr>
+  </tbody></table></div>
+  <p class="small">The conversation itself comes back through the resume; the first prompt is never sent again.</p>
+</section>
+
+<section id="files">
+  <h2>Where it lives</h2>
+  <ul class="plain-list">
+    <li>Script: <code>~/dev/scripts/shared/sh/llm_restore.py</code>, tests in <code>macbook/tests/test_llm_restore.py</code>. Python 3.9+ standard library; the Mac uses <code>/usr/bin/python3</code>.</li>
+    <li>State, private to the user, in <code>~/.local/state/llm-restore/</code>:
+      <ul>
+        <li><code>restore</code>: the generated shell script <code>llmrestore</code> runs. Its comments list each recorded session and its resume command, so it is readable on its own.</li>
+        <li><code>boots/</code>: one snapshot per boot (the last five boots).</li>
+        <li><code>consumed.json</code>: previous boots already restored. <code>launched.json</code>: the 2-minute launch guard.</li>
+        <li><code>cron-off</code>: present while snapshots are paused. <code>cron.log</code>: cron errors. <code>lock</code>: keeps a snapshot and a restore from overlapping.</li>
+      </ul>
+    </li>
+    <li>Sessions are found from <code>~/.claude/sessions/</code> and the running processes for Claude, and from the running Codex TUIs plus Codex's state database in <code>~/.codex/</code> for Codex.</li>
+  </ul>
+</section>
+
+<section id="limits">
+  <h2>Limits</h2>
+  <ul class="plain-list">
+    <li>Window and tab arrangement isn't reproduced; everything lands in one new iTerm window (or one tmux session on the Pi).</li>
+    <li>A Codex TUI that can't be matched to one thread is left out, with a <code>warning: codex pid …</code> line in <code>--snapshot</code> output and in the restore script's comments.</li>
+    <li>A session started and closed between two snapshot minutes is never recorded.</li>
+    <li>On the Mac, iTerm must be installed; macOS may ask once whether the terminal may control iTerm.</li>
+  </ul>
+</section>
+
+<section id="troubleshooting">
+  <h2>Troubleshooting</h2>
+  <div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Fix</th></tr></thead><tbody>
+    <tr><td><code>No sessions recorded. Turn on recording with: llmrestore --cron on</code></td><td>Snapshots are paused or have never run on this host. Run <code>llmrestore --cron</code> to see which, then <code>llmrestore --cron on</code>.</td></tr>
+    <tr><td>A session you expected isn't listed</td><td>It closed more than 30 minutes before the last snapshot. Look for the <code>(N closed more than …)</code> line and rerun with <code>-H 2</code> or wider.</td></tr>
+    <tr><td><code>(the crontab's llm-restore line is missing; --cron on fixes it)</code></td><td>A crontab without the managed block was installed. <code>llmrestore --cron on</code> adds it back.</td></tr>
+    <tr><td><code>Errors were logged to …/cron.log</code></td><td>Read that file; it holds only cron-run errors. Empty it once fixed.</td></tr>
+    <tr><td><code>launched under 120s ago (--force to reopen)</code></td><td>A run moments ago already started it. Wait a minute, or add <code>--force</code> if that launch failed.</td></tr>
+    <tr><td><code>Pi restore failed (ssh vanpi exited 255); nothing opened</code></td><td>The Pi isn't reachable. Check with <code>ssh vanpi true</code>.</td></tr>
+    <tr><td><code>--pi opens iTerm tabs on the Mac</code></td><td>You ran <code>--pi</code> on the Pi. On the Pi, run <code>llmrestore</code> alone and attach to tmux.</td></tr>
+    <tr><td>A traceback ending in <code>osascript</code> … <code>returned non-zero exit status</code></td><td>iTerm automation was refused, or iTerm isn't installed. Allow it in System Settings › Privacy &amp; Security › Automation, then rerun; the launch guard needs <code>--force</code> within 2 minutes.</td></tr>
+  </tbody></table></div>
+</section>
+</main></div>
+</body></html>
