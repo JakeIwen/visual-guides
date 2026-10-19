@@ -18,7 +18,8 @@ This standalone repository retains the guide history extracted from
   obd-things offline CAN report CLI, its manifest format and reading its reports.
   Static reference only; it reads no captures.
 - [Claude /clean](http://vanpi.lan:8791/guides/clean-output.html): the
-  clean-output Claude Code mod: usage, before/after output, adding filters.
+  clean-output Claude Code mod: exchanges with their prompts, last N, all,
+  turn endings, before/after output, adding filters.
 - [llmrestore](http://vanpi.lan:8791/guides/llmrestore.html): reopening Claude
   Code and Codex sessions after a reboot, the restore window, Pi sessions from
   the Mac and the snapshot cron.

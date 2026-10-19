@@ -230,6 +230,8 @@ td.lead-cell { font-weight: 600; }
   font: .84rem/1.55 var(--mono);
 }
 .code pre code { background: none; padding: 0; font-size: inherit; overflow-wrap: normal; }
+/* A terminal line drawn on Claude Code's user-message background, in mock-ups. */
+.code .term-prompt { background: var(--line); color: var(--ink); }
 .copy {
   position: absolute;
   top: .4rem;
