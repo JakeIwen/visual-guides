@@ -26,10 +26,10 @@
 <h1>Claude /clean</h1>
 <dl class="facts">
   <dt>Use</dt><dd>Read or copy your recent Claude Code exchanges, each prompt with its reply, without the <code>Bash(...)</code> calls, collapsed results and search summaries that surround them in the terminal.</dd>
-  <dt>Kind</dt><dd>A Claude Code mod (plugin): one slash command, one pane and one prompt hook. No server, no page, no transcript-file parsing.</dd>
+  <dt>Kind</dt><dd>A Claude Code mod (plugin): one slash command, one pane with a rows line under it, and one prompt hook. No server, no page, no transcript-file parsing.</dd>
   <dt>Source</dt><dd><code>~/dev/scripts/shared/claude-mods/clean-output/</code> · <code>hooks/register.tsx</code> (command, pane, prompt hook) · <code>hooks/clean.ts</code> (filters) · <code>hooks/exchanges.ts</code> and <code>hooks/turn-endings.ts</code> (the two views)</dd>
   <dt>Loaded by</dt><dd><code>env.CLAUDE_CODE_PLUGIN_DIRS</code> in <code>~/.claude/settings.json</code>, so every interactive Mac session has it. Not on the Pi.</dd>
-  <dt>Status</dt><dd><span class="tag ok">Validated · 13 tests pass · type-checks</span> The pane is in use. The prompt band and exchange counting were added 2026-10-19 and replayed against real transcripts, not yet seen in a live pane.</dd>
+  <dt>Status</dt><dd><span class="tag ok">Validated · 18 tests pass · type-checks</span> In daily use. Opening on the newest reply and the rows line were added 2026-10-19 and checked in a live terminal against a fork of a real session.</dd>
   <dt>Updated</dt><dd>2026-10-19</dd>
 </dl>
 
@@ -77,7 +77,7 @@ The editor worker says navigation requests made while a day is still
 being saved will be ignored rather than queued. ...</code></pre></div>
   <h3>Keys while the pane has focus</h3>
   <div class="table-wrap"><table><thead><tr><th>Key</th><th>Does</th></tr></thead><tbody>
-    <tr><td>↑ ↓, PgUp PgDn</td><td>Scroll the pane body.</td></tr>
+    <tr><td>↑ ↓, PgUp PgDn, Home End</td><td>Scroll the pane body: a row, a window, or to either end. The line under the pane follows.</td></tr>
     <tr><td><code>c</code></td><td>Copy everything the command chose, prompts included (the terminal clipboard, or OSC 52 over SSH).</td></tr>
     <tr><td>Esc</td><td>Close the pane and return the keyboard to the prompt.</td></tr>
     <tr><td>Tab, Enter</td><td>Walk to the copy button and press it; same as <code>c</code>.</td></tr>
@@ -88,25 +88,40 @@ being saved will be ignored rather than queued. ...</code></pre></div>
 
 <section id="pane">
   <h2>The pane</h2>
-  <p>Inline above the prompt on a normal terminal, or docked beside the transcript in the fullscreen layout from 110 columns. The first row is a status line. Each exchange follows: your prompt on the theme's user-message background, the same tone the transcript puts behind your own messages, then the reply as markdown.</p>
-  <div class="code"><pre><code>┌ Clean ───────────────────────────────────────────────────────────────────┐
-│ last 2 exchanges (12 in session) · copy · esc closes · arrows scroll     │
+  <p>Inline above the prompt on a normal terminal, or docked beside the transcript in the fullscreen layout from 110 columns. Each exchange is your prompt on the theme's user-message background, the same tone the transcript puts behind your own messages, then the reply as markdown.</p>
+  <p>The pane opens on the newest reply, since that is usually what you came for. When worker messages or notices split the reply, it opens at the start of the last turn, the dim <code>after …</code> line on top; otherwise at the newest prompt. The line under the pane says which rows show and which way more lies. The pane's own first row scrolls away with the rest, so it can't carry that.</p>
+  <h3>As it opens</h3>
+  <div class="code"><pre><code>╭─────────────────────────────────────────────────────────────────────────✕─╮
+│ after a background task finishing                                        │
 │                                                                          │
-│ <span class="term-prompt">oh that sounds useful. `brew install shellcheck` ?                      </span> │
+│ The clean-output session committed and pushed, and the Codex             │
+│ session-search session committed its own work too. You still have two    │
+│ sessions to resume and one unowned AGENTS.md fix to decide on.           │
+│                                                                          │
+│ Resume these two closed Claude sessions (open a new iTerm tab for        │
+│ each):                                                                   │
+│                                                                          │
+│ 1. vanrouter (b50416be). It owns vanrouter/README.md, a note on the      │
+│    mwan3 conntrack flush trim, waiting for your c/p.                     │
+╰──────────────────────────────────────────────────────────────────────────╯
+/clean: rows 95–131 of 145 · more above and below (↑↓ PgUp PgDn)         [-]
+❯ </code></pre></div>
+  <h3>After Home</h3>
+  <div class="code"><pre><code>╭─────────────────────────────────────────────────────────────────────────✕─╮
+│ last 2 exchanges (12 in session) · c: copy · esc closes                  │
+│                                                                          │
+│ <span class="term-prompt"> oh that sounds useful. `brew install shellcheck` ?                     </span> │
 │ Shellcheck installed; fixed its findings. Re-running the deploy checks   │
 │ and wiring them into npm run check.                                      │
 │                                                                          │
-│ I installed shellcheck (brew install shellcheck, version 0.11.0). It     │
-│ found a few warnings in the deploy scripts, which I fixed ...            │
-│                                                                          │
-│ <span class="term-prompt">make cal size reactive to be level with pain/notes side until it        </span> │
-│ <span class="term-prompt">runs out of horizontal space                                            </span> │
+│ <span class="term-prompt"> make cal size reactive to be level with pain/notes side until it       </span> │
+│ <span class="term-prompt"> runs out of horizontal space                                           </span> │
 │ Measuring the current layout at your window size to see how far the      │
 │ calendar falls short of the editor.                                      │
-│  ▼                                                                       │
-└──────────────────────────────────────────────────────────────────────────┘
+╰──────────────────────────────────────────────────────────────────────────╯
+/clean: rows 1–37 of 96 · more below (↓ PgDn End)                        [-]
 ❯ </code></pre></div>
-  <p class="small">Mock-up from the health-calendar session's last exchanges. The frame, title and scroll marks are drawn by Claude Code; the mod supplies the status row, the prompt bands and the markdown. A theme without the user-message key draws the band untinted.</p>
+  <p class="small">Mock-ups from real sessions, shortened; the first matches a live capture of <code>/clean all</code>. Claude Code draws the frame, the ✕ close mark and the band's <code>[-]</code>. The mod supplies the header row, the prompt bands, the markdown and the rows line. With more than one pane open the frame carries a tab row. A theme without the user-message key draws the band untinted.</p>
 </section>
 
 <section id="example">
@@ -193,9 +208,9 @@ claude plugin test .</code></pre></div>
 <section id="install">
   <h2>Where it lives</h2>
   <ul class="plain-list">
-    <li>Source folder: <code>~/dev/scripts/shared/claude-mods/clean-output/</code> in the <code>JakeIwen/scripts</code> checkout. <code>.claude-plugin/plugin.json</code> names it; <code>hooks/hooks.json</code> points at <code>register.tsx</code>; <code>types/index.d.ts</code> declares the two state values: what the pane shows, and the origin of each submitted prompt.</li>
+    <li>Source folder: <code>~/dev/scripts/shared/claude-mods/clean-output/</code> in the <code>JakeIwen/scripts</code> checkout. <code>.claude-plugin/plugin.json</code> names it; <code>hooks/hooks.json</code> points at <code>register.tsx</code>; <code>types/index.d.ts</code> declares the three state values: what the pane shows, the origin of each submitted prompt, and the pane's scroll window.</li>
     <li>Loaded from <code>~/.claude/settings.json</code>: <code>"env": { "CLAUDE_CODE_PLUGIN_DIRS": "~/dev/scripts/shared/claude-mods/clean-output" }</code>. A second mod joins the value with <code>:</code>.</li>
-    <li>Modules: <code>prompt-kinds.ts</code> sorts transcript rows into your prompts, slash commands and injected messages; <code>exchanges.ts</code> and <code>turn-endings.ts</code> build the two views; <code>clean-view.ts</code> holds the pane sections, copy text and drawing budget.</li>
+    <li>Modules: <code>prompt-kinds.ts</code> sorts transcript rows into your prompts, slash commands and injected messages; <code>exchanges.ts</code> and <code>turn-endings.ts</code> build the two views; <code>clean-view.ts</code> holds the pane sections, copy text, drawing budget, where the pane opens and the rows line.</li>
     <li>Interactive sessions watch the folder: a save reloads the module when the folder goes quiet. <code>/reload-plugins</code> forces it.</li>
     <li>Editor types: after the first load, <code>.claude-plugin/types/</code> inside the mod folder holds the API declarations, and <code>tsc -p .</code> type-checks against them. The engine writes that folder and gitignores it.</li>
     <li>Built with the <code>plugin-authoring</code> skill in Claude Code 2.1.300. The plugin API is early access and may change between releases; a break shows as a dim line in the transcript naming the mod and the reason.</li>
@@ -208,7 +223,8 @@ claude plugin test .</code></pre></div>
     <li>Within one assistant message all text comes before its tool lines, because the engine hands the text blocks joined. Across messages the order is right, and with <code>tools</code> off it makes no difference.</li>
     <li>An exchange starts at each of your prompts and at each slash command that got a reply, so a command you ran mid-reply starts a new one. Use <code>/clean 2</code> if the last exchange looks short.</li>
     <li>The mod records where each prompt came from as it is submitted. Rows from before it loaded are sorted by text markers; a scheduled wake-up from that time has no marker and counts as one of your prompts, splitting the exchange.</li>
-    <li>One drawing holds 100,000 characters of markdown. The pane keeps about 90,000 and leaves out the oldest exchanges past that; the status line says how many, and <code>copy</code> still copies all of them.</li>
+    <li>One drawing holds 100,000 characters of markdown. The pane keeps about 90,000 and leaves out the oldest exchanges past that; the header row says how many, and <code>copy</code> still copies all of them.</li>
+    <li>The rows line lives in the band above the prompt, which surveys also use; while one is up the line steps aside. It shows only when the content is taller than the pane.</li>
     <li>An inline pane takes about a third of the screen unless you drag or key it taller; the size you set is kept for the session. The dock is used only in the fullscreen layout.</li>
     <li>Copy goes through Claude Code's clipboard path. Over plain SSH without OSC 52 support the command reports <code>no-clipboard</code>.</li>
     <li>Claude only. Codex has no plugin surface for this; the filter file is portable, the display is not.</li>
@@ -224,6 +240,7 @@ claude plugin test .</code></pre></div>
     <tr><td><code>clean: copy failed (no-clipboard)</code></td><td>The terminal refused the clipboard write. In iTerm2, allow clipboard access in Preferences › General › Selection.</td></tr>
     <tr><td>A dim line names <code>clean-output</code> and a refused hook</td><td>The API changed under a Claude Code update. Run <code>claude plugin validate .</code> in the mod folder; the message names the call.</td></tr>
     <tr><td>One exchange shows up as two</td><td>A wake-up or message from before the mod loaded was counted as your prompt. Prompts submitted after it loaded are sorted exactly; use <code>/clean 2</code> for that session.</td></tr>
+    <tr><td>The pane opens at the top or the very bottom, not at the newest reply</td><td>The pane draws a moment after it opens, and the mod retries for under a second before falling back to the end. Press Home, End or PgUp to move; the rows line shows where you are.</td></tr>
     <tr><td>The prompt band has no tint</td><td>The theme has no user-message background. The built-in themes all do; a custom theme can add <code>userMessageBackground</code>.</td></tr>
     <tr><td>Narration lines clutter the pane</td><td>Add the <code>drop-narration</code> filter from <a href="#filters">Add a filter</a>.</td></tr>
   </tbody></table></div>
