@@ -29,7 +29,7 @@
   <dt>Kind</dt><dd>A Claude Code mod (plugin): one slash command, one pane with a rows line under it, and one prompt hook. No server, no page, no transcript-file parsing.</dd>
   <dt>Source</dt><dd><code>~/dev/scripts/shared/claude-mods/clean-output/</code> · <code>hooks/register.tsx</code> (command, pane, prompt hook) · <code>hooks/clean.ts</code> (filters) · <code>hooks/exchanges.ts</code> and <code>hooks/turn-endings.ts</code> (the two views)</dd>
   <dt>Loaded by</dt><dd><code>env.CLAUDE_CODE_PLUGIN_DIRS</code> in <code>~/.claude/settings.json</code>, so every interactive Mac session has it. Not on the Pi.</dd>
-  <dt>Status</dt><dd><span class="tag ok">Validated · 18 tests pass · type-checks</span> In daily use. Opening on the newest reply and the rows line were added 2026-10-19 and checked in a live terminal against a fork of a real session.</dd>
+  <dt>Status</dt><dd><span class="tag ok">Validated · 18 tests pass · type-checks</span> In daily use. Checked 2026-10-19 in a live terminal: opening on the newest reply, the rows line, running mid-turn, Esc during a turn, and the refresh when a turn ends.</dd>
   <dt>Updated</dt><dd>2026-10-19</dd>
 </dl>
 
@@ -52,9 +52,9 @@
   <h2>Usage</h2>
   <p>Type the command at the Claude Code prompt. An <em>exchange</em> is one of your prompts, or a slash command that got a reply, together with everything the assistant wrote until your next one. Worker messages, background-task notices and scheduled wake-ups that arrive in between stay inside the exchange as one dim line, so a run with subagents reads as one block.</p>
   <div class="table-wrap"><table><thead><tr><th>Command</th><th>Effect</th></tr></thead><tbody>
-    <tr><td><code>/clean</code></td><td>Open the pane with your last exchange, focused.</td></tr>
+    <tr><td><code>/clean</code></td><td>Open the pane with every exchange in the session, focused, scrolled to the newest reply.</td></tr>
+    <tr><td><code>/clean 1</code></td><td>Only your last exchange.</td></tr>
     <tr><td><code>/clean 3</code></td><td>Your last 3 exchanges, oldest first. Any whole number; one larger than the session shows them all.</td></tr>
-    <tr><td><code>/clean all</code></td><td>Every exchange in the session.</td></tr>
     <tr><td><code>/clean turns</code></td><td>The message each turn ended on, for every turn since your last prompt, each band naming what started the turn (your prompt, a worker message, a background task finishing, a scheduled wake-up). Finds a full report that later wrap-ups pushed off the screen.</td></tr>
     <tr><td><code>/clean copy</code></td><td>Copy instead of opening the pane, and print one confirmation line. Each prompt is quoted (<code>&gt; ...</code>) above its reply; exchanges are separated by <code>---</code>.</td></tr>
     <tr><td><code>/clean tools</code></td><td>Keep each tool call as one quoted line, <code>&gt; Bash find ~/dev -type d -name node_modules...</code>, in place.</td></tr>
@@ -79,17 +79,19 @@ being saved will be ignored rather than queued. ...</code></pre></div>
   <div class="table-wrap"><table><thead><tr><th>Key</th><th>Does</th></tr></thead><tbody>
     <tr><td>↑ ↓, PgUp PgDn, Home End</td><td>Scroll the pane body: a row, a window, or to either end. The line under the pane follows.</td></tr>
     <tr><td><code>c</code></td><td>Copy everything the command chose, prompts included (the terminal clipboard, or OSC 52 over SSH).</td></tr>
-    <tr><td>Esc</td><td>Close the pane and return the keyboard to the prompt.</td></tr>
+    <tr><td>Esc</td><td>Close the pane and return the keyboard to the prompt. While Claude is working this closes the pane only; a second Esc stops the turn.</td></tr>
+    <tr><td>ctrl+x tab</td><td>Give the pane the keyboard back after you started typing at the prompt, so Esc closes it again. What you typed stays in the prompt.</td></tr>
     <tr><td>Tab, Enter</td><td>Walk to the copy button and press it; same as <code>c</code>.</td></tr>
     <tr><td>Mouse drag</td><td>Selects text in the pane like any terminal text. Only what is on screen is selectable, so use <code>c</code> for a long reply.</td></tr>
   </tbody></table></div>
-  <p class="small">Esc at an empty prompt also closes it once the prompt has the keys back. Running <code>/clean</code> again while it is open replaces the content in place.</p>
+  <p class="small">The command runs at once even while Claude is working, instead of queueing behind the turn. Running it again while the pane is open replaces the content in place. Esc at an idle, empty prompt also closes the pane.</p>
 </section>
 
 <section id="pane">
   <h2>The pane</h2>
   <p>Inline above the prompt on a normal terminal, or docked beside the transcript in the fullscreen layout from 110 columns. Each exchange is your prompt on the theme's user-message background, the same tone the transcript puts behind your own messages, then the reply as markdown.</p>
   <p>The pane opens on the newest reply, since that is usually what you came for. When worker messages or notices split the reply, it opens at the start of the last turn, the dim <code>after …</code> line on top; otherwise at the newest prompt. The line under the pane says which rows show and which way more lies. The pane's own first row scrolls away with the rest, so it can't carry that.</p>
+  <p>A pane left open keeps up with the session. When each turn ends it rebuilds from the same words you gave <code>/clean</code> and moves to the newest reply. After each prompt you send it takes the keyboard back, because while a turn runs Claude Code gives Esc at the prompt to interrupting the turn. The next key you type goes to the prompt as usual.</p>
   <h3>As it opens</h3>
   <div class="code"><pre><code>╭─────────────────────────────────────────────────────────────────────────✕─╮
 │ after a background task finishing                                        │
@@ -108,7 +110,7 @@ being saved will be ignored rather than queued. ...</code></pre></div>
 ❯ </code></pre></div>
   <h3>After Home</h3>
   <div class="code"><pre><code>╭─────────────────────────────────────────────────────────────────────────✕─╮
-│ last 2 exchanges (12 in session) · c: copy · esc closes                  │
+│ all 12 exchanges · c: copy · esc closes                                  │
 │                                                                          │
 │ <span class="term-prompt"> oh that sounds useful. `brew install shellcheck` ?                     </span> │
 │ Shellcheck installed; fixed its findings. Re-running the deploy checks   │
@@ -119,9 +121,9 @@ being saved will be ignored rather than queued. ...</code></pre></div>
 │ Measuring the current layout at your window size to see how far the      │
 │ calendar falls short of the editor.                                      │
 ╰──────────────────────────────────────────────────────────────────────────╯
-/clean: rows 1–37 of 96 · more below (↓ PgDn End)                        [-]
+/clean: rows 1–37 of 412 · more below (↓ PgDn End)                       [-]
 ❯ </code></pre></div>
-  <p class="small">Mock-ups from real sessions, shortened; the first matches a live capture of <code>/clean all</code>. Claude Code draws the frame, the ✕ close mark and the band's <code>[-]</code>. The mod supplies the header row, the prompt bands, the markdown and the rows line. With more than one pane open the frame carries a tab row. A theme without the user-message key draws the band untinted.</p>
+  <p class="small">Mock-ups from real sessions, shortened; the first matches a live capture of <code>/clean</code>. Claude Code draws the frame, the ✕ close mark and the band's <code>[-]</code>. The mod supplies the header row, the prompt bands, the markdown and the rows line. With more than one pane open the frame carries a tab row. A theme without the user-message key draws the band untinted.</p>
 </section>
 
 <section id="example">
@@ -153,7 +155,7 @@ being saved will be ignored rather than queued. ...</code></pre></div>
 ⏺ Short answer to your question: fix_spotlight does nothing anymore, and the scheduled job was a separate
   Time Machine job that has been broken since July 19.
   ...</code></pre></div>
-  <h3><code>/clean</code></h3>
+  <h3><code>/clean 1</code></h3>
   <div class="code"><pre><code>Checking what the scheduled job actually was, and when it stopped. Logs last updated Jul 19, so it looks like a reorg broke the cron paths.
 
 Now the empirical part: does Spotlight actually skip the marked folders?
@@ -240,6 +242,7 @@ claude plugin test .</code></pre></div>
     <tr><td><code>clean: copy failed (no-clipboard)</code></td><td>The terminal refused the clipboard write. In iTerm2, allow clipboard access in Preferences › General › Selection.</td></tr>
     <tr><td>A dim line names <code>clean-output</code> and a refused hook</td><td>The API changed under a Claude Code update. Run <code>claude plugin validate .</code> in the mod folder; the message names the call.</td></tr>
     <tr><td>One exchange shows up as two</td><td>A wake-up or message from before the mod loaded was counted as your prompt. Prompts submitted after it loaded are sorted exactly; use <code>/clean 2</code> for that session.</td></tr>
+    <tr><td>Esc stopped the turn and the pane stayed</td><td>You had typed at the prompt since the pane last held the keyboard, so Esc belonged to the turn. Press ctrl+x tab, then Esc. Sending a prompt hands the keys back to the pane on its own.</td></tr>
     <tr><td>The pane opens at the top or the very bottom, not at the newest reply</td><td>The pane draws a moment after it opens, and the mod retries for under a second before falling back to the end. Press Home, End or PgUp to move; the rows line shows where you are.</td></tr>
     <tr><td>The prompt band has no tint</td><td>The theme has no user-message background. The built-in themes all do; a custom theme can add <code>userMessageBackground</code>.</td></tr>
     <tr><td>Narration lines clutter the pane</td><td>Add the <code>drop-narration</code> filter from <a href="#filters">Add a filter</a>.</td></tr>
