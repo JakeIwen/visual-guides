@@ -19,7 +19,7 @@
 .mock .m-head { display: flex; justify-content: space-between; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
 .mock .m-head b { font-size: 1.05rem; }
 .mock .m-sub { color: var(--muted); font-size: .8rem; }
-.mock .m-btn, .mock .m-seg, .mock .m-chip, .mock .m-input {
+.mock .m-btn, .mock .m-seg, .mock .m-input {
   display: inline-block;
   border: 1px solid var(--line-strong);
   background: var(--surface);
@@ -37,11 +37,6 @@
 .mock .m-seg span { display: inline-block; padding: .3rem .55rem; color: var(--muted); border-right: 1px solid var(--line); }
 .mock .m-seg span:last-child { border-right: 0; }
 .mock .m-seg span.on { background: var(--surface-2); color: var(--ink); font-weight: 600; }
-.mock .m-chips { display: flex; gap: .35rem; flex-wrap: wrap; margin-bottom: .6rem; }
-.mock .m-chip { border-radius: 999px; padding: .2rem .6rem; font-size: .78rem; }
-.mock .m-chip.on { background: var(--ar-accent); color: var(--ar-accent-ink); border-color: var(--ar-accent); }
-.mock .m-chip.zero { opacity: .5; }
-.mock .m-chip i { font-style: normal; opacity: .75; margin-left: .3rem; }
 
 .mock .m-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: .6rem .75rem; margin-bottom: .45rem; }
 .mock .m-card.kept { border-color: var(--ar-accent); }
