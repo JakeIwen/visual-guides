@@ -17,6 +17,7 @@
   <a href="#example">Before and after</a>
   <a href="#filters">Add a filter</a>
   <a href="#install">Where it lives</a>
+  <a href="#codex">Codex: codexclean</a>
   <a href="#limits">Limits</a>
   <a href="#troubleshooting">Troubleshooting</a>
   <a href="https://github.com/JakeIwen/visual-guides/blob/main/static/guides/clean-output.html">Source</a>
@@ -25,11 +26,11 @@
 <main>
 <h1>Claude /clean</h1>
 <dl class="facts">
-  <dt>Use</dt><dd>Read or copy your recent Claude Code exchanges, each prompt with its reply, without the <code>Bash(...)</code> calls, collapsed results and search summaries that surround them in the terminal.</dd>
-  <dt>Kind</dt><dd>A Claude Code mod (plugin): one slash command, one pane with a rows line under it, and one prompt hook. No server, no page, no transcript-file parsing.</dd>
+  <dt>Use</dt><dd>Read or copy your recent Claude Code exchanges, each prompt with its reply, without the <code>Bash(...)</code> calls, collapsed results and search summaries that surround them in the terminal. <code>codexclean</code> does the same for Codex sessions.</dd>
+  <dt>Kind</dt><dd>A Claude Code mod (plugin): one slash command, one pane with a rows line under it, and one prompt hook. For Codex, a shell command built from the same modules (<a href="#codex">below</a>).</dd>
   <dt>Source</dt><dd><code>~/dev/scripts/shared/claude-mods/clean-output/</code> · <code>hooks/register.tsx</code> (command, pane, prompt hook) · <code>hooks/clean.ts</code> (filters) · <code>hooks/exchanges.ts</code> and <code>hooks/turn-endings.ts</code> (the two views)</dd>
   <dt>Loaded by</dt><dd><code>env.CLAUDE_CODE_PLUGIN_DIRS</code> in <code>~/.claude/settings.json</code>, so every interactive Mac session has it. Not on the Pi.</dd>
-  <dt>Status</dt><dd><span class="tag ok">Validated · 18 tests pass · type-checks</span> In daily use. Checked 2026-10-19 in a live terminal: opening on the newest reply, the rows line, running mid-turn, Esc during a turn, and the refresh when a turn ends.</dd>
+  <dt>Status</dt><dd><span class="tag ok">Validated · 25 mod tests and 4 codexclean tests pass · type-checks</span> In daily use. Checked 2026-10-19 in a live terminal: opening on the newest reply, the rows line, running mid-turn, Esc during a turn, and the refresh when a turn ends. <code>codexclean</code> is installed on the Mac and the Pi and was run against real sessions on both; its <code>watch</code> and paged print were checked in a terminal.</dd>
   <dt>Updated</dt><dd>2026-10-19</dd>
 </dl>
 
@@ -56,9 +57,10 @@
     <tr><td><code>/clean 1</code></td><td>Only your last exchange.</td></tr>
     <tr><td><code>/clean 3</code></td><td>Your last 3 exchanges, oldest first. Any whole number; one larger than the session shows them all.</td></tr>
     <tr><td><code>/clean turns</code></td><td>The message each turn ended on, for every turn since your last prompt, each band naming what started the turn (your prompt, a worker message, a background task finishing, a scheduled wake-up). Finds a full report that later wrap-ups pushed off the screen.</td></tr>
-    <tr><td><code>/clean copy</code></td><td>Copy instead of opening the pane, and print one confirmation line. Each prompt is quoted (<code>&gt; ...</code>) above its reply; exchanges are separated by <code>---</code>.</td></tr>
+    <tr><td><code>/clean copy</code></td><td>Copy instead of opening the pane, and print one confirmation line. The copy is plain text, as the pane shows it: each prompt marked <code>❯</code> the way the transcript marks your messages, the reply without markdown marks (no <code>**</code>, backticks or fences; links as <code>text (url)</code>; tables aligned).</td></tr>
+    <tr><td><code>/clean md</code></td><td>Copy markdown instead, for <code>copy</code> and the pane's <code>c</code>: each prompt quoted (<code>&gt; ...</code>) above its reply, <code>---</code> between exchanges.</td></tr>
     <tr><td><code>/clean tools</code></td><td>Keep each tool call as one quoted line, <code>&gt; Bash find ~/dev -type d -name node_modules...</code>, in place.</td></tr>
-    <tr><td><code>/clean 3 tools copy</code></td><td>Words combine in any order.</td></tr>
+    <tr><td><code>/clean 3 tools copy md</code></td><td>Words combine in any order.</td></tr>
   </tbody></table></div>
   <h3>An exchange with workers in it</h3>
   <p>From the health-calendar session on 2026-10-18, shortened. Fourteen worker messages and notices landed during this one exchange; each shows as a single line.</p>
@@ -78,7 +80,7 @@ being saved will be ignored rather than queued. ...</code></pre></div>
   <h3>Keys while the pane has focus</h3>
   <div class="table-wrap"><table><thead><tr><th>Key</th><th>Does</th></tr></thead><tbody>
     <tr><td>↑ ↓, PgUp PgDn, Home End</td><td>Scroll the pane body: a row, a window, or to either end. The line under the pane follows.</td></tr>
-    <tr><td><code>c</code></td><td>Copy everything the command chose, prompts included (the terminal clipboard, or OSC 52 over SSH).</td></tr>
+    <tr><td><code>c</code></td><td>Copy everything the command chose, prompts included, as plain text (markdown when the command had <code>md</code>), through the terminal clipboard, or OSC 52 over SSH.</td></tr>
     <tr><td>Esc</td><td>Close the pane and return the keyboard to the prompt. While Claude is working this closes the pane only; a second Esc stops the turn.</td></tr>
     <tr><td>ctrl+x tab</td><td>Give the pane the keyboard back after you started typing at the prompt, so Esc closes it again. What you typed stays in the prompt.</td></tr>
     <tr><td>Tab, Enter</td><td>Walk to the copy button and press it; same as <code>c</code>.</td></tr>
@@ -219,6 +221,30 @@ claude plugin test .</code></pre></div>
   </ul>
 </section>
 
+<section id="codex">
+  <h2>Codex: codexclean</h2>
+  <p>The same view for a Codex session, as a shell command on the Mac and the Pi. It reads the session file in <code>~/.codex/sessions/</code> and runs it through the mod's own grouping, filters and plain-text rendering. Codex logs each typed prompt and what started each turn, so nothing is guessed: a goal continuation or a compaction is one divider line, and your <code>!commands</code> are left out.</p>
+  <div class="code"><pre><code>codexclean [N] [turns] [tools] [md] [copy | open | watch | print] [--session &lt;id|file&gt;]</code></pre></div>
+  <div class="table-wrap"><table><thead><tr><th>Command</th><th>Effect</th></tr></thead><tbody>
+    <tr><td><code>codexclean</code></td><td>In a normal terminal: print every exchange, each prompt on a shaded band, paged with <code>less</code> (opening at the end) when longer than a screen.</td></tr>
+    <tr><td><code>!codexclean</code> (inside Codex)</td><td>Save the view as a page in <code>~/.agent/artifacts/</code>, open it on the Mac, and print one line. On the Pi the line gives the page's path under the Mac's mount.</td></tr>
+    <tr><td><code>codexclean 1</code>, <code>turns</code>, <code>tools</code>, <code>md</code></td><td>As for <code>/clean</code>.</td></tr>
+    <tr><td><code>codexclean copy</code></td><td>Copy the plain text (<code>md</code> for markdown) and print one line. On the Pi the copy goes through the OSC 52 <code>pbcopy</code> shim.</td></tr>
+    <tr><td><code>codexclean open</code></td><td>The page, from anywhere. One page per session, rewritten each time.</td></tr>
+    <tr><td><code>codexclean watch --session &lt;id&gt;</code></td><td>In a split pane: redraw the newest exchange (or the last N) as Codex writes it. Ctrl+C stops. <code>!codexclean watch</code> prints this command with the session's id filled in.</td></tr>
+    <tr><td><code>!codexclean print</code></td><td>Print inside Codex anyway.</td></tr>
+  </tbody></table></div>
+  <p>The session is the <code>--session</code> id (any part of it) or file, else the one it runs in (<code>$CODEX_THREAD_ID</code>, which Codex sets for <code>!commands</code>), else the newest session started in the current folder.</p>
+  <p class="small">Why a bare <code>!codexclean</code> doesn't print: Codex records a <code>!command</code>'s output as a user message, so it joins the model's context on the next turn. Printing a session there would feed the model its own history again.</p>
+  <h3>Installed</h3>
+  <ul class="plain-list">
+    <li><code>codex/build.mjs</code> in the mod folder strips the TypeScript types from the engine-free modules (Node 22.13 or later) and lays them out with <code>codex/codexclean.mjs</code> as plain ES modules, which run on the Pi's Node 20.</li>
+    <li><code>zsh codex/deploy.zsh</code> builds and installs on the Pi, then the Mac: <code>~/.local/share/codexclean/</code> plus a launcher at <code>~/.local/bin/codexclean</code>, on PATH for Codex's <code>!commands</code> on both machines.</li>
+    <li>The installed copies don't follow the checkout. Re-run the deploy after editing any of the shared modules.</li>
+    <li>Files from before Codex logged items (about 2026-09) are read from their message events; a 266 MB one takes about 3 s.</li>
+  </ul>
+</section>
+
 <section id="limits">
   <h2>Limits</h2>
   <ul class="plain-list">
@@ -229,7 +255,8 @@ claude plugin test .</code></pre></div>
     <li>The rows line lives in the band above the prompt, which surveys also use; while one is up the line steps aside. It shows only when the content is taller than the pane.</li>
     <li>An inline pane takes about a third of the screen unless you drag or key it taller; the size you set is kept for the session. The dock is used only in the fullscreen layout.</li>
     <li>Copy goes through Claude Code's clipboard path. Over plain SSH without OSC 52 support the command reports <code>no-clipboard</code>.</li>
-    <li>Claude only. Codex has no plugin surface for this; the filter file is portable, the display is not.</li>
+    <li>The plain copy reads markdown line by line: fences, headings, lists, tables, quotes and inline marks. Nested lists keep their indent; HTML in a reply is copied as written.</li>
+    <li>Codex has no plugin surface that draws in its terminal, so its version is a shell command rather than a pane (<a href="#codex">Codex</a>).</li>
   </ul>
 </section>
 
@@ -244,6 +271,8 @@ claude plugin test .</code></pre></div>
     <tr><td>One exchange shows up as two</td><td>A wake-up or message from before the mod loaded was counted as your prompt. Prompts submitted after it loaded are sorted exactly; use <code>/clean 2</code> for that session.</td></tr>
     <tr><td>Esc stopped the turn and the pane stayed</td><td>You had typed at the prompt since the pane last held the keyboard, so Esc belonged to the turn. Press ctrl+x tab, then Esc. Sending a prompt hands the keys back to the pane on its own.</td></tr>
     <tr><td>The pane opens at the top or the very bottom, not at the newest reply</td><td>The pane draws a moment after it opens, and the mod retries for under a second before falling back to the end. Press Home, End or PgUp to move; the rows line shows where you are.</td></tr>
+    <tr><td><code>codexclean: no Codex session started in …</code></td><td>No session file names this folder as its start. Pass <code>--session &lt;id&gt;</code> (the id is in Codex's footer), or run it from the session's folder.</td></tr>
+    <tr><td><code>codexclean</code> shows old behaviour after a change</td><td>The installed build doesn't follow the checkout. Run <code>zsh ~/dev/scripts/shared/claude-mods/clean-output/codex/deploy.zsh</code>.</td></tr>
     <tr><td>The prompt band has no tint</td><td>The theme has no user-message background. The built-in themes all do; a custom theme can add <code>userMessageBackground</code>.</td></tr>
     <tr><td>Narration lines clutter the pane</td><td>Add the <code>drop-narration</code> filter from <a href="#filters">Add a filter</a>.</td></tr>
   </tbody></table></div>
