@@ -157,7 +157,7 @@
     <tr><td class="lead-cell"><code>by:me</code> · <code>by:reply</code></td><td data-label="Matches">Only your prompts; only the replies.</td></tr>
     <tr><td class="lead-cell"><code>age:&lt;2d</code> · <code>after:2026-10-01</code> · <code>before:2026-10-18</code></td><td data-label="Matches">By the session's last activity.</td></tr>
   </tbody></table></div>
-  <p class="small">The index lives on the Pi and updates itself every 30 seconds at low priority, reading only what was added. Its first build reads every transcript and takes a minute or two; searches find nothing until it finishes. A query that would take over 5 seconds is stopped: add a rarer word or a phrase. Thinking, tool calls, tool output, injected instructions and Codex subagents are not indexed; the <code>llmsearch</code> shell script greps all of it, slowly.</p>
+  <p class="small">The index lives on the Pi and updates itself every 30 seconds at low priority, reading only what was added. Its first build reads every transcript and takes a minute or two; searches find nothing until it finishes. A query that would take over 5 seconds is stopped: add a rarer word or a phrase. Thinking, tool calls, tool output, injected instructions and Codex subagents are not indexed. In a shell, <code>llmsearch</code> searches this index; <code>llmsearch --grep</code> greps everything, those included, slowly.</p>
   <h3>Sort</h3>
   <p>The drop-down at the end of the toolbar orders whatever the search and filters leave. Ties keep the previous order, so "Folder, then recent" lists each folder's sessions newest first.</p>
   <div class="table-wrap"><table class="stack"><thead><tr><th>Order</th><th>Use it for</th></tr></thead><tbody>
@@ -305,6 +305,7 @@ llm-switchboard new ~/dev/obd-things "logger" --codex "add a logger"
 llm-switchboard fork c96934f7 "try another approach" [--folder ~/dev] [--keep]
 llm-switchboard search 'can decoder by:me'      # transcript search; same terms as the page
 llm-switchboard search 'can decoder' --session codex:019f   # one result's matches in context
+llm-switchboard search 'can decoder' --json   # one JSON line per result, for scripts
 llm-switchboard index                # catch the transcript index up now
 llm-switchboard stop-all             # kill the tmux server and every session in it
 llm-switchboard host-authorize m4mac &lt; key.pub   # install a Mac's restricted key (the setup script runs it over SSH)
