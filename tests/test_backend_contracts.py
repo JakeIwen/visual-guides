@@ -33,7 +33,9 @@ class BackendContractTests(unittest.TestCase):
 
     def test_stable_entry_is_thin_and_release_contains_its_owners(self):
         entry = ROOT / "app.py"
-        self.assertLessEqual(len(entry.read_text(encoding="utf-8").splitlines()), 25)
+        tree = ast.parse(entry.read_text(encoding="utf-8"))
+        self.assertFalse(any(isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+                             for node in tree.body), "the compatibility entry only delegates")
         artifacts = set(deploy.artifact_paths(ROOT))
         self.assertTrue({"app.py", "visual_guides_cli.py", "visual_guides_server.py"} <= artifacts)
 
