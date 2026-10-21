@@ -410,8 +410,8 @@ class CliTests(unittest.TestCase):
         self.assertEqual(transport.commands, [])
 
     def test_unknown_send_fails_before_token_read_or_network(self) -> None:
-        with mock.patch("app.read_token") as read_token_mock:
-            with mock.patch("app.http.client.HTTPConnection") as connection_mock:
+        with mock.patch("visual_guides_cli.read_token") as read_token_mock:
+            with mock.patch("visual_guides_cli.http.client.HTTPConnection") as connection_mock:
                 with self.assertRaisesRegex(SystemExit, "unknown command"):
                     main(["--send", "unsupported_command"])
 
@@ -424,7 +424,7 @@ class CliTests(unittest.TestCase):
             connection = mock.Mock()
             connection.request.side_effect = OSError("connection failed")
             with mock.patch(
-                "app.http.client.HTTPConnection", return_value=connection
+                "visual_guides_cli.http.client.HTTPConnection", return_value=connection
             ) as connection_class:
                 with self.assertRaisesRegex(SystemExit, "connection failed"):
                     main(
@@ -444,7 +444,7 @@ class CliTests(unittest.TestCase):
     def test_send_requires_explicit_hardware_acknowledgement_before_network(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             token_file = self.private_token_file(directory)
-            with mock.patch("app.http.client.HTTPConnection") as connection_mock:
+            with mock.patch("visual_guides_cli.http.client.HTTPConnection") as connection_mock:
                 with self.assertRaisesRegex(SystemExit, "requires explicit"):
                     main(
                         [

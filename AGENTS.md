@@ -6,7 +6,9 @@ guide commits preserved. Do not add a second copy to the scripts repository.
 
 ## Where things live
 
-- `app.py`: shared HTTP/static server, guarded A/C API and CLI client.
+- `app.py`: stable service/CLI entry and compatibility exports.
+- `visual_guides_server.py`: shared HTTP/static server and guarded A/C API.
+- `visual_guides_cli.py`: argument parsing, preview/send client and server composition.
 - `ac_ir.py`: canonical RG15D commands, waveform encoding and IR transport.
 - `hardware_setup.py`: explicit Pi GPIO18 setup and hardware activation.
 - `deploy.py`, `visual-guides.service`: immutable Pi releases and systemd unit.
