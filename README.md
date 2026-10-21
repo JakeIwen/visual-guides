@@ -35,8 +35,10 @@ Node is used for JavaScript checks and optional npm command aliases.
 
 ## Files
 
-- `app.py`: HTTP server, static serving, authorization and CLI client. Real CLI
-  sends use the same running API admission path as the browser.
+- `app.py`: stable service and CLI path. HTTP/static serving and authorization
+  live in `visual_guides_server.py`; argument parsing, preview/send client and
+  runtime composition live in `visual_guides_cli.py`. Real CLI sends use the
+  same running API admission path as the browser.
 - `ac_ir.py`: canonical command contract/catalog, waveform encoding and serialized
   `ir-ctl` transport. Change the catalog here; the UI loads it from the API.
 - `hardware_setup.py`: explicit owner-operated GPIO18 boot/udev configuration and

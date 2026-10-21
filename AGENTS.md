@@ -71,3 +71,12 @@ Visual Guides release (such as Mosquitto).
 Keep substantive unfinished work in ignored `.agent/handoffs/`; remove completed
 handoffs after promoting durable facts here. Commit extraction/setup separately
 from behavioral changes. Never publish private operational context.
+
+## Contracts
+
+| Path | Caller | Owner |
+| --- | --- | --- |
+| `app.py` | `visual-guides.service`, local preview commands and retained Pi releases | `visual_guides_server.py`, `visual_guides_cli.py` |
+| `python3 -m local_service` | npm service lifecycle commands and installed Mac plist | `local_service/__main__.py`, `local_service/control.py` |
+| `deploy.py` | npm combined and Pi deployment commands | `deploy.py` |
+| `hardware_setup.py` | Documented Pi owner commands | `hardware_setup.py` |
