@@ -20,6 +20,8 @@ guide commits preserved. Do not add a second copy to the scripts repository.
 - `static/guides/<name>.css`, `<name>.js`: private styles and behavior beside their HTML guide; page URLs remain stable.
 - `static/reference/`: versioned supporting documents, refreshed with their guide.
 - `tests/`, `test_deploy.py`, `test_hardware_setup.py`: behavioral verification.
+- `tests/test_static_contract.py`: local asset references, private/shared ownership,
+  palette ownership and syntax checks for every discovered browser script.
 
 ## Hosting and changes
 

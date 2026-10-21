@@ -54,7 +54,8 @@ Node is used for JavaScript checks and optional npm command aliases.
   candidate's package documentation; refresh them and the guide together when
   updating the documented version. General typography stays in `site.css`.
 - `tests/test_app.py`, `test_deploy.py`, `test_hardware_setup.py`: behavioral and
-  deployment-contract tests.
+  deployment-contract tests. `tests/test_static_contract.py` verifies local asset
+  references, page ownership, the palette boundary and all browser JavaScript.
 
 To add a guide, add its page under `static/guides/` and a list entry in
 `static/index.html`. Keep hardware-specific APIs explicit. Pages use plain
@@ -230,8 +231,6 @@ Run `npm test` for all checks, or from this directory:
 ```sh
 python3 -m unittest discover -s tests -v
 python3 -m unittest test_deploy test_hardware_setup -v
-node --check static/guides/air-conditioner.js
-node --check static/guides/mwan3-adaptive.js
 ```
 
 Tests exercise real local HTTP calls with an injected recording transport; they
