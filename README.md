@@ -2,6 +2,12 @@
 
 Local documentation library and guarded A/C infrared controller.
 
+## Screenshots
+
+| Guide library | A/C reference and controller |
+|---|---|
+| ![Visual guide library](docs/screenshots/library.png) | ![Window air-conditioner infrared guide](docs/screenshots/air-conditioner-guide.png) |
+
 - Mac: [localhost:8792](http://127.0.0.1:8792).
 - Pi: [vanpi.lan:8791](http://vanpi.lan:8791).
 - Source: [JakeIwen/visual-guides](https://github.com/JakeIwen/visual-guides).
