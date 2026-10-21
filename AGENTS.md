@@ -15,7 +15,9 @@ guide commits preserved. Do not add a second copy to the scripts repository.
 - `local_service/launchd.py`: plist generation, ownership and launchctl boundary.
 - `local_service/control.py`: status, start/stop/restart, install and verification.
 - `static/guides/`: source pages; `static/index.html` is the guide directory.
-- `static/assets/`: shared styles and guide-specific interactive code.
+- `static/assets/palette.css`: all CSS design colors and theme overrides.
+- `static/assets/site.css`: shared typography, guide primitives and responsive layout.
+- `static/guides/<name>.css`, `<name>.js`: private styles and behavior beside their HTML guide; page URLs remain stable.
 - `static/reference/`: versioned supporting documents, refreshed with their guide.
 - `tests/`, `test_deploy.py`, `test_hardware_setup.py`: behavioral verification.
 

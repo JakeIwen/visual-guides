@@ -44,10 +44,11 @@ Node is used for JavaScript checks and optional npm command aliases.
 - `deploy.py` and `visual-guides.service`: separate immutable Pi releases and
   guarded systemd install; independent of the dashboard package deployer.
 - `static/`: guide index, A/C guide and first-test reference script. Shared
-  styles (light and dark) are in `assets/site.css`; `assets/ac-guide.js` owns the
+  styles are in `assets/site.css`, with colors and light/dark overrides in
+  `assets/palette.css`; `guides/air-conditioner.js` owns the
   step checklists, copy buttons, LED current estimate, preview-only console and
   the catalog table built from `/api/ac/commands`. This is the only HTTP-served
-  directory. `assets/mwan3-guide.css` and `assets/mwan3-guide.js` own the adaptive
+  directory. `guides/mwan3-adaptive.css` and `guides/mwan3-adaptive.js` own the adaptive
   guide's diagrams, policy command generation and shell-script downloads.
   `reference/mwan3-adaptive-{readme,validation}.txt` are snapshots of that
   candidate's package documentation; refresh them and the guide together when
@@ -65,7 +66,8 @@ copy.
 Edit the files in this checkout, then refresh the local Mac page to preview.
 Each guide's Source and History links open its source and revisions on GitHub.
 Use `git log --follow -- static/guides/<name>.html` for local page history.
-Shared styles and guide-specific JavaScript remain under `static/assets/`.
+Shared styles remain under `static/assets/`; each guide's private CSS and JavaScript
+live beside its HTML with the same basename under `static/guides/`.
 
 The Mac serves current working files; the Pi serves the last deployed release.
 After reviewing an edit, use the combined deployment command below. It also
@@ -228,8 +230,8 @@ Run `npm test` for all checks, or from this directory:
 ```sh
 python3 -m unittest discover -s tests -v
 python3 -m unittest test_deploy test_hardware_setup -v
-node --check static/assets/ac-guide.js
-node --check static/assets/mwan3-guide.js
+node --check static/guides/air-conditioner.js
+node --check static/guides/mwan3-adaptive.js
 ```
 
 Tests exercise real local HTTP calls with an injected recording transport; they

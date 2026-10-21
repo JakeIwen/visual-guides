@@ -1,5 +1,4 @@
 /* Guide-specific diagrams and controls; typography/colors come from site.css. */
-:root { --uplink-a: #246c56; --uplink-b: #315da2; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .skip { position: absolute; top: -5rem; left: 1rem; padding: .75rem; background: var(--surface); z-index: 10; }
 .skip:focus { top: .5rem; }
@@ -50,12 +49,12 @@ details > div { margin-top: .8rem; }
 .scenarios button { font-size: .85rem; }
 .scenarios button[aria-pressed=true] { border-color: var(--accent); background: var(--accent-soft); }
 .bar { display: flex; height: 2.65rem; overflow: hidden; border-radius: 5px; margin: .5rem 0; }
-.bar span { display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden; font-size: .78rem; color: #fff; transition: width .2s; }
+.bar span { display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden; font-size: .78rem; color: var(--uplink-ink); transition: width .2s; }
 .a { background: var(--uplink-a); }
 .b { background: var(--uplink-b); }
 .legend { display: flex; justify-content: space-between; gap: .5rem; font-size: .8rem; color: var(--muted); }
 .sessions { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: 1rem; }
-.sessions span { padding: .4rem .6rem; border-radius: 5px; font: .75rem var(--mono); color: #fff; }
+.sessions span { padding: .4rem .6rem; border-radius: 5px; font: .75rem var(--mono); color: var(--uplink-ink); }
 .sessions .failed { text-decoration: line-through; opacity: .55; }
 .diagram h3 { margin-top: 1.2rem; }
 .diagram small { color: var(--muted); }
@@ -82,7 +81,7 @@ footer { font-size: .8rem; color: var(--muted); border-top: 1px solid var(--line
 @media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
 @media print {
   .toc, .crumbs, .skip, button, input, .setup label, #announcement { display: none !important; }
-  body { color: #000; background: #fff; font-size: 10pt; }
+  body { color: var(--print-ink); background: var(--print-paper); font-size: 10pt; }
   .page { display: block; padding: 0; max-width: none; }
   h2 { break-after: avoid; }
   .diagram, .mode-path, table tr { break-inside: avoid; }

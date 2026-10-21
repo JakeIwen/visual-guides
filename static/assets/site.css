@@ -1,62 +1,5 @@
-/* Visual Guides & Documentation: shared styles for the index and every guide. */
-
-:root {
-  color-scheme: light;
-  --bg: #f5f5f2;
-  --surface: #ffffff;
-  --surface-2: #eeeeea;
-  --ink: #1b1d1f;
-  --muted: #5b6064;
-  --line: #dcddd8;
-  --line-strong: #b8bab3;
-  --accent: #1d5f9b;
-  --accent-soft: #e3edf7;
-  --band: #ecece7;
-  --wire-5v: #c23b26;
-  --wire-gpio: #1f6db0;
-  --wire-gnd: #3b4045;
-  --wire-sw: #7a7f84;
-  --led: #a8770b;
-  --warn-bg: #fdf3dc;
-  --warn-line: #d9a93c;
-  --warn-ink: #5c4100;
-  --ok-bg: #e4f2e8;
-  --ok-line: #6fae83;
-  --ok-ink: #1e5a33;
-  --bad-ink: #a1261a;
-  --code-bg: #efefeb;
-  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #131517;
-    --surface: #1b1e21;
-    --surface-2: #23272b;
-    --ink: #e5e6e3;
-    --muted: #a0a6aa;
-    --line: #2d3236;
-    --line-strong: #454c52;
-    --accent: #7db5ea;
-    --accent-soft: #1d2b39;
-    --band: #22262a;
-    --wire-5v: #f0806c;
-    --wire-gpio: #6eb0ea;
-    --wire-gnd: #c3c8cc;
-    --wire-sw: #8d9398;
-    --led: #e5b54e;
-    --warn-bg: #2a2313;
-    --warn-line: #8f6d1f;
-    --warn-ink: #f1d9a1;
-    --ok-bg: #16281c;
-    --ok-line: #3f7f55;
-    --ok-ink: #a6dcb6;
-    --bad-ink: #f19a8e;
-    --code-bg: #212528;
-  }
-}
+/* Shared typography, guide primitives and responsive layout. */
+@import "./palette.css";
 
 * { box-sizing: border-box; }
 
@@ -316,13 +259,10 @@ figcaption { font-size: .875rem; color: var(--muted); margin-top: .45rem; }
   color: var(--muted);
   background: var(--bg);
 }
-.pin.used { color: #fff; border-color: transparent; font-weight: 700; }
+.pin.used { color: var(--pin-ink); border-color: transparent; font-weight: 700; }
 .pin.p-5v { background: var(--wire-5v); }
 .pin.p-gnd { background: var(--wire-gnd); }
 .pin.p-gpio { background: var(--wire-gpio); }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .pin.used { color: #111; }
-}
 .pin-legend { list-style: none; padding: 0; margin: .6rem 0 1rem; font-size: .925rem; }
 
 .calc {
