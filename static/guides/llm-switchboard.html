@@ -36,7 +36,7 @@
   <dt>Kind</dt><dd>A user systemd service on the Pi (<code>llm-switchboard</code>): a supervisor that runs sessions in tmux, plus this web page and a CLI. Python standard library, no build step.</dd>
   <dt>Source</dt><dd><code>~/dev/llm-switchboard</code> on the Pi · <code>JakeIwen/llm-switchboard</code> (private). The service runs from that checkout.</dd>
   <dt>Status</dt><dd><span class="tag ok">In daily use</span> Codex support added 2026-10-15 on an API Codex marks experimental. Mac sessions added 2026-10-18; transcript search 2026-10-19.</dd>
-  <dt>Updated</dt><dd>2026-10-21</dd>
+  <dt>Updated</dt><dd>2026-10-23</dd>
 </dl>
 
 <section id="page">
@@ -47,7 +47,7 @@
     <div class="m-bar"><span class="m-input">Search ( -exclude "phrase" dir: is:kept age:&lt;2d )</span><span class="m-btn">?</span><span class="k">3</span>
       <span class="m-seg"><span class="on">All</span><span>Kept running</span><span>Open now</span></span><span class="k">4</span>
       <span class="m-seg"><span class="on">All tools</span><span>Claude</span><span>Codex</span></span>
-      <span class="m-btn">Kept first ▾</span><span class="k">14</span><span class="m-btn">All folders (27) ▾</span><span class="k">5</span></div>
+      <span class="m-btn">Kept first ▾</span><span class="k">14</span><span class="m-btn">All folders · 27</span><span class="k">5</span></div>
     
     <div class="m-card kept">
       <div class="m-row"><span class="m-check"></span><span class="k">6</span><span class="m-switch on"></span><span class="k">7</span>
@@ -88,7 +88,7 @@
     <li><span class="k">2</span><span>Start a session in an existing folder (<a href="#new">New session</a>). Key: <kbd>n</kbd>.</span></li>
     <li><span class="k">3</span><span>Search; <strong>?</strong> opens the syntax. Every word must match; see <a href="#find">Find sessions</a>.</span></li>
     <li><span class="k">4</span><span>Two filters: <strong>All / Kept running / Open now</strong> (open in any claude process, including SSH terminals) and <strong>All tools / Claude / Codex</strong>. The tool switch is remembered per browser and hidden when Codex support is off.</span></li>
-    <li><span class="k">5</span><span>The folder menu shows one folder at a time. It is grouped by machine (This Pi, then the Mac), A–Z, each folder with its count under the current search. It lists the home folder and up to two levels below it, only folders with at least two sessions, and never <code>~/ais</code>; sessions elsewhere still show under All folders and match <code>dir:</code>. The Mac's home folder shows as <code>~</code> too. Folder paths are tinted by machine, teal for the Pi and violet for the Mac (hover one to see which), and the menu takes the tint and an orange edge while a folder is picked. Clicking a folder name inside a row picks it, or goes back to All folders.</span></li>
+    <li><span class="k">5</span><span>The <a href="#folders">folder picker</a> is a searchable checklist: select several folders across machines, then close it to view their sessions together. Selected folders appear as removable chips. It opens as a bottom sheet on a phone and a dialog on desktop. Counts show unfiltered sessions in the default folder choices; they stay steady while you search or change tabs.</span></li>
     <li><span class="k">6</span><span>Selection circle for <a href="#bulk">acting on several</a>. Clicking the row itself also selects it.</span></li>
     <li><span class="k">7</span><span>The keep-running switch: on means the supervisor runs this session in tmux with Remote Control and restarts it whenever it exits. A kept card gets an orange border. Codex rows show a <strong>Codex</strong> tag here instead (<span class="k">10</span>): the Codex daemon already holds every session.</span></li>
     <li><span class="k">8</span><span>Badges: the supervisor state (<a href="#keep">table below</a>), <strong>Working</strong> while a turn runs, memory use, <strong>Queued</strong> before the first launch, <strong>New</strong> for a session created here that has not written a transcript yet, <strong>Open in a terminal</strong> when another claude process has it.</span></li>
@@ -127,7 +127,7 @@
 
 <section id="find">
   <h2>Find sessions</h2>
-  <p>Type in the search box. Every term must match, case ignored, against the title, first prompt, folder, id and Remote Control name. The folder menu and both filter rows combine with the search, and the menu's counts follow it.</p>
+  <p>Type in the search box. Every term must match, case ignored, against the title, first prompt, folder, id and Remote Control name. The selected folders and both filter rows combine with the search. Folder counts always use unfiltered sessions.</p>
   <div class="table-wrap"><table class="stack"><thead><tr><th>Term</th><th>Matches</th></tr></thead><tbody>
     <tr><td class="lead-cell"><code>word</code> · <code>"two words"</code></td><td data-label="Matches">A word anywhere, or an exact phrase.</td></tr>
     <tr><td class="lead-cell"><code>-word</code> · <code>-dir:tmp</code> · <code>-"a phrase"</code></td><td data-label="Matches">Excludes; works in front of any term below.</td></tr>
@@ -140,6 +140,15 @@
     <tr><td class="lead-cell"><code>age:&lt;2d</code> · <code>age:&gt;1w</code></td><td data-label="Matches">Last activity newer or older than that; units m, h, d, w.</td></tr>
   </tbody></table></div>
   <p class="small">An unparseable term shows a message under the toolbar instead of matching nothing. <kbd>/</kbd> jumps to the search box from anywhere on the page.</p>
+  <h3 id="folders">Choose folders</h3>
+  <p>Open the folder picker and use its search field to find a folder or machine. Tick any number of folders: sessions from any selected folder appear together, subject to the main search and tool/state filters. The list is grouped by machine (This Pi first, then other machines), with folders A–Z. A Pi folder and a Mac folder with the same path are separate choices.</p>
+  <ul class="plain-list">
+    <li>Remove one folder with its chip, or choose <strong>All folders</strong> to clear the folder filter. Your selection is remembered in this browser.</li>
+    <li>Clicking a folder path on a session selects that folder alone, including folders outside the normal choices. A selected folder stays available to remove even if its sessions disappear.</li>
+    <li>Default choices are the home folder and up to two levels below it, with at least two sessions per machine; <code>~/ais</code> and its children are excluded. The Mac's home folder also appears as <code>~</code>. Paths are teal for the Pi and violet for other machines.</li>
+    <li>Each count is that folder's full session count. The total adds only the default choices, excluding hidden deep folders, one-session folders and <code>~/ais</code>. Search text, tool/state tabs and an extra selected folder do not change that total. All folders still leaves the session list unrestricted, so its list may contain more sessions than the picker total.</li>
+  </ul>
+  <p class="small">On phones, including iPhone 16 Pro Max, the picker uses a scrollable bottom sheet with large tap targets. It remains open while you select several folders.</p>
   <h3 id="transcripts">Search inside transcripts</h3>
   <p><strong>Transcripts</strong>, next to the search box, switches it to searching your prompts and the replies in the Pi's Claude Code and Codex sessions, both tools in one list, newest match first. Type a query and press <kbd>Enter</kbd>; <kbd>Esc</kbd>, the button again, or clearing the box goes back to the session list as it was. The filters, sort and folder menu are hidden meanwhile.</p>
   <ul class="plain-list">
