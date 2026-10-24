@@ -13,6 +13,7 @@
 .mock * { min-width: 0; }
 .mock .m-head { display: flex; justify-content: space-between; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
 .mock .m-head b { font-size: 1.05rem; }
+.mock .m-head-actions { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
 .mock .m-sub { color: var(--muted); font-size: .8rem; }
 .mock .m-btn, .mock .m-seg, .mock .m-input {
   display: inline-block;
@@ -32,6 +33,14 @@
 .mock .m-seg span { display: inline-block; padding: .3rem .55rem; color: var(--muted); border-right: 1px solid var(--line); }
 .mock .m-seg span:last-child { border-right: 0; }
 .mock .m-seg span.on { background: var(--surface-2); color: var(--ink); font-weight: 600; }
+.mock .m-search-bar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 0; }
+.mock .m-search-bar .m-scope { border-radius: 8px 0 0 8px; }
+.mock .m-search-bar .m-input { border-radius: 0; border-left: 0; border-right: 0; }
+.mock .m-search-bar .m-help { border-radius: 0 8px 8px 0; }
+.mock .m-sort { display: flex; align-items: center; margin-left: .5rem; }
+.mock .m-status-filter, .mock .m-folders { display: inline-flex; align-items: center; }
+.mock .m-folders .m-btn:first-child { border-radius: 8px 0 0 8px; }
+.mock .m-folders .m-clear { border-radius: 0 8px 8px 0; border-left: 0; }
 
 .mock .m-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: .6rem .75rem; margin-bottom: .45rem; }
 .mock .m-card.kept { border-color: var(--ar-accent); }
@@ -42,6 +51,7 @@
 .mock .m-switch::after { content: ""; position: absolute; top: .15rem; left: .15rem; width: 1rem; height: 1rem; border-radius: 50%; background: var(--surface); }
 .mock .m-switch.on { background: var(--ar-accent); }
 .mock .m-switch.on::after { left: auto; right: .15rem; }
+.mock .m-tags { display: flex; flex-direction: column; align-items: center; gap: .2rem; flex: none; }
 .mock .m-tool { flex: none; font-size: .72rem; font-weight: 600; padding: .15rem .45rem; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--muted); margin-top: .1rem; }
 .mock .m-main { flex: 1; }
 .mock .m-title { font-weight: 600; }
@@ -89,3 +99,15 @@
 .callouts { list-style: none; padding: 0; margin: .5rem 0 1rem; font-size: .925rem; }
 .callouts li { display: flex; gap: .5rem; align-items: baseline; padding: .3rem 0; border-bottom: 1px solid var(--line); }
 .callouts li:last-child { border-bottom: 0; }
+
+@media (max-width: 600px) {
+  .mock .m-search-bar { grid-template-columns: minmax(0, 1fr) auto; row-gap: .4rem; }
+  .mock .m-search-bar .m-scope { grid-column: 1; grid-row: 1; border-radius: 8px; justify-self: start; }
+  .mock .m-sort { grid-column: 2; grid-row: 1; }
+  .mock .m-search-bar .m-input { grid-column: 1; grid-row: 2; border-left: 1px solid var(--line-strong); border-radius: 8px 0 0 8px; }
+  .mock .m-search-bar .m-help { grid-column: 2; grid-row: 2; }
+  .mock .m-status-filter { flex-basis: 100%; }
+  .mock .m-filter-bar .m-seg { display: flex; flex: 1; }
+  .mock .m-filter-bar > .m-seg { flex: 1 1 100%; }
+  .mock .m-filter-bar .m-seg span { flex: 1; text-align: center; }
+}

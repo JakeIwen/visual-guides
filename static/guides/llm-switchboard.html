@@ -15,10 +15,11 @@
   <a href="#page">The page</a>
   <a href="#keep">Keep running</a>
   <a href="#find">Find sessions</a>
-<a href="#transcripts">Search transcripts</a>
+  <a href="#transcripts">Search transcripts</a>
   <a href="#details">Details</a>
   <a href="#bulk">Several at once</a>
   <a href="#new">New session</a>
+  <a href="#settings">Settings</a>
   <a href="#delete">Delete and restore</a>
   <a href="#codex">Codex sessions</a>
   <a href="#mac">Mac sessions</a>
@@ -35,7 +36,7 @@
   <dt>Open</dt><dd><a href="http://vanpi:8777">vanpi:8777</a> over Tailscale only (the Pi's MagicDNS name or <code>tailscale ip -4</code> address), or <code>127.0.0.1:8777</code> on the Pi itself. Not from the van LAN. No login; anyone on the tailnet can use it.</dd>
   <dt>Kind</dt><dd>A user systemd service on the Pi (<code>llm-switchboard</code>): a supervisor that runs sessions in tmux, plus this web page and a CLI. Python standard library, no build step.</dd>
   <dt>Source</dt><dd><code>~/dev/llm-switchboard</code> on the Pi · <code>JakeIwen/llm-switchboard</code> (private). The service runs from that checkout.</dd>
-  <dt>Status</dt><dd><span class="tag ok">In daily use</span> Codex support added 2026-10-15 on an API Codex marks experimental. Mac sessions added 2026-10-18; transcript search 2026-10-19.</dd>
+  <dt>Status</dt><dd><span class="tag ok">In daily use</span> Codex support added 2026-10-15 on an API Codex marks experimental. Mac sessions added 2026-10-18; transcript search 2026-10-19; settings dialog 2026-10-23.</dd>
   <dt>Updated</dt><dd>2026-10-23</dd>
 </dl>
 
@@ -43,11 +44,11 @@
   <h2>The page</h2>
   <p>One list of every session on the Pi, newest activity first. It refreshes itself every few seconds. Below is a mock-up with one session expanded; the numbers are explained under it.</p>
   <div class="mock" aria-label="Mock-up of the picker page">
-    <div class="m-head"><b>LLM Switchboard</b><span class="m-sub">vanpi · 2 kept running · 2 with Remote Control <span class="k">1</span></span><span class="m-btn primary">+ New session <span class="k">2</span></span></div>
-    <div class="m-bar"><span class="m-input">Search ( -exclude "phrase" dir: is:kept age:&lt;2d )</span><span class="m-btn">?</span><span class="k">3</span>
-      <span class="m-seg"><span class="on">All</span><span>Kept running</span><span>Open now</span></span><span class="k">4</span>
+    <div class="m-head"><b>LLM Switchboard</b><span class="m-sub">vanpi · 2 kept running · 2 with Remote Control <span class="k">1</span></span><span class="m-head-actions"><span class="m-btn">⚙ Settings <span class="k">15</span></span><span class="m-btn primary">+ New session <span class="k">2</span></span></span></div>
+    <div class="m-bar m-search-bar"><span class="m-seg m-scope"><span class="on">Sessions</span><span>Transcripts</span></span><span class="m-input">Search sessions…</span><span class="m-btn m-help">? <span class="k">3</span></span><span class="m-sort"><span class="m-btn">Sort ▾</span><span class="k">14</span></span></div>
+    <div class="m-bar m-filter-bar"><span class="m-status-filter"><span class="m-seg"><span class="on">All</span><span>Kept running</span><span>Open now</span></span><span class="k">4</span></span>
       <span class="m-seg"><span class="on">All tools</span><span>Claude</span><span>Codex</span></span>
-      <span class="m-btn">Kept first ▾</span><span class="k">14</span><span class="m-btn">All folders · 27</span><span class="k">5</span></div>
+      <span class="m-folders"><span class="m-btn">3 folders · 27</span><span class="m-btn m-clear">×</span><span class="k">5</span></span></div>
     
     <div class="m-card kept">
       <div class="m-row"><span class="m-check"></span><span class="k">6</span><span class="m-switch on"></span><span class="k">7</span>
@@ -58,7 +59,7 @@
     </div>
 
     <div class="m-card">
-      <div class="m-row"><span class="m-check"></span><span class="m-tool">Codex</span><span class="k">10</span>
+      <div class="m-row"><span class="m-check"></span><span class="m-tags"><span class="m-tool" title="Codex session">Codex</span><span class="m-tool" title="On the Pi (vanpi)">Pi</span></span><span class="k">10</span>
         <div class="m-main"><div class="m-title">CAN decoder cleanup</div>
           <div class="m-meta"><u>~/dev/can-fd</u><span>1h ago</span><code>9bc3e600</code></div>
           <div class="m-badges"><span class="m-badge info">Working</span></div></div>
@@ -77,7 +78,7 @@
         <div><label>Title</label><div class="m-line"><span class="m-input">OpenWrt mwan3 policy</span><span class="m-btn">Rename</span></div></div>
         <div><label>Working folder (Move takes the transcript there and a kept session restarts there; ▾ Fork copies it instead)</label><div class="m-line"><span class="m-input">/home/pi/dev/scripts</span><span class="m-split"><span class="m-btn">Move</span><span class="m-btn">▾</span></span></div></div>
         <div><label>Remote Control name (blank = session title; applies on next launch)</label><div class="m-line"><span class="m-input">mwan3</span><span class="m-btn">Save</span></div></div>
-        <div><label>Resume in a shell on the Pi</label><div class="m-line"><span class="m-cmd">cd -- /home/pi/dev/scripts &amp;&amp; claudepd --resume 4dfb1309-…</span><span class="m-btn">Copy</span></div></div>
+        <div><label>Resume in a shell on the Pi</label><div class="m-line"><span class="m-cmd">cd -- /home/pi/dev/scripts &amp;&amp; claudep --resume 4dfb1309-…</span><span class="m-btn">Copy</span></div></div>
       </div>
     </div>
     <div class="m-trash">▸ Recently deleted (1) · kept 30 days <span class="k">12</span></div>
@@ -86,19 +87,21 @@
   <ol class="callouts">
     <li><span class="k">1</span><span>Host, how many sessions are kept running, and how many of those currently have Remote Control connected. Once the Mac has pushed, also <code>m4mac: online</code> or <code>offline, last seen HH:MM</code> (<a href="#mac">Mac sessions</a>).</span></li>
     <li><span class="k">2</span><span>Start a session in an existing folder (<a href="#new">New session</a>). Key: <kbd>n</kbd>.</span></li>
-    <li><span class="k">3</span><span>Search; <strong>?</strong> opens the syntax. Every word must match; see <a href="#find">Find sessions</a>.</span></li>
-    <li><span class="k">4</span><span>Two filters: <strong>All / Kept running / Open now</strong> (open in any claude process, including SSH terminals) and <strong>All tools / Claude / Codex</strong>. The tool switch is remembered per browser and hidden when Codex support is off.</span></li>
-    <li><span class="k">5</span><span>The <a href="#folders">folder picker</a> is a searchable checklist: select several folders across machines, then close it to view their sessions together. Selected folders appear as removable chips. It opens as a bottom sheet on a phone and a dialog on desktop. Counts show unfiltered sessions in the default folder choices; they stay steady while you search or change tabs.</span></li>
-    <li><span class="k">6</span><span>Selection circle for <a href="#bulk">acting on several</a>. Clicking the row itself also selects it.</span></li>
-    <li><span class="k">7</span><span>The keep-running switch: on means the supervisor runs this session in tmux with Remote Control and restarts it whenever it exits. A kept card gets an orange border. Codex rows show a <strong>Codex</strong> tag here instead (<span class="k">10</span>): the Codex daemon already holds every session.</span></li>
+    <li><span class="k">3</span><span><strong>Sessions | Transcripts</strong> chooses live list filtering or full-text search. The scope control is joined to the search box on the left, with <strong>?</strong> on the right. Help shows only that scope's syntax plus the keys line; see <a href="#find">Find sessions</a>.</span></li>
+    <li><span class="k">4</span><span>Two filters on the second row: <strong>All / Kept running / Open now</strong> (open in any claude process, including SSH terminals) and <strong>All tools / Claude / Codex</strong>. The tool switch is remembered per browser and hidden when Codex support is off. Both filters and Folders are hidden in Transcripts scope.</span></li>
+    <li><span class="k">5</span><span>The <a href="#folders">folder picker</a> is a searchable checklist: select several folders across machines, then close it to view their sessions together. Selected folders appear as removable chips. Counts follow the Sessions query, status tab and tool switch. The fixed <strong>×</strong> at the trigger's right clears all selected folders and appears only with a selection (three folders here). It opens as a bottom sheet on a phone and a dialog on desktop.</span></li>
+    <li><span class="k">6</span><span>Selection circle for <a href="#bulk">acting on several</a>. Use it, <kbd>⌘</kbd>/<kbd>Ctrl</kbd>-click to add, <kbd>⇧</kbd>-click for a range, or <kbd>Space</kbd>. A plain click on the card body opens or closes its details instead.</span></li>
+    <li><span class="k">7</span><span>The Pi Claude keep-running switch: on means the supervisor runs this session in tmux with Remote Control and restarts it whenever it exits. A kept card gets an orange border. Pi Codex and Mac rows have stacked tool/machine tags instead (<span class="k">10</span>).</span></li>
     <li><span class="k">8</span><span>Badges: the supervisor state (<a href="#keep">table below</a>), <strong>Working</strong> while a turn runs, memory use, <strong>Queued</strong> before the first launch, <strong>New</strong> for a session created here that has not written a transcript yet, <strong>Open in a terminal</strong> when another claude process has it.</span></li>
-    <li><span class="k">9</span><span><strong>▾</strong> expands the <a href="#details">details panel</a>; <strong>×</strong> deletes (<a href="#delete">with undo</a>). Both are disabled while the session is open in another claude process.</span></li>
-    <li><span class="k">11</span><span>The details panel of a Claude session. A Codex panel has Recent messages, Title / Rename, Working folder / Fork… and the resume command only.</span></li>
+    <li><span class="k">9</span><span><strong>▾</strong> or a plain click on the card body opens or closes the <a href="#details">details panel</a>; <strong>×</strong> deletes (<a href="#delete">with undo</a>). Deletion is disabled while the session is open in another claude process.</span></li>
+    <li><span class="k">10</span><span>Stacked tags: <strong>Codex</strong> above <strong>Pi</strong> on Pi Codex rows; <strong>Mac</strong> above <strong>Claude</strong> or <strong>Codex</strong> on Mac rows. Tooltips name the machine and tool. The Codex daemon already holds every Codex session; these rows have no keep-running switch.</span></li>
+    <li><span class="k">11</span><span>The details panel of a Claude session. A Codex panel has Recent messages, Title / Rename, Working folder / Fork… and the resume command only. Copyable resume lines use the <a href="#settings">configured command</a>: <code>claudep</code> or <code>codexp</code> here.</span></li>
     <li><span class="k">12</span><span>Deleted sessions wait here 30 days with a Restore button and an <strong>Empty now</strong>.</span></li>
     <li><span class="k">13</span><span>The bar that appears once something is selected.</span></li>
-    <li><span class="k">14</span><span>Sort order, remembered per browser; see <a href="#find">Find sessions</a>.</span></li>
+    <li><span class="k">14</span><span>Sort order, remembered per browser and hidden in Transcripts scope; see <a href="#find">Find sessions</a>.</span></li>
+    <li><span class="k">15</span><span>The <a href="#settings">Settings</a> gear opens this install's commands, folder-menu rules and refresh interval. Changes apply in every browser.</span></li>
   </ol>
-  <p class="small">The page fits a phone: the toolbar wraps and the panel fields stack. There is a dark theme following the system setting.</p>
+  <p class="small">On phones, the scope control and Sort share the first row, the search box takes a full row, and the filter segments wrap onto full-width rows. Panel fields stack. The dark theme follows the system setting.</p>
 </section>
 
 <section id="keep">
@@ -127,7 +130,7 @@
 
 <section id="find">
   <h2>Find sessions</h2>
-  <p>Type in the search box. Every term must match, case ignored, against the title, first prompt, folder, id and Remote Control name. The selected folders and both filter rows combine with the search. Folder counts always use unfiltered sessions.</p>
+  <p>Choose <strong>Sessions</strong> and type in <strong>Search sessions…</strong> to filter the live list as you type. Every term must match, case ignored, against the title, first prompt, folder, id and Remote Control name. The selected folders, status tab and tool switch combine with the search. Folder counts follow the query, status and tool filters too.</p>
   <div class="table-wrap"><table class="stack"><thead><tr><th>Term</th><th>Matches</th></tr></thead><tbody>
     <tr><td class="lead-cell"><code>word</code> · <code>"two words"</code></td><td data-label="Matches">A word anywhere, or an exact phrase.</td></tr>
     <tr><td class="lead-cell"><code>-word</code> · <code>-dir:tmp</code> · <code>-"a phrase"</code></td><td data-label="Matches">Excludes; works in front of any term below.</td></tr>
@@ -143,17 +146,19 @@
   <h3 id="folders">Choose folders</h3>
   <p>Open the folder picker and use its search field to find a folder or machine. Tick any number of folders: sessions from any selected folder appear together, subject to the main search and tool/state filters. The list is grouped by machine (This Pi first, then other machines), with folders A–Z. A Pi folder and a Mac folder with the same path are separate choices.</p>
   <ul class="plain-list">
-    <li>Remove one folder with its chip, or choose <strong>All folders</strong> to clear the folder filter. Your selection is remembered in this browser.</li>
+    <li>Remove one folder with its chip, or use the fixed <strong>×</strong> at the right end of the Folders trigger to clear the selection. It appears only when folders are selected; there is no separate Clear button after the chips. Your selection is remembered in this browser.</li>
+    <li><strong>Invert</strong>, next to <strong>Done</strong> in the dialog footer, reverses the selection among visible choices. If you typed in the dialog's search field, only those matching choices are inverted.</li>
     <li>Clicking a folder path on a session selects that folder alone, including folders outside the normal choices. A selected folder stays available to remove even if its sessions disappear.</li>
-    <li>Default choices are the home folder and up to two levels below it, with at least two sessions per machine; <code>~/ais</code> and its children are excluded. The Mac's home folder also appears as <code>~</code>. Paths are teal for the Pi and violet for other machines.</li>
-    <li>Each count is that folder's full session count. The total adds only the default choices, excluding hidden deep folders, one-session folders and <code>~/ais</code>. Search text, tool/state tabs and an extra selected folder do not change that total. All folders still leaves the session list unrestricted, so its list may contain more sessions than the picker total.</li>
+    <li>The <a href="#settings">Settings</a> defaults list home and up to two levels below it, with at least two sessions per machine and no hidden prefixes. On vanpi, <code>~/ais</code> is hidden by setting, including its children. The Mac's home folder also appears as <code>~</code>. Paths are teal for the Pi and violet for other machines.</li>
+    <li>Which folders are listed is decided from their counts before the Sessions query, status tab and tool switch are applied, so choices do not come and go as you type. Their displayed counts, chip counts and the trigger's total do apply those filters; a listed folder can show <strong>0</strong>. The total sums the listed folders' counts plus any selected exception outside the normal choices. With nothing selected, <strong>All folders</strong> leaves the session list unrestricted, so the list may contain more sessions than that total.</li>
   </ul>
   <p class="small">On phones, including iPhone 16 Pro Max, the picker uses a scrollable bottom sheet with large tap targets. It remains open while you select several folders.</p>
   <h3 id="transcripts">Search inside transcripts</h3>
-  <p><strong>Transcripts</strong>, next to the search box, switches it to searching your prompts and the replies in the Pi's Claude Code and Codex sessions, both tools in one list, newest match first. Type a query and press <kbd>Enter</kbd>; <kbd>Esc</kbd>, the button again, or clearing the box goes back to the session list as it was. The filters, sort and folder menu are hidden meanwhile.</p>
+  <p><strong>Transcripts</strong> in the scope control searches your prompts and visible replies in the Pi's Claude Code and Codex sessions, both tools in one list, newest match first. Its placeholder is <strong>Search transcripts — press Enter</strong>. Choosing this scope carries the translated Sessions query over but waits for <kbd>Enter</kbd> before searching. Pressing <kbd>Enter</kbd> with text in Sessions switches scopes and runs the same words immediately.</p>
+  <p>The bridge changes <code>is:claude</code>/<code>is:codex</code> to <code>tool:claude</code>/<code>tool:codex</code>. Other session-only terms (<code>is:*</code>, <code>state:</code>, <code>title:</code>, <code>id:</code>) are left out, with <strong>Ignored inside transcripts: …</strong> under the toolbar. <kbd>Esc</kbd>, clearing the box, or choosing <strong>Sessions</strong> restores the earlier Sessions query. The status, tool and folder controls and Sort are hidden in Transcripts scope. <strong>?</strong> shows only the active scope's syntax plus the keys line.</p>
   <ul class="plain-list">
     <li>Each result shows the session, how many records match, when the latest one was, and its text around the match.</li>
-    <li><strong>Open matches</strong> lists up to a dozen matches with the message before and after each, labelled You or Reply, and a copyable <code>claudepd --resume</code> or <code>codexp resume</code> line.</li>
+    <li><strong>Open matches</strong> lists up to a dozen matches with the message before and after each, labelled You or Reply, and a copyable resume line using the <a href="#settings">configured command</a>: <code>cd -- … &amp;&amp; claudep --resume &lt;id&gt;</code> or <code>cd -- … &amp;&amp; codexp resume &lt;id&gt;</code> on this install.</li>
     <li>Mac sessions appear only when the words are in their title or folder ("title/folder match only"), with their resume command: their text never leaves the Mac.</li>
     <li>The line under the toolbar says how many sessions the index holds and when it last caught up.</li>
   </ul>
@@ -162,7 +167,7 @@
     <tr><td class="lead-cell"><code>-word</code> · <code>-"a phrase"</code></td><td data-label="Matches">Leaves out sessions where it appears anywhere.</td></tr>
     <tr><td class="lead-cell"><code>tool:claude</code> · <code>tool:codex</code></td><td data-label="Matches">One tool only.</td></tr>
     <tr><td class="lead-cell"><code>dir:obd</code></td><td data-label="Matches">Part of the session's folder.</td></tr>
-    <tr><td class="lead-cell"><code>by:me</code> · <code>by:reply</code></td><td data-label="Matches">Only your prompts; only the replies.</td></tr>
+    <tr><td class="lead-cell"><code>by:me</code> · <code>by:reply</code></td><td data-label="Matches">Only your prompts; only visible replies. Thinking and tool output are not indexed.</td></tr>
     <tr><td class="lead-cell"><code>age:&lt;2d</code> · <code>after:2026-10-01</code> · <code>before:2026-10-18</code></td><td data-label="Matches">By the session's last activity.</td></tr>
   </tbody></table></div>
   <p class="small">The index lives on the Pi and updates itself every 30 seconds at low priority, reading only what was added. Its first build reads every transcript and takes a minute or two; searches find nothing until it finishes. A query that would take over 5 seconds is stopped: add a rarer word or a phrase. Thinking, tool calls, tool output, injected instructions and Codex subagents are not indexed. In a shell, <code>llmsearch</code> searches this index; <code>llmsearch --grep</code> greps the transcripts instead, slowly, thinking, tool calls and tool output included (and for Codex, injected instructions and subagents).</p>
@@ -179,24 +184,24 @@
 
 <section id="details">
   <h2>The details panel</h2>
-  <p><strong>▾</strong> (or <kbd>Enter</kbd> on the highlighted row) opens it under the row. What it offers for a Claude session:</p>
+  <p>A plain click on a card body or <strong>▾</strong> opens or closes its details; <kbd>Enter</kbd> opens the highlighted row's panel. What the panel offers for a Claude session:</p>
   <div class="table-wrap"><table class="stack"><thead><tr><th>Control</th><th>Does</th></tr></thead><tbody>
     <tr><td class="lead-cell">Open in Claude ↗</td><td data-label="Does">The claude.ai/code link from the session's last Remote Control connection. Only after it has connected once.</td></tr>
     <tr><td class="lead-cell">Recent messages</td><td data-label="Does">The last few prompts and replies, read from the transcript, to tell similar sessions apart.</td></tr>
     <tr><td class="lead-cell">Terminal screen</td><td data-label="Does">Kept sessions: the tmux window's last 200 lines, or the screen as it was when claude last exited. The place to read a waiting prompt. <strong>×</strong> in its corner closes it.</td></tr>
     <tr><td class="lead-cell">Restart</td><td data-label="Does">Kept sessions: relaunch now.</td></tr>
     <tr><td class="lead-cell">Title · Rename</td><td data-label="Does">A kept session that is idle gets <code>/rename</code> typed into its window; a closed session gets Claude Code's own title record appended to its transcript. Either way the new title shows everywhere Claude Code lists sessions.</td></tr>
-    <tr><td class="lead-cell">Working folder · Move</td><td data-label="Does">Moves the transcript under the other folder's project directory and rewrites its <code>cwd</code> fields, so <code>claudepd --resume</code> works from there. A kept session restarts in the new folder. Type a path or pick one from the list of known folders.</td></tr>
+    <tr><td class="lead-cell">Working folder · Move</td><td data-label="Does">Moves the transcript under the other folder's project directory and rewrites its <code>cwd</code> fields, so the configured <code>claudep --resume</code> command works from there. A kept session restarts in the new folder. Type a path or pick one from the list of known folders.</td></tr>
     <tr><td class="lead-cell">Move ▾ · Fork…</td><td data-label="Does">The arrow beside Move opens a menu with <strong>Fork…</strong>: copy the conversation so far into a new session with a new id and a name you choose, in this folder or another, optionally kept running. The original is only read, so it can be running. The copy drops the original's Remote Control link and any half-written last line.</td></tr>
     <tr><td class="lead-cell">Remote Control name · Save</td><td data-label="Does">The name shown in the Claude app. Blank uses the title. Takes effect at the next launch.</td></tr>
-    <tr><td class="lead-cell">Resume in a shell on the Pi</td><td data-label="Does">A copyable <code>cd … &amp;&amp; claudepd --resume …</code> line. Kept sessions also get <code>llm-switchboard attach &lt;id&gt;</code>, which opens the tmux window in your terminal (detach with <kbd>Ctrl-b</kbd> <kbd>d</kbd>).</td></tr>
+    <tr><td class="lead-cell">Resume in a shell on the Pi</td><td data-label="Does">A copyable <code>cd -- … &amp;&amp; claudep --resume &lt;id&gt;</code> line using the configured Claude command (<code>claudep</code> here). Kept sessions also get <code>llm-switchboard attach &lt;id&gt;</code>, which opens the tmux window in your terminal (detach with <kbd>Ctrl-b</kbd> <kbd>d</kbd>).</td></tr>
   </tbody></table></div>
   <p class="small">Rename, Move and × are refused while the session is open in another claude process, the same rule as <code>clauderm</code> and <code>claudeclean</code>: a running process owns its transcript. No two sessions in one folder may share a name (case and spacing ignored); rename, fork, move and new are refused with a message when they would make a duplicate.</p>
 </section>
 
 <section id="bulk">
   <h2>Several at once</h2>
-  <p>Click a row to select it, <kbd>⌘</kbd>/<kbd>Ctrl</kbd>-click to add one, <kbd>⇧</kbd>-click for a range, or tap the circle. The bar at the bottom applies to the selection:</p>
+  <p>Use a card's selection circle, <kbd>⌘</kbd>/<kbd>Ctrl</kbd>-click to add one, <kbd>⇧</kbd>-click for a range, or <kbd>Space</kbd> on the highlighted row. A plain card-body click opens or closes details; it does not select. The bar at the bottom applies to the selection:</p>
   <div class="table-wrap"><table class="stack"><thead><tr><th>Button</th><th>Does</th></tr></thead><tbody>
     <tr><td class="lead-cell">Keep running · Stop keeping</td><td data-label="Does">Flip the switch on every selected Claude session, after a confirmation that lists them. Codex rows are skipped with a note.</td></tr>
     <tr><td class="lead-cell">Move to folder…</td><td data-label="Does">One folder for all of them; sessions open elsewhere, or whose name is already taken there, are reported and left alone. Codex rows are skipped.</td></tr>
@@ -206,9 +211,9 @@
   <h3>Keys</h3>
   <div class="table-wrap"><table class="stack"><thead><tr><th>Key</th><th>Does</th></tr></thead><tbody>
     <tr><td class="lead-cell"><kbd>↑</kbd> <kbd>↓</kbd> or <kbd>j</kbd> <kbd>k</kbd></td><td data-label="Does">Move the highlight.</td></tr>
-    <tr><td class="lead-cell"><kbd>Space</kbd> · <kbd>⇧</kbd>+<kbd>↑</kbd><kbd>↓</kbd></td><td data-label="Does">Select the highlighted row; extend the selection.</td></tr>
+    <tr><td class="lead-cell"><kbd>Space</kbd> · <kbd>⇧</kbd>+<kbd>↑</kbd><kbd>↓</kbd></td><td data-label="Does">Toggle selection of the highlighted row; extend the selection.</td></tr>
     <tr><td class="lead-cell"><kbd>⌘</kbd>/<kbd>Ctrl</kbd>+<kbd>A</kbd> · <kbd>Esc</kbd></td><td data-label="Does">Select everything shown; clear the selection (or close a dialog).</td></tr>
-    <tr><td class="lead-cell"><kbd>Enter</kbd> · <kbd>⌫</kbd></td><td data-label="Does">Open the highlighted row's details; delete the selection.</td></tr>
+    <tr><td class="lead-cell"><kbd>Enter</kbd> · <kbd>⌫</kbd></td><td data-label="Does">Open the highlighted row's details; delete the selection. In the search box, Enter runs transcript search.</td></tr>
     <tr><td class="lead-cell"><kbd>/</kbd> · <kbd>n</kbd></td><td data-label="Does">Search; New session. Dialogs confirm with <kbd>Enter</kbd>.</td></tr>
   </tbody></table></div>
 </section>
@@ -224,6 +229,21 @@
   <div class="code"><pre><code>llm-switchboard new --list                                   # folders a new session may use
 llm-switchboard new ~/dev/obd-things "ignition-off logger"
 llm-switchboard new ~/dev/can-fd "decoder cleanup" --codex "tidy the DBC loader and add tests"</code></pre></div>
+</section>
+
+<section id="settings">
+  <h2>Settings</h2>
+  <p>The <strong>Settings</strong> gear beside <strong>+ New session</strong> opens six fields. They are stored on the Pi in <code>~/.config/llm-switchboard/settings.json</code> and apply to this install in every browser, not just the browser that saved them.</p>
+  <div class="table-wrap"><table class="stack"><thead><tr><th>Field</th><th>Default and limits</th></tr></thead><tbody>
+    <tr><td class="lead-cell">Claude command</td><td data-label="Default and limits"><code>claude</code>. Must be one shell word.</td></tr>
+    <tr><td class="lead-cell">Codex command</td><td data-label="Default and limits"><code>codex</code>. Must be one shell word.</td></tr>
+    <tr><td class="lead-cell">Folder menu depth</td><td data-label="Default and limits">2 levels below home; allowed 0–6.</td></tr>
+    <tr><td class="lead-cell">Minimum sessions per folder</td><td data-label="Default and limits">2; allowed 1–50. Determines which folders are normally listed, before list filters are applied.</td></tr>
+    <tr><td class="lead-cell">Hidden folders</td><td data-label="Default and limits">None. Comma-separated <code>~/…</code> prefixes hide those folders and their children from the normal menu choices.</td></tr>
+    <tr><td class="lead-cell">Refresh interval</td><td data-label="Default and limits">4 seconds; allowed 2–60 seconds.</td></tr>
+  </tbody></table></div>
+  <p>On vanpi, the commands are <code>claudep</code> and <code>codexp</code>, and Hidden folders includes <code>~/ais</code>. The commands set the <strong>Resume in a shell</strong> lines on Pi rows, Mac rows and transcript-search results: <code>cd -- … &amp;&amp; claudep --resume &lt;id&gt;</code> or <code>cd -- … &amp;&amp; codexp resume &lt;id&gt;</code>. They also set what <code>llm-switchboard new --codex</code> prints. Kept-running launches still use <code>claudepd</code>, regardless of these settings.</p>
+  <p class="small">The <a href="#cli">settings CLI</a> reads the same values; <code>llm-switchboard settings set KEY VALUE</code> changes one. The API exposes <code>GET /api/settings</code> and <code>POST /api/settings</code>; <code>/api/sessions</code> also includes the settings.</p>
 </section>
 
 <section id="delete">
@@ -248,26 +268,26 @@ llm-switchboard new ~/dev/can-fd "decoder cleanup" --codex "tidy the DBC loader 
     <tr><td class="lead-cell">New</td><td data-label="Claude">Folder and name.</td><td data-label="Codex">Folder, name and a first message it starts working on.</td></tr>
     <tr><td class="lead-cell">Working</td><td data-label="Claude">While a turn runs in a kept session.</td><td data-label="Codex">While a turn runs; a turn keeps going after whoever started it disconnects.</td></tr>
     <tr><td class="lead-cell">Open in a terminal</td><td data-label="Claude">Detected from the claude process list.</td><td data-label="Codex">Not detected. A Codex TUI started with extra <code>-c</code> options does not even go through the daemon.</td></tr>
-    <tr><td class="lead-cell">Resume in a shell</td><td data-label="Claude"><code>claudepd --resume</code></td><td data-label="Codex"><code>codexp resume &lt;id&gt;</code></td></tr>
+    <tr><td class="lead-cell">Resume in a shell</td><td data-label="Claude">Configured Claude command: <code>claudep --resume &lt;id&gt;</code> here.</td><td data-label="Codex">Configured Codex command: <code>codexp resume &lt;id&gt;</code> here.</td></tr>
   </tbody></table></div>
   <p class="small">Same-name rule across both: a Codex session cannot take a Claude session's name in the same folder, or the other way round. Short ids are the last 8 characters for Codex (its ids are time-ordered, so the first 8 collide) and the first 8 for Claude.</p>
 </section>
 
 <section id="mac">
   <h2>Mac sessions</h2>
-  <p>The Mac's Claude Code and Codex sessions appear in the same list, tagged <strong>Mac</strong>, while the Mac is awake. The Mac does the work: a launchd job there runs the same package, computes its own rows every 10 seconds and pushes them to the Pi over SSH with a key of its own, which the Pi accepts for one command only. The Mac opens no port and runs no web page, and the Pi has no way into the Mac.</p>
+  <p>The Mac's Claude Code and Codex sessions appear in the same list, with stacked <strong>Mac</strong> and <strong>Claude</strong> or <strong>Codex</strong> tags, while the Mac is awake. Tag tooltips name the machine and tool; the badge reads <code>m4mac · online</code>, without repeating the tool. The Mac does the work: a launchd job there runs the same package, computes its own rows every 10 seconds and pushes them to the Pi over SSH with a key of its own, which the Pi accepts for one command only. The Mac opens no port and runs no web page, and the Pi has no way into the Mac.</p>
   <div class="mock" aria-label="Mock-up of a Mac row">
     <div class="m-card">
-      <div class="m-row"><span class="m-check"></span><span class="m-tool">Mac</span>
+      <div class="m-row"><span class="m-check"></span><span class="m-tags"><span class="m-tool" title="On the Mac (m4mac)">Mac</span><span class="m-tool" title="Claude session">Claude</span></span>
         <div class="m-main"><div class="m-title">Telemetry dashboard layout</div>
           <div class="m-meta"><u>~/dev/obd-things</u><span>12m ago</span><code>5e0d41b2</code><span>2.1 MB</span></div>
-          <div class="m-badges"><span class="m-badge info">m4mac · online · Claude</span></div></div>
+          <div class="m-badges"><span class="m-badge info">m4mac · online</span></div></div>
         <div class="m-side"><span>▴</span><span>×</span></div></div>
       <div class="m-panel">
         <div><label>Title</label><div class="m-line"><span class="m-input">Telemetry dashboard layout</span><span class="m-btn">Rename</span></div></div>
         <div><label>Working folder on the Mac</label><div class="m-line"><span class="m-input">/Users/…/dev/obd-things</span><span class="m-btn">Move</span></div></div>
         <div class="m-actions"><span class="m-btn">Fork on the Mac…</span><span class="m-btn">Fork onto the Pi…</span><span class="m-btn">Delete</span></div>
-        <div><label>Resume in a shell on the Mac</label><div class="m-line"><span class="m-cmd">cd -- /Users/…/dev/obd-things &amp;&amp; claude --resume 5e0d41b2-…</span><span class="m-btn">Copy</span></div></div>
+        <div><label>Resume in a shell on the Mac</label><div class="m-line"><span class="m-cmd">cd -- /Users/…/dev/obd-things &amp;&amp; claudep --resume 5e0d41b2-…</span><span class="m-btn">Copy</span></div></div>
       </div>
     </div>
   </div>
@@ -277,7 +297,7 @@ llm-switchboard new ~/dev/can-fd "decoder cleanup" --codex "tidy the DBC loader 
     <li><strong>Actions are queued</strong>, and the Mac runs them on its next push after checking them itself: <strong>Rename</strong>, <strong>Move</strong>, <strong>Fork on the Mac…</strong> (never started or kept running), <strong>Delete</strong> to the Mac's own trash, and <strong>Restore</strong> from Recently deleted. Nothing that starts a process or sends a prompt can be queued. The Mac refuses a session that is open in a claude process there, or a Codex session working on a turn.</li>
     <li><strong>Fork onto the Pi…</strong> (Claude sessions only) is the one way a conversation leaves the Mac. The Mac posts a notification, logs the upload and sends that one transcript (at most 16 MiB, 10 uploads an hour). It becomes a new Pi session, not running, in the Pi folder with the same path under the home folder (<code>~/dev/obd-things</code> on the Mac goes to <code>~/dev/obd-things</code> on the Pi), which must already exist there. Its name must be free in that folder.</li>
     <li><strong>Mac Codex sessions</strong> need the Codex daemon running on the Mac for any action; without it they are listed from disk, read-only. They have no Move and no Fork onto the Pi.</li>
-    <li>The resume command uses plain <code>claude --resume</code> or <code>codex resume</code>, to paste into a shell on the Mac.</li>
+    <li>The resume command uses the <a href="#settings">configured commands</a> (<code>claudep --resume &lt;id&gt;</code> or <code>codexp resume &lt;id&gt;</code> here), to paste into a shell on the Mac. Copying it does not start anything on the Mac.</li>
   </ul>
   <h3>Action status</h3>
   <p>A box above the list shows the last ten minutes of Mac actions, each with its state:</p>
@@ -315,6 +335,10 @@ llm-switchboard search 'can decoder by:me'      # transcript search; same terms 
 llm-switchboard search 'can decoder' --session codex:019f   # one result's matches in context
 llm-switchboard search 'can decoder' --json   # one JSON line per result, for scripts
 llm-switchboard index                # catch the transcript index up now
+llm-switchboard settings             # current settings as JSON
+llm-switchboard settings set folders.depth 3
+llm-switchboard settings set folders.hidden "~/ais,~/tmp"
+llm-switchboard settings set claude_command claudep
 llm-switchboard stop-all             # kill the tmux server and every session in it
 llm-switchboard host-authorize m4mac &lt; key.pub   # install a Mac's restricted key (the setup script runs it over SSH)
 journalctl --user -u llm-switchboard -f</code></pre></div>
@@ -325,7 +349,7 @@ journalctl --user -u llm-switchboard -f</code></pre></div>
   <ul class="plain-list">
     <li>Checkout <code>~/dev/llm-switchboard</code>; the service runs <code>bin/llm-switchboard serve</code> from it, so a code change needs <code>systemctl --user restart llm-switchboard</code>. Running sessions are untouched: the tmux server is in its own systemd scope and the restarted supervisor adopts the windows.</li>
     <li>User unit <code>llm-switchboard</code>, started at boot through <code>loginctl enable-linger pi</code>. Port 8777, on localhost and the Tailscale address only; it answers only localhost and Tailscale peers, and binds the Tailscale address once Tailscale is up. <code>serve --host ADDR</code> (repeatable, <code>tailscale</code> for that address) changes where it listens.</li>
-    <li>State: <code>~/.config/llm-switchboard/sessions.json</code> (enabled sessions) and <code>codex-trash.json</code> (Codex sessions deleted here); trash in <code>~/.local/share/llm-switchboard/trash/</code>; what the Mac last pushed, and its action queue, in <code>~/.local/share/llm-switchboard/hosts/m4mac.json</code>; the transcript search index in <code>~/.local/share/llm-switchboard/transcript-search.sqlite3</code> and its <code>-wal</code>, <code>-shm</code> and <code>.lock</code> files. To rebuild it from scratch, stop the service, delete all four, and start it again.</li>
+    <li>State in <code>~/.config/llm-switchboard/</code>: <code>sessions.json</code> (enabled sessions), <code>settings.json</code> (install-wide settings) and <code>codex-trash.json</code> (Codex sessions deleted here); trash in <code>~/.local/share/llm-switchboard/trash/</code>; what the Mac last pushed, and its action queue, in <code>~/.local/share/llm-switchboard/hosts/m4mac.json</code>; the transcript search index in <code>~/.local/share/llm-switchboard/transcript-search.sqlite3</code> and its <code>-wal</code>, <code>-shm</code> and <code>.lock</code> files. To rebuild it from scratch, stop the service, delete all four, and start it again.</li>
     <li>On the Mac: the launchd job <code>~/Library/LaunchAgents/dev.llm-switchboard.host-agent.plist</code>, logs (including every upload) in <code>~/Library/Logs/llm-switchboard/</code>, its record of actions run and the upload quota in <code>~/.config/llm-switchboard/</code>, its trash in <code>~/.local/share/llm-switchboard/trash/</code>.</li>
     <li>Sessions are the same files Claude Code uses, <code>~/.claude/projects/*/*.jsonl</code>, read in place; Codex sessions come from the daemon socket under <code>~/.codex/app-server-control/</code>.</li>
     <li>Tests: <code>python3 -m unittest discover -s tests</code> and <code>tests/browser/run.sh</code> (headless Chromium against a fake home and a fake Codex daemon). The repo's AGENTS.md asks for this guide to be updated with any change in behaviour.</li>
