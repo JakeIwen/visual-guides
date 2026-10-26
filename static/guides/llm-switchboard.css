@@ -1,9 +1,7 @@
-/* LLM Switchboard guide: a static mock-up of the picker page, drawn with the site's
-   tokens so it reads in light and dark. Nothing here is interactive. */
-
+/* Static picker illustration; shared palette and guide primitives stay in assets/. */
 .mock {
   margin: .75rem 0 .5rem;
-  padding: .9rem 1rem 1rem;
+  padding: .85rem;
   background: var(--bg);
   border: 1px solid var(--line-strong);
   border-radius: 10px;
@@ -11,103 +9,63 @@
   line-height: 1.4;
 }
 .mock * { min-width: 0; }
-.mock .m-head { display: flex; justify-content: space-between; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
-.mock .m-head b { font-size: 1.05rem; }
-.mock .m-head-actions { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
-.mock .m-sub { color: var(--muted); font-size: .8rem; }
-.mock .m-btn, .mock .m-seg, .mock .m-input {
+.mock .m-head { display: flex; justify-content: space-between; gap: .5rem; align-items: center; }
+.mock .m-head b { font-size: 1rem; }
+.mock .m-head-actions { display: flex; gap: .4rem; flex: none; }
+.mock .m-summary, .mock .m-count { color: var(--muted); font-size: .75rem; margin: .4rem 0; }
+.mock .m-btn {
   display: inline-block;
   border: 1px solid var(--line-strong);
   background: var(--surface);
   color: var(--ink);
-  border-radius: 8px;
-  padding: .3rem .6rem;
-  font-size: .8rem;
-  vertical-align: middle;
+  border-radius: 6px;
+  padding: .3rem .45rem;
+  font-size: .75rem;
 }
-.mock .m-btn.primary { background: var(--ar-accent); color: var(--ar-accent-ink); border-color: var(--ar-accent); font-weight: 600; }
+.mock .m-btn.primary { background: var(--warn-bg); border-color: var(--warn-line); }
 .mock .m-btn.danger { color: var(--bad-ink); }
-.mock .m-input { flex: 1 1 14rem; color: var(--muted); }
-.mock .m-bar { display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; margin: .7rem 0 .5rem; }
-.mock .m-seg { padding: 0; overflow: hidden; white-space: nowrap; }
-.mock .m-seg span { display: inline-block; padding: .3rem .55rem; color: var(--muted); border-right: 1px solid var(--line); }
-.mock .m-seg span:last-child { border-right: 0; }
-.mock .m-seg span.on { background: var(--surface-2); color: var(--ink); font-weight: 600; }
-.mock .m-search-bar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 0; }
-.mock .m-search-bar .m-scope { border-radius: 8px 0 0 8px; }
-.mock .m-search-bar .m-input { border-radius: 0; border-left: 0; border-right: 0; }
-.mock .m-search-bar .m-help { border-radius: 0 8px 8px 0; }
-.mock .m-sort { display: flex; align-items: center; margin-left: .5rem; }
-.mock .m-status-filter, .mock .m-folders { display: inline-flex; align-items: center; }
-.mock .m-folders .m-btn:first-child { border-radius: 8px 0 0 8px; }
-.mock .m-folders .m-clear { border-radius: 0 8px 8px 0; border-left: 0; }
-
-.mock .m-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: .6rem .75rem; margin-bottom: .45rem; }
-.mock .m-card.kept { border-color: var(--ar-accent); }
-.mock .m-row { display: flex; gap: .6rem; align-items: flex-start; }
-.mock .m-check { flex: none; width: 1.05rem; height: 1.05rem; border: 1.5px solid var(--line-strong); border-radius: 50%; margin-top: .15rem; }
-.mock .m-check.on { background: var(--ar-accent); border-color: var(--ar-accent); }
-.mock .m-switch { flex: none; width: 2.3rem; height: 1.3rem; border-radius: 999px; background: var(--line-strong); position: relative; margin-top: .05rem; }
-.mock .m-switch::after { content: ""; position: absolute; top: .15rem; left: .15rem; width: 1rem; height: 1rem; border-radius: 50%; background: var(--surface); }
+.mock .m-search {
+  display: flex;
+  justify-content: space-between;
+  margin-top: .7rem;
+  padding: .45rem .65rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--muted);
+}
+.mock .m-filters { display: grid; grid-template-columns: 1.2fr 1.2fr .8fr auto; gap: .35rem; margin: .4rem 0; }
+.mock .m-filters .m-btn { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mock .m-reset { align-self: center; color: var(--muted); font-size: .75rem; }
+.mock .m-list { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.mock .m-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .5rem; padding: .6rem; border-top: 1px solid var(--line); }
+.mock .m-row:first-child { border-top: 0; }
+.mock .m-row.kept { box-shadow: inset 3px 0 0 var(--ar-accent); }
+.mock .m-check { width: .85rem; height: .85rem; border: 1px solid var(--line-strong); border-radius: 3px; margin-top: .2rem; }
+.mock .m-switch { width: 2rem; height: 1.1rem; border-radius: 999px; background: var(--line-strong); position: relative; margin-top: .15rem; }
+.mock .m-switch::after { content: ""; position: absolute; top: .15rem; left: .15rem; width: .8rem; height: .8rem; border-radius: 50%; background: var(--surface); }
 .mock .m-switch.on { background: var(--ar-accent); }
 .mock .m-switch.on::after { left: auto; right: .15rem; }
-.mock .m-tags { display: flex; flex-direction: column; align-items: center; gap: .2rem; flex: none; }
-.mock .m-tool { flex: none; font-size: .72rem; font-weight: 600; padding: .15rem .45rem; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--muted); margin-top: .1rem; }
-.mock .m-main { flex: 1; }
-.mock .m-title { font-weight: 600; }
-.mock .m-meta { color: var(--muted); font-size: .78rem; display: flex; gap: .2rem .6rem; flex-wrap: wrap; }
-.mock .m-meta code { font-size: .72rem; background: none; padding: 0; }
-.mock .m-meta u { text-decoration: underline dotted; text-underline-offset: 2px; }
-.mock .m-badges { display: flex; gap: .3rem; flex-wrap: wrap; margin-top: .3rem; }
-.mock .m-badge { font-size: .72rem; font-weight: 600; padding: .05rem .5rem; border-radius: 999px; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
-.mock .m-badge.ok { background: var(--ok-bg); color: var(--ok-ink); }
-.mock .m-badge.info { background: var(--ar-info-bg); color: var(--ar-info); }
-.mock .m-badge.warn { background: var(--warn-bg); color: var(--warn-ink); }
-.mock .m-side { flex: none; display: flex; gap: .5rem; color: var(--muted); font-size: 1rem; }
-
-.mock .m-panel { margin-top: .6rem; padding-top: .6rem; border-top: 1px solid var(--line); display: grid; gap: .55rem; }
-.mock .m-panel label { display: block; font-size: .72rem; color: var(--muted); margin-bottom: .15rem; }
-.mock .m-line { display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; }
-.mock .m-line .m-input { flex: 1 1 10rem; color: var(--ink); font-family: var(--mono); font-size: .78rem; }
+.mock .m-title { font-weight: 600; overflow-wrap: anywhere; }
+.mock .m-meta { color: var(--muted); font-size: .75rem; display: flex; align-items: center; gap: .25rem .6rem; flex-wrap: wrap; margin-top: .25rem; }
+.mock .m-identity { border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-weight: 600; }
+.mock .m-folder { text-decoration: underline dotted; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.mock .m-pills { display: flex; gap: .3rem; flex-wrap: wrap; margin-top: .35rem; }
+.mock .m-pill { font-size: .7rem; padding: .05rem .45rem; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+.mock .m-pill.ok { background: var(--ok-bg); color: var(--ok-ink); }
+.mock .m-pill.warn { background: var(--warn-bg); color: var(--warn-ink); }
+.mock .m-details { margin-top: .6rem; padding-top: .6rem; border-top: 1px dashed var(--line); }
 .mock .m-actions { display: flex; gap: .4rem; flex-wrap: wrap; }
-.mock .m-cmd { flex: 1 1 10rem; font: .76rem var(--mono); background: var(--code-bg); border: 1px solid var(--line); border-radius: 6px; padding: .3rem .5rem; overflow-wrap: anywhere; }
-.mock .m-msgs { display: grid; gap: .3rem; font-size: .8rem; }
-.mock .m-msg { padding: .3rem .55rem; border-radius: 8px; background: var(--surface-2); max-width: 90%; }
-.mock .m-msg.user { background: var(--ar-info-bg); color: var(--ar-info); margin-left: auto; }
-.mock .m-split { display: inline-flex; }
-.mock .m-split .m-btn:first-child { border-radius: 8px 0 0 8px; }
-.mock .m-split .m-btn:last-child { border-radius: 0 8px 8px 0; border-left: 0; padding: .3rem .45rem; }
-.mock .m-bulk { display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; margin-top: .75rem; padding: .5rem .75rem; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 10px; }
-.mock .m-bulk b { margin-right: auto; }
-.mock .m-trash { color: var(--accent); font-size: .8rem; margin-top: .5rem; }
+.mock .m-details p { font-size: .75rem; color: var(--muted); margin: .5rem 0; }
+.mock .m-id { font: .7rem var(--mono); color: var(--muted); }
 
-/* numbered callouts: a marker in the mock, the same number in the legend */
-.mock .k, .callouts .k {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.15rem;
-  height: 1.15rem;
-  border-radius: 50%;
-  background: var(--ink);
-  color: var(--bg);
-  font: 600 .7rem/1 var(--mono);
-  vertical-align: text-bottom;
-  margin: 0 .2rem;
-  flex: none;
-}
-.callouts { list-style: none; padding: 0; margin: .5rem 0 1rem; font-size: .925rem; }
-.callouts li { display: flex; gap: .5rem; align-items: baseline; padding: .3rem 0; border-bottom: 1px solid var(--line); }
-.callouts li:last-child { border-bottom: 0; }
+/* Long syntax examples wrap inside their table rather than widening a column. */
+.table-wrap td code { white-space: normal; overflow-wrap: anywhere; }
 
 @media (max-width: 600px) {
-  .mock .m-search-bar { grid-template-columns: minmax(0, 1fr) auto; row-gap: .4rem; }
-  .mock .m-search-bar .m-scope { grid-column: 1; grid-row: 1; border-radius: 8px; justify-self: start; }
-  .mock .m-sort { grid-column: 2; grid-row: 1; }
-  .mock .m-search-bar .m-input { grid-column: 1; grid-row: 2; border-left: 1px solid var(--line-strong); border-radius: 8px 0 0 8px; }
-  .mock .m-search-bar .m-help { grid-column: 2; grid-row: 2; }
-  .mock .m-status-filter { flex-basis: 100%; }
-  .mock .m-filter-bar .m-seg { display: flex; flex: 1; }
-  .mock .m-filter-bar > .m-seg { flex: 1 1 100%; }
-  .mock .m-filter-bar .m-seg span { flex: 1; text-align: center; }
+  .mock { padding: .65rem; }
+  .mock .m-head { flex-wrap: wrap; }
+  .mock .m-row { gap: .4rem; padding: .6rem .4rem; }
+  .mock .m-check { width: .75rem; height: .75rem; }
+  .mock .m-btn { padding: .3rem .35rem; }
 }
