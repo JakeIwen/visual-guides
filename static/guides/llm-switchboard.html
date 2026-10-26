@@ -36,8 +36,8 @@
   <dt>Open</dt><dd><a href="http://vanpi:8777">vanpi:8777</a> over Tailscale only (the Pi's MagicDNS name or <code>tailscale ip -4</code> address), or <code>127.0.0.1:8777</code> on the Pi itself. Not from the van LAN. No login; anyone on the tailnet can use it.</dd>
   <dt>Kind</dt><dd>A user systemd service on the Pi (<code>llm-switchboard</code>): a supervisor that runs sessions in tmux, plus this web page and a CLI. Python standard library, no build step.</dd>
   <dt>Source</dt><dd><code>~/dev/llm-switchboard</code> on the Pi · <code>JakeIwen/llm-switchboard</code> (private). The service runs from that checkout.</dd>
-  <dt>Status</dt><dd><span class="tag ok">In daily use</span> Codex support added 2026-10-15 on an API Codex marks experimental. Mac sessions added 2026-10-18; transcript search 2026-10-19; settings dialog 2026-10-23.</dd>
-  <dt>Updated</dt><dd>2026-10-23</dd>
+  <dt>Status</dt><dd><span class="tag ok">In daily use</span> Codex support added 2026-10-15 on an API Codex marks experimental. Mac sessions added 2026-10-18; transcript search 2026-10-19; settings dialog 2026-10-23; unnamed Mac sessions titled by their first prompt 2026-10-26.</dd>
+  <dt>Updated</dt><dd>2026-10-26</dd>
 </dl>
 
 <section id="page">
@@ -293,7 +293,7 @@ llm-switchboard new ~/dev/can-fd "decoder cleanup" --codex "tidy the DBC loader 
   </div>
   <ul class="plain-list">
     <li><strong>Online or not</strong> is judged only from the last push. After 35 seconds without one, the header says <code>m4mac: offline, last seen HH:MM</code>, the Mac's rows grey out, and their actions are disabled until it pushes again. Nothing pings the Mac.</li>
-    <li><strong>What crosses:</strong> ids, titles, folder, times, size and whether the session is open or busy. Prompts, replies and terminal screens stay on the Mac, so a Mac row has no Recent messages, Terminal screen, keep-running switch or Restart, the search box matches it by title and folder only, and a session with no title shows as <code>(untitled)</code> rather than its first prompt.</li>
+    <li><strong>What crosses:</strong> ids, titles, folder, times, size and whether the session is open or busy. A session with no name is titled by its first prompt, cut to one line of 120 characters, as Pi sessions are; one with no prompt at all isn't listed. Otherwise prompts, replies and terminal screens stay on the Mac, so a Mac row has no Recent messages, Terminal screen, keep-running switch or Restart, and the search box matches it by title and folder only.</li>
     <li><strong>Actions are queued</strong>, and the Mac runs them on its next push after checking them itself: <strong>Rename</strong>, <strong>Move</strong>, <strong>Fork on the Mac…</strong> (never started or kept running), <strong>Delete</strong> to the Mac's own trash, and <strong>Restore</strong> from Recently deleted. Nothing that starts a process or sends a prompt can be queued. The Mac refuses a session that is open in a claude process there, or a Codex session working on a turn.</li>
     <li><strong>Fork onto the Pi…</strong> (Claude sessions only) is the one way a conversation leaves the Mac. The Mac posts a notification, logs the upload and sends that one transcript (at most 16 MiB, 10 uploads an hour). It becomes a new Pi session, not running, in the Pi folder with the same path under the home folder (<code>~/dev/obd-things</code> on the Mac goes to <code>~/dev/obd-things</code> on the Pi), which must already exist there. Its name must be free in that folder.</li>
     <li><strong>Mac Codex sessions</strong> need the Codex daemon running on the Mac for any action; without it they are listed from disk, read-only. They have no Move and no Fork onto the Pi.</li>
