@@ -118,7 +118,7 @@
 
 <section id="firefox">
   <h2>Firefox sidebar</h2>
-  <p>The toolbar button toggles a full-height sidebar. On YouTube, the player's <b>Van TV</b> button casts the current playhead and pauses the page once accepted; <b>Alt+Shift+V</b> does the same for the active tab. Right-click a video link or a watch page for <b>Van TV: Cast Now</b> (replaces playback) or <b>Van TV: Add to Queue</b> (plays next, from the start).</p>
+  <p>The toolbar button toggles a full-height sidebar. On YouTube, the player's <b>Van TV</b> button casts the current playhead and pauses the page once accepted; <b>Alt+Shift+V</b> does the same for the active tab. Right-click a video link or a watch page for <b>Van TV: Cast Now (Shift: Add to Queue)</b>: click to replace playback, <b>Shift-click</b> to play it next, from the start. It's one item because Firefox tucks two or more from one extension into a submenu.</p>
   <div class="mock" aria-label="Mock-up of the Van TV sidebar">
     <div class="m-head"><b>Van TV</b><span class="m-pill">Working…</span><span class="k">1</span></div>
     <div class="m-title">php situation is insane</div>
@@ -131,8 +131,8 @@
     <div class="m-setting"><span>A/V offset</span><span>−</span><b>0 ms</b><span>+</span><span class="m-btn">Reset</span></div>
     <div class="m-queue">
       <div class="m-qhead"><b>Queue</b><span class="m-links">Jump to end · Clear</span><span class="k">7</span></div>
-      <div class="m-q played">Me at the zoo <span class="k">8</span></div>
-      <div class="m-q current"><small>Now playing</small>php situation is insane</div>
+      <div class="m-q played">Me at the zoo <span class="m-x">×</span><span class="k">8</span></div>
+      <div class="m-q current"><span><small>Now playing</small>php situation is insane</span><span class="m-x">×</span></div>
       <div class="m-q"><span class="m-grip">⠿</span>Rick Astley – Never Gonna Give You Up <span class="m-x">↗ ×</span><span class="k">9</span></div>
       <div class="m-q"><span class="m-grip">⠿</span>PSY – GANGNAM STYLE <span class="m-x">↗ ×</span></div>
     </div>
@@ -145,8 +145,8 @@
     <li>Previous · back 20 s · play/pause · forward 20 s · Next. Previous walks back through played videos (Next returns); with nothing before, it restarts. Next is disabled when nothing comes next.</li>
     <li>Stop · <b>CC</b> subtitles (saved; English default) · <b>Quality</b> Auto or max 1080/720/480/360 (reloads at the same position).</li>
     <li>Volume ±5 and mute, speed ±0.25× and reset, A/V offset ±50 ms and reset. All saved on the receiver; work while idle.</li>
-    <li><b>Jump to end</b> scrolls to the last queued video; <b>Clear</b> removes upcoming videos only.</li>
-    <li>Played videos (dimmed) sit above the current one; a sliver peeks out so you can scroll up. Click one to replay.</li>
+    <li><b>Jump to end</b> scrolls to the last queued video; <b>Clear</b> removes every played and upcoming video, leaving the current one playing.</li>
+    <li>Played videos (dimmed) sit above the current one; a sliver peeks out so you can scroll up. Click one to replay; × drops it from history. × on <b>Now playing</b> skips to the next queued video and forgets this one (stops if nothing is queued).</li>
     <li>Upcoming: click to play now, drag the grip (or Alt+↑/↓) to reorder, ↗ opens YouTube, × removes. ⌘/Ctrl- or middle-click a title opens YouTube in a background tab.</li>
     <li>Cast or queue the active tab's video.</li>
   </ol>
@@ -161,6 +161,7 @@
       <tr><td>Add to Queue</td><td>Inserts next, from the start (link timestamps ignored). Starts at once if the player is idle or stopped. Up to 50.</td></tr>
       <tr><td>Order</td><td>The cast queue plays before the phone app's own queue, at the end of each video or on Next.</td></tr>
       <tr><td>Played history</td><td>The last 20 videos that started, any source, oldest first. Replaying one starts it from zero.</td></tr>
+      <tr><td>Remove and clear</td><td>× removes any row: played, now playing (skips to the next queued video, or stops) or upcoming. <b>Clear</b> empties history and the upcoming queue; the current video keeps playing.</td></tr>
       <tr><td>Saved</td><td>Queue and history are saved on the Pi and survive Stop, phone disconnects and restarts. Restoring them never starts playback.</td></tr>
       <tr><td>Titles</td><td>From YouTube's oEmbed lookup; mpv's title once a video loads.</td></tr>
       <tr><td>Prefetch</td><td>The next queued video is resolved in the background, so it starts faster than a first cast.</td></tr>
@@ -217,7 +218,7 @@ vantv subs [on|off|&lt;lang&gt;]</code></pre></div>
       <tr><td><code>GET /api/status</code></td><td>Player state, video, position, settings, <code>queue</code>, <code>played</code>, <code>canPlayNext</code>, <code>diagnostics</code>, pairing code.</td></tr>
       <tr><td><code>POST /api/cast</code></td><td><code>{"videoId": …}</code> or <code>{"url": "https://youtu.be/…?t=90"}</code>, optional <code>position</code>. 202 while loading.</td></tr>
       <tr><td><code>POST /api/control</code></td><td><code>action</code>: pause, resume, toggle, stop, next, previous, seek, audio_delay, speed, volume, mute, quality, subtitles.</td></tr>
-      <tr><td><code>POST /api/queue</code></td><td><code>action</code>: add (<code>videoId</code> or <code>url</code>), play / remove (<code>key</code>), move (<code>key</code>, <code>index</code>), clear.</td></tr>
+      <tr><td><code>POST /api/queue</code></td><td><code>action</code>: add (<code>videoId</code> or <code>url</code>), play (<code>key</code>), remove (<code>key</code>, or <code>current</code>: the playing video's id), move (<code>key</code>, <code>index</code>), clear (upcoming and history).</td></tr>
       <tr><td><code>GET /health</code></td><td>Supervisor health, no pairing data.</td></tr>
     </tbody>
   </table></div>

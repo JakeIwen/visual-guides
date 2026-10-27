@@ -31,7 +31,7 @@
 .m-links { font-size: .72rem; }
 .m-q { display: flex; align-items: center; gap: .4rem; padding: .3rem .4rem; border-radius: 6px; }
 .m-q.played { color: var(--muted); }
-.m-q.current { display: block; background: var(--surface-2); box-shadow: inset 3px 0 var(--accent); font-weight: 600; }
+.m-q.current { background: var(--surface-2); box-shadow: inset 3px 0 var(--accent); font-weight: 600; }
 .m-q.current small { display: block; color: var(--muted); font-weight: 400; font-size: .68rem; }
 .m-grip, .m-x { color: var(--muted); }
 .m-x { margin-left: auto; }
