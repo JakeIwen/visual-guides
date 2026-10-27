@@ -28,9 +28,9 @@
 <main>
 <h1>Van TV</h1>
 <dl class="facts">
-  <dt>Use</dt><dd>Play YouTube on the van TV without ads: cast from the YouTube app like a smart TV, from Firefox on the Mac, from the <code>vantv</code> CLI, or by pasting a link into the status page. Sound goes HDMI → splitter → optical → Sonos.</dd>
+  <dt>Use</dt><dd>Play YouTube on the van TV without ads: send a link from the iPhone share sheet, cast from the YouTube app like a smart TV, from Firefox on the Mac, from the <code>vantv</code> CLI, or by pasting a link into the status page. Sound goes HDMI → splitter → optical → Sonos.</dd>
   <dt>Open</dt><dd>Status page <a href="http://vanpi.lan:8795/">vanpi.lan:8795</a> on the van Wi-Fi (no login; trusted LAN only). The Firefox toolbar button opens the sidebar remote.</dd>
-  <dt>Kind</dt><dd>A Node service on the Pi (<code>youtube-cast.service</code>) that pairs with YouTube like a TV (DIAL/Lounge) and plays with yt-dlp + mpv; a Firefox extension; a zsh CLI.</dd>
+  <dt>Kind</dt><dd>A Node service on the Pi (<code>youtube-cast.service</code>) that pairs with YouTube like a TV (DIAL/Lounge) and plays with yt-dlp + mpv; two iPhone Shortcuts; a Firefox extension; a zsh CLI.</dd>
   <dt>Source</dt><dd><code>~/dev/castit/youtube</code> · <a href="https://github.com/JakeIwen/castit/tree/main/youtube">JakeIwen/castit</a> (public). Install-specific addresses live in the ignored <code>youtube/local.json</code>.</dd>
   <dt>Status</dt><dd><span class="tag ok">In daily use</span> OpenGL output (fixes A/V drift) and the post-play Sonos check landed 2026-10-22.</dd>
   <dt>Updated</dt><dd>2026-10-26</dd>
@@ -43,21 +43,24 @@
     <div class="schematic">
       <svg viewBox="0 0 760 330" role="img" aria-labelledby="flow-title flow-desc">
         <title id="flow-title">Van TV signal path</title>
-        <desc id="flow-desc">The YouTube app, the Firefox sidebar, the vantv CLI and the status page send casts to the Van TV receiver on the Pi. It resolves streams with yt-dlp and plays them in mpv over HDMI. A splitter sends the picture to the TV and the sound over optical to the vonMid soundbar, which is grouped with the rear pair vonRear and muted. A room check repairs that grouping after each start and resume.</desc>
+        <desc id="flow-desc">The iPhone share sheet, the YouTube app, the Firefox sidebar, the vantv CLI and the status page send videos to the Van TV receiver on the Pi. It resolves streams with yt-dlp and plays them in mpv over HDMI. A splitter sends the picture to the TV and the sound over optical to the vonMid soundbar, which is grouped with the rear pair vonRear and muted. A room check repairs that grouping after each start and resume.</desc>
         <rect class="sv-board" x="10" y="20" width="200" height="290" rx="8"/>
         <text class="sv-text sv-strong" x="26" y="46">Senders</text>
-        <rect class="sv-part w-gpio" x="26" y="62" width="168" height="48" rx="5"/>
-        <text class="sv-text" x="38" y="83">YouTube app</text>
-        <text class="sv-text sv-muted" x="38" y="101">Cast → Van TV</text>
-        <rect class="sv-part w-gpio" x="26" y="120" width="168" height="48" rx="5"/>
-        <text class="sv-text" x="38" y="141">Firefox sidebar</text>
-        <text class="sv-text sv-muted" x="38" y="159">button · menu · shortcut</text>
-        <rect class="sv-part w-gpio" x="26" y="178" width="168" height="48" rx="5"/>
-        <text class="sv-text" x="38" y="199">vantv CLI</text>
-        <text class="sv-text sv-muted" x="38" y="217">Mac terminal</text>
-        <rect class="sv-part w-gpio" x="26" y="236" width="168" height="48" rx="5"/>
-        <text class="sv-text" x="38" y="257">Status page</text>
-        <text class="sv-text sv-muted" x="38" y="275">paste a link</text>
+        <rect class="sv-part w-gpio" x="26" y="62" width="168" height="40" rx="5"/>
+        <text class="sv-text" x="38" y="80">iPhone share sheet</text>
+        <text class="sv-text sv-muted" x="38" y="96">Van TV Cast · Queue</text>
+        <rect class="sv-part w-gpio" x="26" y="110" width="168" height="40" rx="5"/>
+        <text class="sv-text" x="38" y="128">YouTube app</text>
+        <text class="sv-text sv-muted" x="38" y="144">Cast → Van TV</text>
+        <rect class="sv-part w-gpio" x="26" y="158" width="168" height="40" rx="5"/>
+        <text class="sv-text" x="38" y="176">Firefox sidebar</text>
+        <text class="sv-text sv-muted" x="38" y="192">button · menu · shortcut</text>
+        <rect class="sv-part w-gpio" x="26" y="206" width="168" height="40" rx="5"/>
+        <text class="sv-text" x="38" y="224">vantv CLI</text>
+        <text class="sv-text sv-muted" x="38" y="240">Mac terminal</text>
+        <rect class="sv-part w-gpio" x="26" y="254" width="168" height="40" rx="5"/>
+        <text class="sv-text" x="38" y="272">Status page</text>
+        <text class="sv-text sv-muted" x="38" y="288">paste a link</text>
 
         <path class="sv-wire w-gpio" d="M210 165 H262"/>
 
@@ -92,13 +95,21 @@
         <path class="sv-wire w-led" d="M635 222 V236"/>
       </svg>
     </div>
-    <figcaption>One receiver, four ways in. The room check keeps vonMid muted with the rear pair grouped to it.</figcaption>
+    <figcaption>One receiver, five ways in. The room check keeps vonMid muted with the rear pair grouped to it.</figcaption>
   </figure>
 </section>
 
 <section id="phone">
   <h2>From the phone</h2>
-  <h3>YouTube app (recommended)</h3>
+  <h3>iPhone share sheet (recommended)</h3>
+  <ol>
+    <li>On the van Wi-Fi, open <b>Share</b> in Safari (youtube.com), or any app that shares a YouTube link. No YouTube app needed.</li>
+    <li>Choose <b>Van TV Queue</b> to append the video to the queue, or <b>Van TV Cast</b> to play it now.</li>
+    <li>A notification reports <b>Added to the Van TV queue</b>, <b>Casting on Van TV</b>, or the receiver's error text, such as <code>Not a YouTube video link: "…"</code> with a preview of what was shared.</li>
+  </ol>
+  <p>The Shortcuts pass the shared text to the receiver without detecting links themselves. The receiver finds the YouTube link inside it; titles and trailing words are fine. Run either Shortcut directly from the Shortcuts app to use the link on the clipboard.</p>
+  <p>Van Wi-Fi only: these Shortcuts cannot work when the phone itself is the hotspot. Use the YouTube app's TV-code route below instead.</p>
+  <h3>YouTube app</h3>
   <ol>
     <li>On the van Wi-Fi, open the YouTube app, tap <b>Cast</b> and choose <b>Van TV</b>.</li>
     <li>If Van TV isn't listed: iPhone Settings → Privacy &amp; Security → Local Network → turn on YouTube.</li>
@@ -111,8 +122,8 @@
     <li>YouTube app → Settings → Watch on TV → <b>Enter TV code</b>.</li>
     <li>Van TV now appears under Cast.</li>
   </ol>
-  <h3>Without the app</h3>
-  <p>In Safari: <b>Share → Copy</b> the video's link, open the status page, paste it into <b>YouTube link</b>, then <b>Cast</b> or <b>Add to Queue</b>. <b>Share → Add to Home Screen</b> on that page gives it an icon. Van TV Wi-Fi only.</p>
+  <h3>Status page fallback</h3>
+  <p>In Safari: <b>Share → Copy</b> the video's link, open the status page, paste it into <b>YouTube link</b>, then <b>Cast</b> or <b>Add to Queue</b>. Text around the link is accepted here too. <b>Share → Add to Home Screen</b> on that page gives it an icon. Van Wi-Fi only.</p>
   <p class="small">The app has no speed menu or CC control for Van TV; use the sidebar, status page or <code>vantv</code> for those.</p>
 </section>
 
@@ -238,6 +249,14 @@ bash receiver/deploy.sh update-ytdlp      # when YouTube breaks extraction</code
     <li>Pairing identity, settings, queue and history live in <code>~/.local/state/youtube-cast/</code> on the Pi. Never delete it to update.</li>
     <li>Optional YouTube watch history: <code>zsh firefox/push-youtube-cookies.zsh</code> (<code>--remove</code> turns it off). Uses account cookies; your call.</li>
   </ul>
+  <h3>iPhone Shortcuts</h3>
+  <div class="code"><pre><code>cd ~/dev/castit
+zsh youtube/ios-shortcut/build.zsh
+open 'youtube/ios-shortcut/dist/Van TV Cast.shortcut'
+open 'youtube/ios-shortcut/dist/Van TV Queue.shortcut'</code></pre></div>
+  <p>The build signs <code>dist/Van TV Cast.shortcut</code> and <code>dist/Van TV Queue.shortcut</code> inside <code>youtube/ios-shortcut/</code>. On the Mac, click <b>Add Shortcut</b> for each. iCloud syncs them to the iPhone; open the Shortcuts app there to nudge it. Delete an older copy before re-importing: imports never replace in place.</p>
+  <p>To test from the Mac, put a YouTube link in <code>file-with-link.txt</code> and run:</p>
+  <div class="code"><pre><code>shortcuts run 'Van TV Queue' -i file-with-link.txt</code></pre></div>
 </section>
 
 <section id="troubleshooting">
