@@ -44,6 +44,7 @@
     <tr><td><code>llmrestore -n</code></td><td>Dry run: print what it would open and skip, and open nothing. Also <code>--dry-run</code>.</td></tr>
     <tr><td><code>llmrestore -m 45</code></td><td>Also reopen sessions closed up to 45 minutes before the last snapshot. Default 30, max 1440. Also <code>--minutes</code>.</td></tr>
     <tr><td><code>llmrestore -H 2</code></td><td>The same window in hours; decimals work (<code>-H 1.5</code>). Max 24. Use <code>-m</code> or <code>-H</code>, not both.</td></tr>
+    <tr><td><code>llmrestore --last 3</code></td><td>Instead of a time window, reopen the 3 most recently closed sessions (from the last 24 hours). Open, missing and just-launched sessions are skipped and don't count toward the 3; a session listed twice opens once. Unlike a full restore, it leaves the previous boot's list in place for a later <code>llmrestore</code>. Can't be combined with <code>-m</code> or <code>-H</code>.</td></tr>
     <tr><td><code>llmrestore --force</code></td><td>Reopen even sessions launched in the last 2 minutes.</td></tr>
     <tr><td><code>llmrestore --pi</code></td><td>On the Mac: reopen the Pi's sessions as iTerm tabs over SSH. See <a href="#pi">Pi sessions from the Mac</a>.</td></tr>
     <tr><td><code>llmrestore --cron</code></td><td>Status: whether snapshots are on, the last snapshot, and how many sessions a restore would reopen.</td></tr>
