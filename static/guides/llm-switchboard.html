@@ -148,7 +148,7 @@
   <ul class="plain-list">
     <li>Pi results search your prompts and visible replies in both tools, newest match first. Each appears as an ordinary row with its match count, latest-match age and excerpt. Expand for normal actions or use its keep-running switch directly.</li>
     <li><strong>Open matches</strong> shows up to twelve matching records, each with the message before and after, labelled <strong>You</strong> or <strong>Reply</strong>. <strong>Hide context</strong> closes them.</li>
-    <li>Mac results say <strong>Title or folder match only; the Mac keeps its transcripts</strong>. They have no excerpts or Open matches: transcript text is not uploaded for search.</li>
+    <li>Mac results say <strong>Title or folder match only; the Mac keeps its transcripts</strong>. They have no excerpts or Open matches: transcript text is not uploaded for search. To search a Mac session's text, run <code>llmsearch</code> or <code>llm-switchboard search</code> on the Mac.</li>
     <li>The scope line reports index freshness; its tooltip has the full index status, including session count. Missing, updating and error states appear there too.</li>
   </ul>
   <div class="table-wrap"><table class="stack"><thead><tr><th>Term</th><th>Matches</th></tr></thead><tbody>
@@ -159,7 +159,7 @@
     <tr><td class="lead-cell"><code>by:me</code> · <code>by:reply</code></td><td data-label="Matches">Only your prompts; only visible replies.</td></tr>
     <tr><td class="lead-cell"><code>age:&lt;2d</code> · <code>after:2026-10-01</code> · <code>before:2026-10-18</code></td><td data-label="Matches">Session last activity, not the individual message's date.</td></tr>
   </tbody></table></div>
-  <p class="small">The Pi updates its index every 30 seconds at low priority, reading additions. The first build can take a minute or two. Thinking, tool calls, tool output, injected instructions and Codex subagents are not indexed. Searches exceeding five seconds stop: add a rarer word or phrase. In a shell, <code>llmsearch</code> uses the index; <code>llmsearch --grep</code> searches raw transcripts instead, slowly, including material the index leaves out.</p>
+  <p class="small">The Pi updates its index every 30 seconds at low priority, reading additions. The first build can take a minute or two. The Mac keeps its own index of its own transcripts, updated every 30 seconds by the background launchd job <code>dev.llm-switchboard.search-index</code>; the index and its results never leave the Mac. Thinking, tool calls, tool output, injected instructions and Codex subagents are not indexed. Searches exceeding five seconds stop: add a rarer word or phrase. In a shell on either machine, <code>llmsearch</code> uses that machine's index; <code>llmsearch --grep</code> searches raw transcripts instead, slowly, including material the index leaves out.</p>
 </section>
 
 <section id="details">
@@ -267,13 +267,13 @@
     <tr><td class="lead-cell">expired</td><td data-label="Meaning">60 seconds passed. If never delivered, nothing ran. If delivered with no result, the outcome is unknown: check before retrying. An action is never sent twice.</td></tr>
   </tbody></table></div>
   <h3>Setting up the Mac</h3>
-  <p>Clone the repo, configure this install's private machine identifiers and SSH destination in untracked <code>local.env</code> using <code>local.env.example</code>, then run <code>bash ~/dev/llm-switchboard/scripts/setup-mac.sh</code>. It uses Homebrew Python 3.11+, creates a dedicated SSH key, authorizes it through the normal Pi SSH login, pushes once and loads <code>dev.llm-switchboard.host-agent</code>.</p>
-  <p class="small">The key is restricted to <code>host-exchange</code>: no shell, terminal or forwarding. The Mac opens no listening port. Its logs are in <code>~/Library/Logs/llm-switchboard/</code>. To unload the agent from the checkout, use <code>/opt/homebrew/bin/python3 -m llm_switchboard host-install --unload</code>; after a Homebrew Python version upgrade, run <code>host-install</code> again.</p>
+  <p>Clone the repo, configure this install's private machine identifiers and SSH destination in untracked <code>local.env</code> using <code>local.env.example</code>, then run <code>bash ~/dev/llm-switchboard/scripts/setup-mac.sh</code>. It uses Homebrew Python 3.11+, creates a dedicated SSH key, authorizes it through the normal Pi SSH login, creates the checkout's <code>.venv</code>, links <code>llm-switchboard</code> into <code>~/.local/bin</code>, pushes once, builds the Mac's search index and loads <code>dev.llm-switchboard.host-agent</code> and <code>dev.llm-switchboard.search-index</code>.</p>
+  <p class="small">The key is restricted to <code>host-exchange</code>: no shell, terminal or forwarding. The Mac opens no listening port. Its logs are in <code>~/Library/Logs/llm-switchboard/</code>. To unload both jobs from the checkout, use <code>/opt/homebrew/bin/python3 -m llm_switchboard host-install --unload</code>; after a Homebrew Python version upgrade, run <code>host-install</code> again.</p>
 </section>
 
 <section id="cli">
   <h2>From a shell</h2>
-  <p>Run the CLI on the Pi. Ids accept unique prefixes; Codex also accepts the short id shown by list. Brackets below denote optional arguments, not literal shell text. Resume commands can use a shell function configured in Settings.</p>
+  <p>Run the CLI on the Pi. On the Mac, <code>search</code> and <code>index</code> work the same against the Mac's own transcripts. Ids accept unique prefixes; Codex also accepts the short id shown by list. Brackets below denote optional arguments, not literal shell text. Resume commands can use a shell function configured in Settings.</p>
   <div class="code"><pre><code>llm-switchboard list
 llm-switchboard status
 llm-switchboard enable &lt;id&gt; [--name "phone name"]
@@ -287,7 +287,7 @@ llm-switchboard fork &lt;id&gt; "another approach" [--folder ~/dev/example] [--k
 llm-switchboard search 'retry by:me'
 llm-switchboard search 'retry' --session claude:&lt;id&gt;
 llm-switchboard search 'retry' --json
-llm-switchboard index
+llm-switchboard index [--quiet]   # --quiet: print only if something changed
 llm-switchboard settings
 llm-switchboard settings set folders.depth 3
 llm-switchboard settings set folders.hidden "~/private,~/archive"
@@ -304,7 +304,7 @@ journalctl --user -u llm-switchboard -f</code></pre></div>
     <li>The checkout's wrapper uses <code>.venv/bin/python</code>. The backend needs its locked HTTP dependencies; do not restart it without that environment. The React page is built from <code>web/</code> into <code>web/dist</code>. After a deployed code change, <code>systemctl --user restart llm-switchboard</code> adopts existing tmux windows rather than stopping sessions.</li>
     <li><code>~/.config/llm-switchboard/</code> holds <code>sessions.json</code>, <code>settings.json</code> and <code>codex-trash.json</code>. <code>~/.local/share/llm-switchboard/</code> holds <code>trash/</code>, per-host snapshots and queues in <code>hosts/</code>, and <code>transcript-search.sqlite3</code> with its <code>-wal</code>, <code>-shm</code> and <code>.lock</code> companions. To rebuild from scratch, stop the service, remove those four index files, then start it again.</li>
     <li>Claude transcripts stay in <code>~/.claude/projects/*/*.jsonl</code>. Codex is accessed through its daemon socket under <code>~/.codex/app-server-control/</code>, not by editing its storage.</li>
-    <li>On the Mac, the launchd plist is <code>~/Library/LaunchAgents/dev.llm-switchboard.host-agent.plist</code>; logs, including uploads, are in <code>~/Library/Logs/llm-switchboard/</code>. Its action ledger and upload quota are in <code>~/.config/llm-switchboard/</code>, and its trash in <code>~/.local/share/llm-switchboard/trash/</code>.</li>
+    <li>On the Mac, the launchd plists are <code>~/Library/LaunchAgents/dev.llm-switchboard.host-agent.plist</code> and <code>dev.llm-switchboard.search-index.plist</code>; logs, including uploads and index updates, are in <code>~/Library/Logs/llm-switchboard/</code>. The Mac's search index is <code>~/.local/share/llm-switchboard/transcript-search.sqlite3</code>; to rebuild it, <code>launchctl bootout gui/$(id -u)/dev.llm-switchboard.search-index</code>, remove the four index files, then run <code>host-install</code>. Its action ledger and upload quota are in <code>~/.config/llm-switchboard/</code>, and its trash in <code>~/.local/share/llm-switchboard/trash/</code>.</li>
     <li>The app's whole suite is <code>.venv/bin/python -m unittest discover -s tests -f</code>, including backend, Node and rebuilt-page checks. Browser checks use isolated fixtures through <code>browser_clean</code>, not real sessions. The app repo requires this guide to follow behavior changes.</li>
   </ul>
 </section>
@@ -327,7 +327,7 @@ journalctl --user -u llm-switchboard -f</code></pre></div>
     <tr><td class="lead-cell">Mac rows missing or offline</td><td data-label="Check or fix">On the Mac run <code>launchctl print gui/$(id -u)/dev.llm-switchboard.host-agent</code> and <code>tail ~/Library/Logs/llm-switchboard/agent-error.log</code>. Public-key errors require fixing authorization; rerun the setup script with the correct local.env. Sleep or lost connectivity makes the Mac offline.</td></tr>
     <tr><td class="lead-cell">Mac action failed or expired</td><td data-label="Check or fix">Read the action pill tooltip or result toast. Open sessions, duplicate names, missing folders or sleep can prevent it. “Outcome unknown” means delivered but no result: inspect after the next push before retrying.</td></tr>
     <tr><td class="lead-cell">Fork onto the Pi refused</td><td data-label="Check or fix">The matching home-relative folder must exist on the Pi, the name must be free, the transcript at most 16 MiB, and the hourly quota available. The Mac must be able to post its upload notification.</td></tr>
-    <tr><td class="lead-cell">Transcript search finds nothing</td><td data-label="Check or fix">Check the scope line: the index may still be building. <code>llm-switchboard index</code> shows index errors in a Pi shell. All words must occur in one prompt or reply; thinking and tool output are excluded. Whole-word search means <code>decod</code> does not find <code>decoder</code>. Mac results are title/folder only.</td></tr>
+    <tr><td class="lead-cell">Transcript search finds nothing</td><td data-label="Check or fix">Check the scope line: the index may still be building. <code>llm-switchboard index</code> shows index errors in a Pi shell. All words must occur in one prompt or reply; thinking and tool output are excluded. Whole-word search means <code>decod</code> does not find <code>decoder</code>. Mac results on the Pi are title/folder only; search their text on the Mac with <code>llmsearch</code>.</td></tr>
     <tr><td class="lead-cell">A new Codex session never appears</td><td data-label="Check or fix">A first message must be accepted before Codex saves it. Check daemon version and the page's Codex error line.</td></tr>
   </tbody></table></div>
 </section>
