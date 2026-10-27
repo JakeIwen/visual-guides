@@ -65,7 +65,7 @@ skip  claude scratch-f2: transcript not found
 would open  claude api-d3  (open at 2026-10-18 23:41)
       cd -- /Users/jacobr/dev/api &amp;&amp; command claude --permission-mode bypassPermissions --resume 2b9c…
 would open  codex Fix the import  (closed 4m before the last snapshot, last seen 2026-10-18 23:37)
-      cd -- /Users/jacobr/dev/site &amp;&amp; command codex -s workspace-write resume 019a…
+      cd -- /Users/jacobr/dev/site &amp;&amp; command /Users/jacobr/dev/scripts/shared/codex_autocontinue/run -- codex -s workspace-write resume 019a…
 (3 closed more than 30 minutes before the last snapshot; widen with -m or -H)</code></pre></div>
   <p class="small">Illustrative names and ids; the format is the tool's. A session is labelled by its title, or its id when it has none.</p>
   <div class="table-wrap"><table><thead><tr><th>Wording</th><th>Means</th></tr></thead><tbody>
@@ -143,6 +143,7 @@ Restore list: 13 session(s) open or closed within 30 minutes of the last snapsho
 <section id="commands">
   <h2>The resume command</h2>
   <p>Every command starts with <code>cd -- &lt;folder&gt; &amp;&amp; command</code>: the session reopens where it ran, and <code>command</code> bypasses shell functions such as a <code>codex</code> wrapper that adds its own flags, so the session's recorded options are used as they were.</p>
+  <p>What <code>codexp</code> and <code>claudep</code> add outside the flags comes back too: a Codex session restarts under the capacity-retry wrapper (<code>shared/codex_autocontinue/run --</code>) when it is installed, and on the Pi every command runs under <code>env -u DISPLAY</code>, so previews don't open on the Pi's desktop.</p>
   <div class="table-wrap"><table><thead><tr><th>Tool</th><th>Kept</th><th>Dropped</th></tr></thead><tbody>
     <tr><td>Claude Code</td><td>Permission mode, model, effort, settings, agents, system prompts, plugin dirs, added dirs, allowed/disallowed tools, MCP config, <code>--remote-control</code>, <code>--chrome</code>, <code>--dangerously-skip-permissions</code> and similar session-wide flags. Ends with <code>--resume &lt;id&gt;</code>.</td><td>The original <code>--resume</code>/<code>--continue</code>/<code>--session-id</code>, worktree and cloud modes, the initial prompt, and any option it doesn't recognise.</td></tr>
     <tr><td>Codex</td><td><code>-c</code>, <code>--enable</code>/<code>--disable</code>, model, profile, sandbox, approval policy, added dirs, remote options, and unknown boolean flags. Ends with <code>resume &lt;id&gt;</code>.</td><td><code>--cd</code>, images, <code>--last</code>/<code>--all</code>, worktree, and the initial prompt.</td></tr>
