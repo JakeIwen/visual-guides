@@ -37,7 +37,7 @@
   <dt>Open</dt><dd>Use the picker's address over Tailscale. The page is at <code>/</code>; old <code>/next/</code> links redirect there. There is no login: anyone on the tailnet who can reach the service can use it.</dd>
   <dt>Kind</dt><dd>A Pi user service with a tmux supervisor, a FastAPI backend, a React + Mantine page and a CLI. The Mac pushes its own session list while awake.</dd>
   <dt>Source</dt><dd><a href="https://github.com/JakeIwen/llm-switchboard">JakeIwen/llm-switchboard</a> · checkout <code>~/dev/llm-switchboard</code>.</dd>
-  <dt>Updated</dt><dd>2026-10-26</dd>
+  <dt>Updated</dt><dd>2026-10-27</dd>
 </dl>
 
 <section id="page">
@@ -288,6 +288,7 @@ llm-switchboard fork &lt;id&gt; "another approach" [--folder ~/dev/example] [--k
 llm-switchboard search 'retry by:me'
 llm-switchboard search 'retry' --session claude:&lt;id&gt;
 llm-switchboard search 'retry' --json
+llm-switchboard search --json --before 2 --after 3 -- 'retry'
 llm-switchboard index [--quiet]   # --quiet: print only if something changed
 llm-switchboard settings
 llm-switchboard settings set folders.depth 3
@@ -295,6 +296,7 @@ llm-switchboard settings set folders.hidden "~/private,~/archive"
 llm-switchboard settings set claude_command claude
 llm-switchboard stop-all          # kills the dedicated tmux server
 journalctl --user -u llm-switchboard -f</code></pre></div>
+  <p><code>search -B N</code> / <code>--before N</code> and <code>-A N</code> / <code>--after N</code> show that many lines before and after each matching line in the latest matching prompt or reply, not neighboring messages. Counts are non-negative; an omitted side is zero. Overlapping or adjacent windows merge, with a <code>--</code> line between separate groups. Long lines show a 300-character window with <code>…</code> on cut sides, keeping a matching term visible. If no line contains the query text (for example, an accent-insensitive index match), the ordinary excerpt is used. Either flag adds a <code>context</code> string to each JSON result; plain output prints those lines instead of the excerpt. Without the flags, output is unchanged. <code>--session</code> ignores them.</p>
   <p class="small"><code>search --json</code> emits one JSON record per result for scripts; exit 3 means the index is not built yet. <code>host-authorize &lt;host-id&gt; &lt; key.pub</code> installs a Mac's restricted key on the Pi; the setup script runs it over SSH. The CLI's host commands are not a way to launch sessions on the Mac.</p>
 </section>
 
