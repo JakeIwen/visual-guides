@@ -58,20 +58,21 @@
 
 <section id="output">
   <h2>Reading the output</h2>
-  <p>Each recorded session gets one line: <code>skip</code> with the reason, or <code>open</code> (<code>would open</code> in a dry run) with when it was last seen and the exact command that resumes it.</p>
+  <p>Each recorded session gets one line: <code>skip</code> with the reason, or <code>open</code> (<code>would open</code> in a dry run) with the session's name, when it was last seen, and the command that resumes it.</p>
   <div class="code"><pre><code>$ llmrestore -n
 skip  claude api-3f: already open
 skip  claude notes-61: kept running by llm-switchboard
 skip  claude scratch-f2: transcript not found
-would open  claude api-d3  (open at 2026-10-18 23:41)
-      cd -- /Users/jacobr/dev/api &amp;&amp; command claude --permission-mode bypassPermissions --resume 2b9c…
-would open  codex Fix the import  (closed 4m before the last snapshot, last seen 2026-10-18 23:37)
+would open  claude api-d3  (Retry failed webhooks, last seen 2026-10-18 23:41)
+      cd -- /Users/jacobr/dev/api &amp;&amp; claudepr 2b9c…
+would open  codex Fix the import  (last seen 2026-10-18 23:37)
       cd -- /Users/jacobr/dev/site &amp;&amp; command /Users/jacobr/dev/scripts/shared/codex_autocontinue/run -- codex -s workspace-write resume 019a…
 (3 closed more than 30 minutes before the last snapshot; widen with -m or -H)</code></pre></div>
-  <p class="small">Illustrative names and ids; the format is the tool's. A session is labelled by its title, or its id when it has none.</p>
+  <p class="small">Illustrative names and ids; the format is the tool's. A session is labelled by its tab name (Claude) or thread name (Codex), or its id when it has none.</p>
   <div class="table-wrap"><table><thead><tr><th>Wording</th><th>Means</th></tr></thead><tbody>
-    <tr><td><code>open at …</code></td><td>The session was still open in the last snapshot. After a reboot that is the usual case: the last snapshot before shutdown.</td></tr>
-    <tr><td><code>closed 4m before the last snapshot</code></td><td>It had already closed when that snapshot ran. Shutdown closes terminals one by one, so these are normal too.</td></tr>
+    <tr><td><code>(Retry failed webhooks, …)</code></td><td>A Claude session's name: its <code>/rename</code> title, else the title Claude gave it, as the <code>/resume</code> picker shows.</td></tr>
+    <tr><td><code>last seen …</code></td><td>The last snapshot that found it open.</td></tr>
+    <tr><td><code>claudepr &lt;id&gt; …</code></td><td>Shorthand for the Claude resume it runs, <code>command claude --permission-mode bypassPermissions --resume &lt;id&gt;</code> (on the Pi, under <code>env -u DISPLAY</code>); paste either form to resume by hand.</td></tr>
     <tr><td><code>(3 closed more than 30 minutes …)</code></td><td>Older sessions are still recorded (for 24 hours) but outside the window. Rerun with <code>-H 2</code> or similar to include them.</td></tr>
     <tr><td><code>Opened as tabs of a new iTerm window.</code></td><td>Mac result line after a real run.</td></tr>
     <tr><td><code>Attach with: tmux attach -t llmrestore</code></td><td>Pi result line after a real run.</td></tr>
