@@ -29,11 +29,11 @@
 <h1>Van TV</h1>
 <dl class="facts">
   <dt>Use</dt><dd>Play YouTube on the van TV without ads: send a link from the iPhone share sheet, cast from the YouTube app like a smart TV, from Firefox on the Mac, from the <code>vantv</code> CLI, or by pasting a link into the status page. Sound goes HDMI → splitter → optical → Sonos.</dd>
-  <dt>Open</dt><dd>Status page <a href="http://vanpi.lan:8795/">vanpi.lan:8795</a> on the van Wi-Fi (no login; trusted LAN only). The Firefox toolbar button opens the sidebar remote.</dd>
+  <dt>Open</dt><dd>Status page <a href="http://vanpi.lan:8795/">vanpi.lan:8795</a> on the van Wi-Fi, or the Pi's Tailscale address on port 8795 from anywhere on the tailnet (no login; trusted networks only). The Firefox toolbar button opens the sidebar remote.</dd>
   <dt>Kind</dt><dd>A Node service on the Pi (<code>youtube-cast.service</code>) that pairs with YouTube like a TV (DIAL/Lounge) and plays with yt-dlp + mpv; two iPhone Shortcuts; a Firefox extension; a zsh CLI.</dd>
   <dt>Source</dt><dd><code>~/dev/castit/youtube</code> · <a href="https://github.com/JakeIwen/castit/tree/main/youtube">JakeIwen/castit</a> (public). Install-specific addresses live in the ignored <code>youtube/local.json</code>.</dd>
   <dt>Status</dt><dd><span class="tag ok">In daily use</span> OpenGL output (fixes A/V drift) and the post-play Sonos check landed 2026-10-22.</dd>
-  <dt>Updated</dt><dd>2026-10-26</dd>
+  <dt>Updated</dt><dd>2026-10-27</dd>
 </dl>
 
 <section id="flow">
@@ -103,12 +103,12 @@
   <h2>From the phone</h2>
   <h3>iPhone share sheet (recommended)</h3>
   <ol>
-    <li>On the van Wi-Fi, open <b>Share</b> in Safari (youtube.com), or any app that shares a YouTube link. No YouTube app needed.</li>
+    <li>With Tailscale connected on the phone, open <b>Share</b> in Safari (youtube.com), or any app that shares a YouTube link. No YouTube app needed.</li>
     <li>Choose <b>Van TV Queue</b> to append the video to the queue, or <b>Van TV Cast</b> to play it now.</li>
     <li>A notification reports <b>Added to the Van TV queue</b>, <b>Casting on Van TV</b>, or the receiver's error text, such as <code>Not a YouTube video link: "…"</code> with a preview of what was shared.</li>
   </ol>
   <p>The Shortcuts pass the shared text to the receiver without detecting links themselves. The receiver finds the YouTube link inside it; titles and trailing words are fine. Run either Shortcut directly from the Shortcuts app to use the link on the clipboard.</p>
-  <p>Van Wi-Fi only: these Shortcuts cannot work when the phone itself is the hotspot. Use the YouTube app's TV-code route below instead.</p>
+  <p>The Shortcuts call the Pi's Tailscale address, so they work on the van Wi-Fi and away from it, including when the phone is the hotspot. Two things must hold: the Tailscale VPN is on in the phone (its <b>VPN On Demand</b> setting keeps it on), and the Pi has a route to the phone (direct over the van LAN when both are there; the Pi's uplink otherwise, so Starlink or the hotspot must be up). Without Tailscale, use the YouTube app's TV-code route below.</p>
   <h3>YouTube app</h3>
   <ol>
     <li>On the van Wi-Fi, open the YouTube app, tap <b>Cast</b> and choose <b>Van TV</b>.</li>
@@ -123,7 +123,7 @@
     <li>Van TV now appears under Cast.</li>
   </ol>
   <h3>Status page fallback</h3>
-  <p>In Safari: <b>Share → Copy</b> the video's link, open the status page, paste it into <b>YouTube link</b>, then <b>Cast</b> or <b>Add to Queue</b>. Text around the link is accepted here too. <b>Share → Add to Home Screen</b> on that page gives it an icon. Van Wi-Fi only.</p>
+  <p>In Safari: <b>Share → Copy</b> the video's link, open the status page, paste it into <b>YouTube link</b>, then <b>Cast</b> or <b>Add to Queue</b>. Text around the link is accepted here too. <b>Share → Add to Home Screen</b> on that page gives it an icon. Van Wi-Fi, or the Tailscale address.</p>
   <p class="small">The app has no speed menu or CC control for Van TV; use the sidebar, status page or <code>vantv</code> for those.</p>
 </section>
 
@@ -244,7 +244,7 @@ npm run depf                              # Firefox extension → install prompt
 bash receiver/deploy.sh status            # health, unit, PID
 bash receiver/deploy.sh update-ytdlp      # when YouTube breaks extraction</code></pre></div>
   <ul>
-    <li><code>youtube/local.json</code> (ignored) holds the Pi's SSH target, addresses, audio device, <code>roomCommand</code> and the Firefox sender URLs. The receiver deploy copies it to the Pi.</li>
+    <li><code>youtube/local.json</code> (ignored) holds the Pi's SSH target, LAN and optional Tailscale addresses (<code>tailscaleAddress</code>; the status port binds it, retrying until Tailscale is up), audio device, <code>roomCommand</code> and the sender URLs, Tailscale first so the Shortcuts use it. The receiver deploy copies it to the Pi.</li>
     <li>Releases live in <code>/home/pi/youtube-cast/releases/</code>; the deploy prints the retained previous release for rollback.</li>
     <li>Pairing identity, settings, queue and history live in <code>~/.local/state/youtube-cast/</code> on the Pi. Never delete it to update.</li>
     <li>Optional YouTube watch history: <code>zsh firefox/push-youtube-cookies.zsh</code> (<code>--remove</code> turns it off). Uses account cookies; your call.</li>
@@ -269,6 +269,7 @@ open 'youtube/ios-shortcut/dist/Van TV Queue.shortcut'</code></pre></div>
       <tr><td>~20 s before a cast starts</td><td>yt-dlp stream lookup (~11 s) on a busy Pi</td><td>Queued videos are prefetched. The <code>Video load timing</code> journal line shows each phase.</td></tr>
       <tr><td>Choppy video</td><td>Dropped frames, or 25 fps on the 60 Hz screen</td><td>Sidebar <b>Info</b> shows drops; try Quality 720p.</td></tr>
       <tr><td>Van TV missing from the app's Cast list</td><td>Local Network permission, or phone on the hotspot</td><td>Turn on the permission, or pair with the TV code.</td></tr>
+      <tr><td>Van TV Cast / Queue Shortcut times out away from the van</td><td>Tailscale VPN off on the phone, or the Pi has no uplink</td><td>Turn Tailscale on (VPN On Demand keeps it on); check Starlink or the hotspot is up for the Pi.</td></tr>
       <tr><td>Every cast fails to load</td><td>YouTube changed; yt-dlp out of date</td><td><code>bash receiver/deploy.sh update-ytdlp</code></td></tr>
       <tr><td>Logs</td><td></td><td><code>ssh vanpi journalctl -u youtube-cast -n 80</code></td></tr>
     </tbody>
