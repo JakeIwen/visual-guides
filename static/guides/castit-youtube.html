@@ -33,12 +33,12 @@
   <dt>Kind</dt><dd>A Node service on the Pi (<code>youtube-cast.service</code>) that pairs with YouTube like a TV (DIAL/Lounge) and plays with yt-dlp + mpv; two iPhone Shortcuts; a Firefox extension; a zsh CLI.</dd>
   <dt>Source</dt><dd><code>~/dev/castit/youtube</code> · <a href="https://github.com/JakeIwen/castit/tree/main/youtube">JakeIwen/castit</a> (public). Install-specific addresses live in the ignored <code>youtube/local.json</code>.</dd>
   <dt>Status</dt><dd><span class="tag ok">In daily use</span> OpenGL output (fixes A/V drift) and the post-play Sonos check landed 2026-10-22.</dd>
-  <dt>Updated</dt><dd>2026-10-27</dd>
+  <dt>Updated</dt><dd>2026-10-29</dd>
 </dl>
 
 <section id="flow">
   <h2>How it fits</h2>
-  <p>Every sender talks to one receiver on the Pi. The receiver resolves the stream with yt-dlp, plays it full screen in mpv, and about 1.5 s after each start or resume checks that the Sonos speakers are still grouped for movie sound.</p>
+  <p>Every sender talks to one receiver on the Pi. The receiver wakes the screen, resolves the stream with yt-dlp, plays it full screen in mpv, and about 1.5 s after each start or resume checks that the Sonos speakers are still grouped for movie sound.</p>
   <figure>
     <div class="schematic">
       <svg viewBox="0 0 760 330" role="img" aria-labelledby="flow-title flow-desc">
@@ -150,9 +150,9 @@
     <div class="m-row"><span class="m-btn">Cast this tab</span><span class="m-btn">Queue this tab</span><span class="k">10</span></div>
   </div>
   <ol class="m-legend">
-    <li>State pill. Animated <b>Working…</b> while loading or waiting on a request; <b>Info</b> expands playback diagnostics (buffering, dropped frames, incoming vs needed bandwidth) and watch-history problems.</li>
-    <li>Title and channel link to YouTube.</li>
-    <li>Scrubber: drag or arrow keys to seek; click the total to show time remaining.</li>
+    <li>State pill. Animated <b>Loading…</b> while a video loads, <b>Working…</b> while waiting on a request; <b>Info</b> expands playback diagnostics (buffering, dropped frames, incoming vs needed bandwidth) and watch-history problems.</li>
+    <li>Title and channel link to YouTube. The sidebar, player button and right-click menu send the title with the cast, so it shows from the first second; other senders get it from a quick lookup.</li>
+    <li>Scrubber: drag or arrow keys to seek; click the total to show time remaining. While a video loads it shows the stage (<b>Finding the stream</b>, <b>Starting the player</b>, <b>Buffering</b>), the seconds so far and a bar toward the usual load time; the bar pulses once a load runs longer than usual.</li>
     <li>Previous · back 20 s · play/pause · forward 20 s · Next. Previous walks back through played videos (Next returns); with nothing before, it restarts. Next is disabled when nothing comes next.</li>
     <li>Stop · <b>CC</b> subtitles (saved; English default) · <b>Quality</b> Auto or max 1080/720/480/360 (reloads at the same position).</li>
     <li>Volume ±5 and mute, speed ±0.25× and reset, A/V offset ±50 ms and reset. All saved on the receiver; work while idle.</li>
@@ -226,10 +226,10 @@ vantv subs [on|off|&lt;lang&gt;]</code></pre></div>
   <div class="table-wrap"><table>
     <thead><tr><th>Endpoint</th><th>Body / result</th></tr></thead>
     <tbody>
-      <tr><td><code>GET /api/status</code></td><td>Player state, video, position, settings, <code>queue</code>, <code>played</code>, <code>canPlayNext</code>, <code>diagnostics</code>, pairing code.</td></tr>
-      <tr><td><code>POST /api/cast</code></td><td><code>{"videoId": …}</code> or <code>{"url": "https://youtu.be/…?t=90"}</code>, optional <code>position</code>. 202 while loading.</td></tr>
+      <tr><td><code>GET /api/status</code></td><td>Player state, video, position, settings, <code>queue</code>, <code>played</code>, <code>canPlayNext</code>, <code>diagnostics</code>, pairing code; while a video loads, <code>loading</code>: <code>{"phase": "resolve"|"start"|"buffer", "elapsed": s, "expected": s|null}</code>.</td></tr>
+      <tr><td><code>POST /api/cast</code></td><td><code>{"videoId": …}</code> or <code>{"url": "https://youtu.be/…?t=90"}</code>, optional <code>position</code> and <code>title</code>. 202 while loading.</td></tr>
       <tr><td><code>POST /api/control</code></td><td><code>action</code>: pause, resume, toggle, stop, next, previous, seek, audio_delay, speed, volume, mute, quality, subtitles.</td></tr>
-      <tr><td><code>POST /api/queue</code></td><td><code>action</code>: add (<code>videoId</code> or <code>url</code>), play (<code>key</code>), remove (<code>key</code>, or <code>current</code>: the playing video's id), move (<code>key</code>, <code>index</code>), clear (upcoming and history).</td></tr>
+      <tr><td><code>POST /api/queue</code></td><td><code>action</code>: add (<code>videoId</code> or <code>url</code>, optional <code>title</code>), play (<code>key</code>), remove (<code>key</code>, or <code>current</code>: the playing video's id), move (<code>key</code>, <code>index</code>), clear (upcoming and history).</td></tr>
       <tr><td><code>GET /health</code></td><td>Supervisor health, no pairing data.</td></tr>
     </tbody>
   </table></div>
@@ -266,7 +266,9 @@ open 'youtube/ios-shortcut/dist/Van TV Queue.shortcut'</code></pre></div>
     <tbody>
       <tr><td>Sound only from vonMid after a pause</td><td>Sonos dropped the group when audio restarted</td><td>Should self-repair ~1.5 s after resume; otherwise the BTT <code>rear_movie</code> button.</td></tr>
       <tr><td>Audio drifts ahead; Pause lags</td><td>Video backlog after mpv (old <code>xv</code> output)</td><td>Deployed fix: OpenGL output. Check <code>ps</code> shows <code>--vo=gpu</code>.</td></tr>
-      <tr><td>~20 s before a cast starts</td><td>yt-dlp stream lookup (~11 s) on a busy Pi</td><td>Queued videos are prefetched. The <code>Video load timing</code> journal line shows each phase.</td></tr>
+      <tr><td>~15 s before a cast starts</td><td>yt-dlp stream lookup (~10–14 s) on a busy Pi</td><td>Queued videos are prefetched. The sidebar shows the stage; the <code>Video load timing</code> journal line shows each phase.</td></tr>
+      <tr><td>Loads take 30 s or more; journal says <code>path=hook</code></td><td>The stream lookup failed or timed out, so mpv looks the video up again itself</td><td>Usually a one-off (a new YouTube player script). Every load on <code>path=hook</code> means yt-dlp's output changed: <code>bash receiver/deploy.sh update-ytdlp</code>, then check the resolver.</td></tr>
+      <tr><td>Screen stays dark when a video starts</td><td>The Pi desktop is labwc (Wayland): the receiver wakes it with <code>wlopm --on</code></td><td><code>ssh vanpi wlopm</code> shows the output state. Idle blanking (<code>~/.config/labwc/blank-when-idle.sh</code>) waits while mpv or VLC is open.</td></tr>
       <tr><td>Choppy video</td><td>Dropped frames, or 25 fps on the 60 Hz screen</td><td>Sidebar <b>Info</b> shows drops; try Quality 720p.</td></tr>
       <tr><td>Van TV missing from the app's Cast list</td><td>Local Network permission, or phone on the hotspot</td><td>Turn on the permission, or pair with the TV code.</td></tr>
       <tr><td>Van TV Cast / Queue Shortcut times out away from the van</td><td>Tailscale VPN off on the phone, or the Pi has no uplink</td><td>Turn Tailscale on (VPN On Demand keeps it on); check Starlink or the hotspot is up for the Pi.</td></tr>
