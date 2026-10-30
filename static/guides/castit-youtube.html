@@ -33,7 +33,7 @@
   <dt>Kind</dt><dd>A Node service on the Pi (<code>youtube-cast.service</code>) that pairs with YouTube like a TV (DIAL/Lounge) and plays with yt-dlp + mpv; two iPhone Shortcuts; a Firefox extension; a zsh CLI.</dd>
   <dt>Source</dt><dd><code>~/dev/castit/youtube</code> · <a href="https://github.com/JakeIwen/castit/tree/main/youtube">JakeIwen/castit</a> (public). Install-specific addresses live in the ignored <code>youtube/local.json</code>.</dd>
   <dt>Status</dt><dd><span class="tag ok">In daily use</span> OpenGL output (fixes A/V drift) and the post-play Sonos check landed 2026-10-22.</dd>
-  <dt>Updated</dt><dd>2026-10-29</dd>
+  <dt>Updated</dt><dd>2026-10-30</dd>
 </dl>
 
 <section id="flow">
@@ -267,7 +267,8 @@ open 'youtube/ios-shortcut/dist/Van TV Queue.shortcut'</code></pre></div>
       <tr><td>Sound only from vonMid after a pause</td><td>Sonos dropped the group when audio restarted</td><td>Should self-repair ~1.5 s after resume; otherwise the BTT <code>rear_movie</code> button.</td></tr>
       <tr><td>Audio drifts ahead; Pause lags</td><td>Video backlog after mpv (old <code>xv</code> output)</td><td>Deployed fix: OpenGL output. Check <code>ps</code> shows <code>--vo=gpu</code>.</td></tr>
       <tr><td>~15 s before a cast starts</td><td>yt-dlp stream lookup (~10–14 s) on a busy Pi</td><td>Queued videos are prefetched. The sidebar shows the stage; the <code>Video load timing</code> journal line shows each phase.</td></tr>
-      <tr><td>Loads take 30 s or more; journal says <code>path=hook</code></td><td>The stream lookup failed or timed out, so mpv looks the video up again itself</td><td>Usually a one-off (a new YouTube player script). Every load on <code>path=hook</code> means yt-dlp's output changed: <code>bash receiver/deploy.sh update-ytdlp</code>, then check the resolver.</td></tr>
+      <tr><td>Loads take 30 s or more; journal says <code>path=hook</code></td><td>The stream lookup failed, so mpv looks the video up again itself</td><td>Usually a one-off (a new YouTube player script). Every load on <code>path=hook</code> means yt-dlp's output changed: <code>bash receiver/deploy.sh update-ytdlp</code>, then check the resolver.</td></tr>
+      <tr><td>Nothing plays after about a minute; journal shows <code>resolve=60000ms</code> and <code>outcome=failed</code></td><td>The stream lookup hit its 60 s limit (slow uplink or a busy Pi). The receiver gives up rather than start the same lookup again in mpv</td><td>Cast again; the retry is usually much faster. Check the Pi's load (<code>ssh vanpi uptime</code>) and the uplink.</td></tr>
       <tr><td>Screen stays dark when a video starts</td><td>The Pi desktop is labwc (Wayland): the receiver wakes it with <code>wlopm --on</code></td><td><code>ssh vanpi wlopm</code> shows the output state. Idle blanking (<code>~/.config/labwc/blank-when-idle.sh</code>) waits while mpv or VLC is open.</td></tr>
       <tr><td>Choppy video</td><td>Dropped frames, or 25 fps on the 60 Hz screen</td><td>Sidebar <b>Info</b> shows drops; try Quality 720p.</td></tr>
       <tr><td>Van TV missing from the app's Cast list</td><td>Local Network permission, or phone on the hotspot</td><td>Turn on the permission, or pair with the TV code.</td></tr>
