@@ -15,6 +15,7 @@
   <a href="#flow">How it fits</a>
   <a href="#phone">From the phone</a>
   <a href="#firefox">Firefox sidebar</a>
+  <a href="#saved">Saved videos</a>
   <a href="#queue">Queue and history</a>
   <a href="#settings">Sound and picture</a>
   <a href="#sonos">Sonos grouping</a>
@@ -32,7 +33,7 @@
   <dt>Open</dt><dd>Status page <a href="http://vanpi.lan:8795/">vanpi.lan:8795</a> on the van Wi-Fi, or the Pi's Tailscale address on port 8795 from anywhere on the tailnet (no login; trusted networks only). The Firefox toolbar button opens the sidebar remote.</dd>
   <dt>Kind</dt><dd>A Node service on the Pi (<code>youtube-cast.service</code>) that pairs with YouTube like a TV (DIAL/Lounge) and plays with yt-dlp + mpv; two iPhone Shortcuts; a Firefox extension; a zsh CLI.</dd>
   <dt>Source</dt><dd><code>~/dev/castit/youtube</code> · <a href="https://github.com/JakeIwen/castit/tree/main/youtube">JakeIwen/castit</a> (public). Install-specific addresses live in the ignored <code>youtube/local.json</code>.</dd>
-  <dt>Status</dt><dd><span class="tag ok">In daily use</span> OpenGL output (fixes A/V drift) and the post-play Sonos check landed 2026-10-22.</dd>
+  <dt>Status</dt><dd><span class="tag ok">In daily use</span> OpenGL output (fixes A/V drift) and the post-play Sonos check landed 2026-10-22; saved video storage landed 2026-10-30.</dd>
   <dt>Updated</dt><dd>2026-10-30</dd>
 </dl>
 
@@ -54,7 +55,7 @@
         <text class="sv-text sv-muted" x="38" y="144">Cast → Van TV</text>
         <rect class="sv-part w-gpio" x="26" y="158" width="168" height="40" rx="5"/>
         <text class="sv-text" x="38" y="176">Firefox sidebar</text>
-        <text class="sv-text sv-muted" x="38" y="192">button · menu · shortcut</text>
+        <text class="sv-text sv-muted" x="38" y="192">button · Save menu · shortcut</text>
         <rect class="sv-part w-gpio" x="26" y="206" width="168" height="40" rx="5"/>
         <text class="sv-text" x="38" y="224">vantv CLI</text>
         <text class="sv-text sv-muted" x="38" y="240">Mac terminal</text>
@@ -129,39 +130,60 @@
 
 <section id="firefox">
   <h2>Firefox sidebar</h2>
-  <p>The toolbar button toggles a full-height sidebar. On YouTube, the player's <b>Van TV</b> button casts the current playhead and pauses the page once accepted; <b>Alt+Shift+V</b> does the same for the active tab. Right-click a video link or a watch page for <b>Van TV: Cast Now (Shift: Add to Queue)</b>: click to replace playback, <b>Shift-click</b> to play it next, from the start. It's one item because Firefox tucks two or more from one extension into a submenu.</p>
+  <p>The toolbar button toggles a full-height sidebar. On YouTube, the player's <b>Van TV</b> button casts the current playhead and pauses the page once accepted; <b>Alt+Shift+V</b> does the same for the active tab. Right-click a video link or a watch page for <b>Van TV: Cast Now (Shift: Add to Queue)</b>: click to replace playback, <b>Shift-click</b> to play it next, from the start. The same menu offers <b>Save on Van TV</b>, which keeps a copy without interrupting playback. Firefox groups these items into a submenu. The toolbar button is the user-controlled way to close the sidebar; Firefox cannot close it automatically when you switch to a non-YouTube tab.</p>
   <div class="mock" aria-label="Mock-up of the Van TV sidebar">
-    <div class="m-head"><b>Van TV</b><span class="m-pill">Working…</span><span class="k">1</span></div>
+    <div class="m-head"><b>Van TV</b><span class="m-pill">Working…</span><span class="m-btn">ⓘ Info</span><span class="k">1</span></div>
     <div class="m-title">php situation is insane</div>
     <div class="m-sub">channel avatar · name · subscribers <span class="k">2</span></div>
     <div class="m-scrub"><span class="m-bar"><span class="m-fill"></span></span><span class="m-times">3:12 <span>12:29 <span class="k">3</span></span></span></div>
     <div class="m-row m-transport"><span>⏮</span><span>↺20</span><span class="m-play">⏸</span><span>20↻</span><span>⏭</span><span class="k">4</span></div>
-    <div class="m-row"><span>■ Stop</span><span class="m-btn">CC</span><span class="m-btn">Auto ▾</span><span class="k">5</span></div>
+    <div class="m-row"><span>■ Stop</span><span class="m-btn">CC</span><span class="m-btn" title="Save on Van TV">↓</span><span class="m-btn">Auto ▾</span><span class="k">5</span></div>
     <div class="m-setting"><span>Volume</span><span>−</span><b>70%</b><span>+</span><span class="m-btn">Mute</span><span class="k">6</span></div>
     <div class="m-setting"><span>Speed</span><span>−</span><b>1×</b><span>+</span><span class="m-btn">1×</span></div>
     <div class="m-setting"><span>A/V offset</span><span>−</span><b>0 ms</b><span>+</span><span class="m-btn">Reset</span></div>
     <div class="m-queue">
-      <div class="m-qhead"><b>Queue</b><span class="m-links">Jump to end · Clear</span><span class="k">7</span></div>
-      <div class="m-q played">Me at the zoo <span class="m-x">×</span><span class="k">8</span></div>
+      <div class="m-qhead"><b>Saved</b><span class="m-links">channels A–Z</span><span class="k">7</span></div>
+      <div class="m-q"><span><b>Channel</b><small>Video · 123 MB</small></span><span class="m-btn">Play</span><span class="m-btn">Queue</span><span class="m-btn">Delete</span></div>
+    </div>
+    <div class="m-queue">
+      <div class="m-qhead"><b>Queue</b><span class="m-links">Jump to end · Clear</span><span class="k">8</span></div>
+      <div class="m-q played">Me at the zoo <span class="m-x">×</span><span class="k">9</span></div>
       <div class="m-q current"><span><small>Now playing</small>php situation is insane</span><span class="m-x">×</span></div>
-      <div class="m-q"><span class="m-grip">⠿</span>Rick Astley – Never Gonna Give You Up <span class="m-x">↗ ×</span><span class="k">9</span></div>
+      <div class="m-q"><span class="m-grip">⠿</span>Rick Astley – Never Gonna Give You Up <span class="m-x">↗ ×</span><span class="k">10</span></div>
       <div class="m-q"><span class="m-grip">⠿</span>PSY – GANGNAM STYLE <span class="m-x">↗ ×</span></div>
     </div>
-    <div class="m-row"><span class="m-btn">Cast this tab</span><span class="m-btn">Queue this tab</span><span class="k">10</span></div>
+    <div class="m-row"><span class="m-btn">Cast this tab</span><span class="m-btn">Queue this tab</span><span class="k">11</span></div>
   </div>
   <ol class="m-legend">
-    <li>State pill. Animated <b>Loading…</b> while a video loads, <b>Working…</b> while waiting on a request; <b>Info</b> expands playback diagnostics (buffering, dropped frames, incoming vs needed bandwidth) and watch-history problems.</li>
+    <li>State pill. Animated <b>Loading…</b> while a video loads, <b>Working…</b> while waiting on a request; <b>Info</b> expands playback diagnostics (buffering, dropped frames, incoming vs needed bandwidth), the current source (saved copy, disk cache or YouTube) and watch-history problems.</li>
     <li>Title and channel link to YouTube. The sidebar, player button and right-click menu send the title with the cast, so it shows from the first second; other senders get it from a quick lookup.</li>
     <li>Scrubber: drag or arrow keys to seek; click the total to show time remaining. While a video loads it shows the stage (<b>Finding the stream</b>, <b>Starting the player</b>, <b>Buffering</b>), the seconds so far and a bar toward the usual load time; the bar pulses once a load runs longer than usual.</li>
     <li>Previous · back 20 s · play/pause · forward 20 s · Next. Previous walks back through played videos (Next returns); with nothing before, it restarts. Next is disabled when nothing comes next.</li>
-    <li>Stop · <b>CC</b> subtitles (saved; English default) · <b>Quality</b> Auto or max 1080/720/480/360 (reloads at the same position).</li>
+    <li>Stop · <b>CC</b> subtitles (saved; English default) · <b>Save</b> the current video (its tooltip shows progress, saved or error state) · <b>Quality</b> Auto or max 1080/720/480/360 (reloads at the same position).</li>
     <li>Volume ±5 and mute, speed ±0.25× and reset, A/V offset ±50 ms and reset. All saved on the receiver; work while idle.</li>
+    <li><b>Saved</b> expands channel groups in A–Z order. Each row shows Play, Queue and Delete; Delete asks for an inline confirmation. Active downloads show progress, and a missing drive shows <b>Saved videos unavailable</b>.</li>
     <li><b>Jump to end</b> scrolls to the last queued video; <b>Clear</b> removes every played and upcoming video, leaving the current one playing.</li>
     <li>Played videos (dimmed) sit above the current one; a sliver peeks out so you can scroll up. Click one to replay; × drops it from history. × on <b>Now playing</b> skips to the next queued video and forgets this one (stops if nothing is queued).</li>
     <li>Upcoming: click to play now, drag the grip (or Alt+↑/↓) to reorder, ↗ opens YouTube, × removes. ⌘/Ctrl- or middle-click a title opens YouTube in a background tab.</li>
     <li>Cast or queue the active tab's video.</li>
   </ol>
   <p class="small">Install or update: <code>npm run depf</code> from <code>~/dev/castit/youtube</code>, click <b>Add</b> in Firefox Developer Edition, reload YouTube tabs.</p>
+</section>
+
+<section id="saved">
+  <h2>Saved videos</h2>
+  <p>The receiver keeps saved copies on the Pi's removable exFAT drive at <code>/mnt/EXFAT512/van-tv</code>. The sidebar's <b>Saved</b> section groups them by channel in A–Z order; <b>Play</b> starts from the beginning, <b>Queue</b> adds the video, and <b>Delete</b> asks for an inline confirmation. It shows download progress and says when the drive is unavailable.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>What</th><th>Behavior</th></tr></thead>
+    <tbody>
+      <tr><td>Save</td><td>Use the sidebar button beside CC, <b>Save on Van TV</b> in the Firefox context menu, or <code>vantv download [url|id]</code>. The download runs in the background and fetches only parts not already on disk; repeat it after an error to resume.</td></tr>
+      <tr><td>Playback source</td><td>A saved copy wins first, then a complete disk cache, then YouTube. <b>Info</b> reports which source is playing; saved copies and complete caches play without network use.</td></tr>
+      <tr><td>Cache</td><td>Streaming uses a local cache under <code>van-tv/.cache/</code>. A partly or fully watched video's cache is deleted 10 minutes after the player moves on to something else, unless <b>Download</b> was chosen.</td></tr>
+      <tr><td>Files</td><td>Saved media lives in <code>&lt;Channel&gt;/&lt;Title&gt; [&lt;id&gt;].mp4</code> or <code>.mkv</code>, with a matching <code>.info.json</code> sidecar.</td></tr>
+      <tr><td>Drive and space</td><td>If the drive is absent, playback streams as before and the library is unavailable. Below 2 GiB free, the receiver writes nothing and refuses downloads; existing saved or complete cached videos still play.</td></tr>
+    </tbody>
+  </table></div>
+  <p>Deleting a saved video removes its media and sidecar without interrupting an already open local playback. The cache is removed after a successful save; a download that is still using the original stream waits until that playback closes.</p>
 </section>
 
 <section id="queue">
@@ -173,7 +195,7 @@
       <tr><td>Order</td><td>The cast queue plays before the phone app's own queue, at the end of each video or on Next.</td></tr>
       <tr><td>Played history</td><td>The last 20 videos that started, any source, oldest first. Replaying one starts it from zero.</td></tr>
       <tr><td>Remove and clear</td><td>× removes any row: played, now playing (skips to the next queued video, or stops) or upcoming. <b>Clear</b> empties history and the upcoming queue; the current video keeps playing.</td></tr>
-      <tr><td>Saved</td><td>Queue and history are saved on the Pi and survive Stop, phone disconnects and restarts. Restoring them never starts playback.</td></tr>
+      <tr><td>Queue/history persistence</td><td>Queue and history are saved on the Pi and survive Stop, phone disconnects and restarts. Restoring them never starts playback.</td></tr>
       <tr><td>Titles</td><td>From YouTube's oEmbed lookup; mpv's title once a video loads.</td></tr>
       <tr><td>Prefetch</td><td>The next queued video is resolved in the background, so it starts faster than a first cast.</td></tr>
     </tbody>
@@ -212,6 +234,8 @@
   <div class="code"><pre><code>vantv [youtube-url]                      # cast; default: front Chrome/Safari tab, then clipboard
 vantv pause|resume|stop|status
 vantv queue [youtube-url|list|clear]
+vantv download [youtube-url|id]              # keep video; default: currently loaded video
+vantv saved                                  # list saved videos by channel
 vantv vol [+n|-n|n|mute|unmute]
 vantv speed [+x|-x|x]                    # e.g. vantv speed 1.5 · vantv speed +0.25
 vantv delay [+ms|-ms|ms]                 # A/V offset
@@ -226,10 +250,11 @@ vantv subs [on|off|&lt;lang&gt;]</code></pre></div>
   <div class="table-wrap"><table>
     <thead><tr><th>Endpoint</th><th>Body / result</th></tr></thead>
     <tbody>
-      <tr><td><code>GET /api/status</code></td><td>Player state, video, position, settings, <code>queue</code>, <code>played</code>, <code>canPlayNext</code>, <code>diagnostics</code>, pairing code; while a video loads, <code>loading</code>: <code>{"phase": "resolve"|"start"|"buffer", "elapsed": s, "expected": s|null}</code>.</td></tr>
+      <tr><td><code>GET /api/status</code></td><td>Player state, video, position, settings, <code>queue</code>, <code>played</code>, <code>canPlayNext</code>, <code>diagnostics</code>, <code>source</code>, current-video <code>download</code>, <code>library.available</code>, pairing code; while a video loads, <code>loading</code>: <code>{"phase": "resolve"|"start"|"buffer", "elapsed": s, "expected": s|null}</code>.</td></tr>
       <tr><td><code>POST /api/cast</code></td><td><code>{"videoId": …}</code> or <code>{"url": "https://youtu.be/…?t=90"}</code>, optional <code>position</code> and <code>title</code>. 202 while loading.</td></tr>
-      <tr><td><code>POST /api/control</code></td><td><code>action</code>: pause, resume, toggle, stop, next, previous, seek, audio_delay, speed, volume, mute, quality, subtitles.</td></tr>
+      <tr><td><code>POST /api/control</code></td><td><code>action</code>: pause, resume, toggle, stop, next, previous, seek, audio_delay, speed, volume, mute, quality, subtitles, <code>download</code> (optional <code>id</code>), <code>delete_saved</code> (<code>id</code>). Download returns when accepted; poll status/library for completion.</td></tr>
       <tr><td><code>POST /api/queue</code></td><td><code>action</code>: add (<code>videoId</code> or <code>url</code>, optional <code>title</code>), play (<code>key</code>), remove (<code>key</code>, or <code>current</code>: the playing video's id), move (<code>key</code>, <code>index</code>), clear (upcoming and history).</td></tr>
+      <tr><td><code>GET /api/library</code></td><td><code>{available, freeBytes, channels, downloads}</code>; channels are case-insensitively sorted and videos are newest saved first. With no drive, <code>freeBytes</code> is <code>null</code> and <code>channels</code> is empty.</td></tr>
       <tr><td><code>GET /health</code></td><td>Supervisor health, no pairing data.</td></tr>
     </tbody>
   </table></div>
@@ -245,6 +270,8 @@ bash receiver/deploy.sh status            # health, unit, PID
 bash receiver/deploy.sh update-ytdlp      # when YouTube breaks extraction</code></pre></div>
   <ul>
     <li><code>youtube/local.json</code> (ignored) holds the Pi's SSH target, LAN and optional Tailscale addresses (<code>tailscaleAddress</code>; the status port binds it, retrying until Tailscale is up), audio device, <code>roomCommand</code> and the sender URLs, Tailscale first so the Shortcuts use it. The receiver deploy copies it to the Pi.</li>
+    <li>To enable saved videos, set <code>receiver.videoStore</code> to <code>/mnt/EXFAT512/van-tv</code> in that private config and install <code>ffmpeg</code> on the Pi with <code>sudo apt-get install ffmpeg</code>. The receiver still starts and streams when the drive is absent; below 2 GiB free it writes nothing and refuses downloads.</li>
+    <li>The daily exFAT snapshot excludes <code>van-tv/</code>; Borg already skips the removable drive, so saved videos are not in those backups.</li>
     <li>Releases live in <code>/home/pi/youtube-cast/releases/</code>; the deploy prints the retained previous release for rollback.</li>
     <li>Pairing identity, settings, queue and history live in <code>~/.local/state/youtube-cast/</code> on the Pi. Never delete it to update.</li>
     <li>Optional YouTube watch history: <code>zsh firefox/push-youtube-cookies.zsh</code> (<code>--remove</code> turns it off). Uses account cookies; your call.</li>
