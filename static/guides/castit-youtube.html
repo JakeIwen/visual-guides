@@ -34,7 +34,7 @@
   <dt>Kind</dt><dd>A Node service on the Pi (<code>youtube-cast.service</code>) that pairs with YouTube like a TV (DIAL/Lounge) and plays with yt-dlp + mpv; two iPhone Shortcuts; a Firefox extension; a zsh CLI.</dd>
   <dt>Source</dt><dd><code>~/dev/castit/youtube</code> · <a href="https://github.com/JakeIwen/castit/tree/main/youtube">JakeIwen/castit</a> (public). Install-specific addresses live in the ignored <code>youtube/local.json</code>.</dd>
   <dt>Status</dt><dd><span class="tag ok">In daily use</span> OpenGL output (fixes A/V drift) and the post-play Sonos check landed 2026-10-22; saved video storage landed 2026-10-30.</dd>
-  <dt>Updated</dt><dd>2026-10-30</dd>
+  <dt>Updated</dt><dd>2026-10-31</dd>
 </dl>
 
 <section id="flow">
@@ -55,7 +55,7 @@
         <text class="sv-text sv-muted" x="38" y="144">Cast → Van TV</text>
         <rect class="sv-part w-gpio" x="26" y="158" width="168" height="40" rx="5"/>
         <text class="sv-text" x="38" y="176">Firefox sidebar</text>
-        <text class="sv-text sv-muted" x="38" y="192">button · Save menu · shortcut</text>
+        <text class="sv-text sv-muted" x="38" y="192">button · menu · shortcut</text>
         <rect class="sv-part w-gpio" x="26" y="206" width="168" height="40" rx="5"/>
         <text class="sv-text" x="38" y="224">vantv CLI</text>
         <text class="sv-text sv-muted" x="38" y="240">Mac terminal</text>
@@ -130,7 +130,7 @@
 
 <section id="firefox">
   <h2>Firefox sidebar</h2>
-  <p>The toolbar button toggles a full-height sidebar, and so does <b>F13</b>: the extension assigns that key once, at install, and Firefox's <b>Manage Extension Shortcuts</b> page can change it. On the MacBook, a <code>hidutil</code> login agent in the scripts repo turns the F5 microphone key into F13. On YouTube, the player's <b>Van TV</b> button casts the current playhead and pauses the page once accepted; <b>Alt+Shift+V</b> does the same for the active tab. Right-click a video link or a watch page for <b>Van TV: Cast Now (Shift: Add to Queue)</b>: click to replace playback, <b>Shift-click</b> to play it next, from the start. The same menu offers <b>Save on Van TV</b>, which keeps a copy without interrupting playback. Firefox groups these items into a submenu. Close the sidebar with the toolbar button or F13; Firefox cannot close it automatically when you switch to a non-YouTube tab.</p>
+  <p>The toolbar button toggles a full-height sidebar, and so does <b>F13</b>: the extension assigns that key once, at install, and Firefox's <b>Manage Extension Shortcuts</b> page can change it. On the MacBook, a <code>hidutil</code> login agent in the scripts repo turns the F5 microphone key into F13. On YouTube, the player's <b>Van TV</b> button casts the current playhead and pauses the page once accepted; <b>Alt+Shift+V</b> does the same for the active tab. Right-click a video link or a watch page for <b>Van TV: Cast Now (Shift: Add to Queue)</b>: click to replace playback, <b>Shift-click</b> to play it next, from the start. It is the extension's only menu item, so Firefox shows it directly rather than in a submenu. To keep a copy of the open tab's video without interrupting playback, use <b>Save</b> in the sidebar's bottom row. Close the sidebar with the toolbar button or F13; Firefox cannot close it automatically when you switch to a non-YouTube tab.</p>
   <div class="mock" aria-label="Mock-up of the Van TV sidebar">
     <div class="m-head"><b>Van TV</b><span class="m-pill">Working…</span><span class="m-btn">ⓘ Info</span><span class="k">1</span></div>
     <div class="m-title">php situation is insane</div>
@@ -152,7 +152,7 @@
       <div class="m-q"><span class="m-grip">⠿</span>Rick Astley – Never Gonna Give You Up <span class="m-x">↗ ×</span><span class="k">10</span></div>
       <div class="m-q"><span class="m-grip">⠿</span>PSY – GANGNAM STYLE <span class="m-x">↗ ×</span></div>
     </div>
-    <div class="m-row"><span class="m-btn">Cast this tab</span><span class="m-btn">Queue this tab</span><span class="k">11</span></div>
+    <div class="m-row"><span class="m-btn">Cast</span><span class="m-btn">Queue</span><span class="m-btn">Save</span><span class="k">11</span></div>
   </div>
   <ol class="m-legend">
     <li>State pill. Animated <b>Loading…</b> while a video loads, <b>Working…</b> while waiting on a request; <b>Info</b> expands playback diagnostics (buffering, dropped frames, incoming vs needed bandwidth), the current source (saved copy, disk cache or YouTube) and watch-history problems.</li>
@@ -165,7 +165,7 @@
     <li><b>Jump to end</b> scrolls to the last queued video; <b>Clear</b> removes every played and upcoming video, leaving the current one playing.</li>
     <li>Played videos (dimmed) sit above the current one; a sliver peeks out so you can scroll up. Click one to replay; × drops it from history. × on <b>Now playing</b> skips to the next queued video and forgets this one (stops if nothing is queued).</li>
     <li>Upcoming: click to play now, drag the grip (or Alt+↑/↓) to reorder, ↗ opens YouTube, × removes. ⌘/Ctrl- or middle-click a title opens YouTube in a background tab.</li>
-    <li>Cast or queue the active tab's video.</li>
+    <li>Cast, queue or save the active tab's video.</li>
   </ol>
   <p class="small">Install or update: <code>npm run depf</code> from <code>~/dev/castit/youtube</code>, click <b>Add</b> in Firefox Developer Edition, reload YouTube tabs.</p>
 </section>
@@ -176,7 +176,7 @@
   <div class="table-wrap"><table>
     <thead><tr><th>What</th><th>Behavior</th></tr></thead>
     <tbody>
-      <tr><td>Save</td><td>Use the sidebar button beside CC, <b>Save on Van TV</b> in the Firefox context menu, or <code>vantv download [url|id]</code>. The download runs in the background and fetches only parts not already on disk; repeat it after an error to resume.</td></tr>
+      <tr><td>Save</td><td>Use the sidebar's download button beside CC (the playing video), <b>Save</b> in its bottom row (the open YouTube tab), or <code>vantv download [url|id]</code>. The download runs in the background and fetches only parts not already on disk; repeat it after an error to resume.</td></tr>
       <tr><td>Playback source</td><td>A saved copy wins first, then a complete disk cache, then YouTube. <b>Info</b> reports which source is playing; saved copies and complete caches play without network use.</td></tr>
       <tr><td>Cache</td><td>Streaming uses a local cache under <code>van-tv/.cache/</code>. A partly or fully watched video's cache is deleted 10 minutes after the player moves on to something else, unless <b>Download</b> was chosen.</td></tr>
       <tr><td>Files</td><td>Saved media lives in <code>&lt;Channel&gt;/&lt;Title&gt; [&lt;id&gt;].mp4</code> or <code>.mkv</code>, with a matching <code>.info.json</code> sidecar.</td></tr>
