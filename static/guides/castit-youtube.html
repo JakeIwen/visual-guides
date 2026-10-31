@@ -157,7 +157,7 @@
   <ol class="m-legend">
     <li>State pill. Animated <b>Loading…</b> while a video loads, <b>Working…</b> while waiting on a request; <b>Info</b> expands playback diagnostics (buffering, dropped frames, incoming vs needed bandwidth), the current source (saved copy, disk cache or YouTube) and watch-history problems.</li>
     <li>Title and channel link to YouTube. The sidebar, player button and right-click menu send the title with the cast, so it shows from the first second; other senders get it from a quick lookup.</li>
-    <li>Scrubber: drag or arrow keys to seek; click the total to show time remaining. While a video loads it shows the stage (<b>Finding the stream</b>, <b>Starting the player</b>, <b>Buffering</b>), the seconds so far and a bar toward the usual load time; the bar pulses once a load runs longer than usual.</li>
+    <li>Scrubber: drag or arrow keys (5 s; Shift for 20 s) to seek; click the total to show time remaining. While a video loads it shows the stage (<b>Finding the stream</b>, <b>Starting the player</b>, <b>Buffering</b>), the seconds so far and a bar toward the usual load time; the bar pulses once a load runs longer than usual.</li>
     <li>Previous · back 20 s · play/pause · forward 20 s · Next. Previous walks back through played videos (Next returns); with nothing before, it restarts. Next is disabled when nothing comes next.</li>
     <li>Stop · <b>CC</b> subtitles (saved; English default) · <b>Save</b> the current video (its tooltip shows progress, saved or error state) · <b>Quality</b> Auto or max 1080/720/480/360 (reloads at the same position).</li>
     <li>Volume ±5 and mute, speed ±0.25× and reset, A/V offset ±50 ms and reset. All saved on the receiver; work while idle.</li>
@@ -167,6 +167,23 @@
     <li>Upcoming: click to play now, drag the grip (or Alt+↑/↓) to reorder, ↗ opens YouTube, × removes. ⌘/Ctrl- or middle-click a title opens YouTube in a background tab.</li>
     <li>Cast, queue or save the active tab's video.</li>
   </ol>
+  <h3>Keyboard shortcuts</h3>
+  <p>Click anywhere in the sidebar, then use YouTube's player keys; <b>/</b> shows the same list there. A key acts only when its sidebar control would. Ctrl, ⌘ and Alt combinations, text fields and the Quality menu keep their own keys; while the list is open only <b>/</b> and Escape act.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Key</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>Space · K</td><td>Play or pause</td></tr>
+      <tr><td>← · →</td><td>Back or forward 5 s</td></tr>
+      <tr><td>Shift+← · Shift+→</td><td>Back or forward 20 s</td></tr>
+      <tr><td>J · L</td><td>Back or forward 10 s</td></tr>
+      <tr><td>0–9</td><td>Jump to 0–90% of the video</td></tr>
+      <tr><td>Shift+P · Shift+N</td><td>Previous or next video</td></tr>
+      <tr><td>↓ · ↑</td><td>Volume down or up</td></tr>
+      <tr><td>M · C</td><td>Mute · subtitles on or off</td></tr>
+      <tr><td>&lt; · &gt;</td><td>Slower or faster</td></tr>
+      <tr><td>/</td><td>Show or hide the shortcut list</td></tr>
+    </tbody>
+  </table></div>
   <p class="small">Install or update: <code>npm run depf</code> from <code>~/dev/castit/youtube</code>, click <b>Add</b> in Firefox Developer Edition, reload YouTube tabs.</p>
 </section>
 
