@@ -39,8 +39,10 @@ The Mac is always preview-only. Keep Pi transmission disabled unless explicitly
 requested and hardware verified. GPIO17 belongs to a different service. A send
 does not confirm appliance state; preserve the no-retry behavior.
 
-Use the scoped Pi deployer here. Dashboard project links belong to
-`~/dev/van-dashboard/van_dashboard/van_dashboard_projects.py`; preserve user-added links in its runtime StateStore.
+Use the scoped Pi deployer here. Dashboard project links are documented in
+`~/dev/van-dashboard/docs/HOSTED_PROJECTS.md`: projects live in the dashboard's
+runtime StateStore (filled by its scanner and UI), not a static source catalog;
+preserve user-added links.
 
 `npm run deploy` is the combined Mac/Pi workflow: check both hosts, run tests,
 gracefully restart Mac Python, apply the Pi release, verify Mac supervision.
