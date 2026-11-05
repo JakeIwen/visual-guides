@@ -1451,20 +1451,20 @@
       "verified": "2026-11-04"
     },
     {
-      "id": "hidutil-dictation-to-f13",
+      "id": "hidutil-dictation-to-f16",
       "provider": "macOS hidutil",
       "scope": "System-wide on input services carrying this mapping",
       "keys": [
         "Dictation key (F5 position)"
       ],
-      "action": "Send F13 instead of the dictation/voice-command key.",
+      "action": "Send F16 instead of the dictation/voice-command key; Van TV in Firefox uses F16 to show or hide its sidebar.",
       "status": "enabled",
       "conditions": "",
-      "limitations": "This remaps the consumer voice-command usage, not every ordinary F5 key. F13 behavior belongs to the receiving application; no built-in shortcut is implied.",
+      "limitations": "This remaps the consumer voice-command usage, not every ordinary F5 key. F16 behavior belongs to the receiving application. F13–F15 were avoided because Firefox on macOS reads them as PrintScreen, ScrollLock and Pause.",
       "sources": [
-        "~/dev/scripts/macbook/launchagents/com.jacobr.dictation-key-f13.plist"
+        "~/dev/scripts/macbook/launchagents/com.jacobr.dictation-key-f16.plist"
       ],
-      "verified": "2026-11-04"
+      "verified": "2026-11-05"
     },
     {
       "id": "zsh-external-editor",

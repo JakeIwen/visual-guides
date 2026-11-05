@@ -34,7 +34,7 @@
   <dt>Kind</dt><dd>A Node service on the Pi (<code>youtube-cast.service</code>) that pairs with YouTube like a TV (DIAL/Lounge) and plays with yt-dlp + mpv; two iPhone Shortcuts; a Firefox extension; a zsh CLI.</dd>
   <dt>Source</dt><dd><code>~/dev/castit/youtube</code> · <a href="https://github.com/JakeIwen/castit/tree/main/youtube">JakeIwen/castit</a> (public). Install-specific addresses live in the ignored <code>youtube/local.json</code>.</dd>
   <dt>Status</dt><dd><span class="tag ok">In daily use</span> OpenGL output (fixes A/V drift) and the post-play Sonos check landed 2026-10-22; saved video storage landed 2026-10-30.</dd>
-  <dt>Updated</dt><dd>2026-10-31</dd>
+  <dt>Updated</dt><dd>2026-11-05</dd>
 </dl>
 
 <section id="flow">
@@ -130,7 +130,7 @@
 
 <section id="firefox">
   <h2>Firefox sidebar</h2>
-  <p>The toolbar button toggles a full-height sidebar, and so does <b>F13</b>: the extension assigns that key once, at install, and Firefox's <b>Manage Extension Shortcuts</b> page can change it. On the MacBook, a <code>hidutil</code> login agent in the scripts repo turns the F5 microphone key into F13. On YouTube, the player's <b>Van TV</b> button casts the current playhead and pauses the page once accepted; <b>Alt+Shift+V</b> does the same for the active tab. Right-click a video link or a watch page for <b>Van TV: Cast Now (Shift: Add to Queue)</b>: click to replace playback, <b>Shift-click</b> to play it next, from the start. It is the extension's only menu item, so Firefox shows it directly rather than in a submenu. To keep a copy of the open tab's video without interrupting playback, use <b>Save</b> in the sidebar's bottom row. Close the sidebar with the toolbar button or F13; Firefox cannot close it automatically when you switch to a non-YouTube tab.</p>
+  <p>The toolbar button toggles a full-height sidebar, and so does <b>F16</b>: the extension assigns that key once, at install, and Firefox's <b>Manage Extension Shortcuts</b> page can change it. On the MacBook, a <code>hidutil</code> login agent in the scripts repo turns the F5 microphone key into F16 (Firefox on macOS reads F13–F15 as other keys). On YouTube, the player's <b>Van TV</b> button casts the current playhead and pauses the page once accepted; <b>Alt+Shift+V</b> does the same for the active tab. Right-click a video link or a watch page for <b>Van TV: Cast Now (Shift: Add to Queue)</b>: click to replace playback, <b>Shift-click</b> to play it next, from the start. It is the extension's only menu item, so Firefox shows it directly rather than in a submenu. To keep a copy of the open tab's video without interrupting playback, use <b>Save</b> in the sidebar's bottom row. Close the sidebar with the toolbar button or F16; Firefox cannot close it automatically when you switch to a non-YouTube tab.</p>
   <div class="mock" aria-label="Mock-up of the Van TV sidebar">
     <div class="m-head"><b>Van TV</b><span class="m-pill">Working…</span><span class="m-btn">ⓘ Info</span><span class="k">1</span></div>
     <div class="m-title">php situation is insane</div>
