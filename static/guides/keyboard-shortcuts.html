@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keyboard shortcuts · Visual Guides</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css">
+  <link rel="stylesheet" href="keyboard-shortcuts.css">
+  <script src="keyboard-shortcuts.js" defer></script>
+</head>
+<body>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Visual Guides &amp; Documentation</a><span aria-hidden="true">/</span><span aria-current="page">Keyboard shortcuts</span></nav>
+<main class="keyboard-reference">
+  <h1>Keyboard shortcuts</h1>
+  <form id="filters" role="search" aria-label="Filter keyboard shortcuts">
+    <label class="search-field">Search keys, action or source
+      <input id="search" type="search" placeholder="e.g. Cmd+C, region, iTerm" disabled>
+    </label>
+    <label>Provider <select id="provider" disabled><option value="">All providers</option></select></label>
+    <label>App / scope <select id="scope" disabled><option value="">All scopes</option></select></label>
+    <label class="check-field"><input id="include-disabled" type="checkbox" disabled> Include disabled</label>
+    <button id="reset" type="reset" disabled>Reset</button>
+  </form>
+  <p id="result-status" role="status" aria-live="polite">Loading keyboard reference…</p>
+  <button id="retry" type="button" hidden>Retry loading</button>
+  <details>
+    <summary>Coverage and limitations</summary>
+    <div id="catalog-notes" class="small"></div>
+  </details>
+  <ul id="shortcuts" aria-label="Keyboard mappings"></ul>
+  <noscript><p>JavaScript is required to filter this guide. Read the <a href="../reference/keyboard-shortcuts.json">catalog JSON</a> or use the terminal command below.</p></noscript>
+  <section aria-labelledby="terminal-heading">
+    <h2 id="terminal-heading">Terminal</h2>
+    <p>On the Mac, <code>keys</code> prints the reference in new or reloaded shells; an existing shell can run <code>source ~/.zshrc</code>. It is a command, not a chord. Direct invocation: <code>python3 ~/dev/visual-guides/keyboard_reference.py</code> (Python 3.9+, no dependencies). Add a search phrase or <code>--all</code> to include disabled mappings.</p>
+    <p>Default output shows grouped keys, actions and statuses. Use <code>--details</code> for each row’s conditions, limitations, sources and verification date; <code>--notes</code> prints catalog-wide caveats after the results. <code>--json</code> always includes complete records and notes.</p>
+  </section>
+  <section aria-labelledby="maintenance-heading">
+    <h2 id="maintenance-heading">Keeping this current</h2>
+    <p>When a custom BTT, iTerm, zsh or harness mapping changes, update the <a href="../reference/keyboard-shortcuts.json">canonical catalog</a> in the same task and verify this guide and the terminal output. A verified date records a source check, not a claim that the shortcut was exercised in every app. Review every catalog string before publishing; automated privacy checks catch common leaks, not every private detail.</p>
+    <p class="small">Keycaps separated by an arrow are consecutive sequence steps, not one simultaneous chord. Search can join those steps, such as <code>cosnt</code> for C → O → S → N → T → Space. Built-in macOS shortcuts are outside this custom reference.</p>
+  </section>
+  <p><a href="https://github.com/JakeIwen/visual-guides/blob/main/static/reference/keyboard-shortcuts.json">Source</a> · <a href="https://github.com/JakeIwen/visual-guides/commits/main/static/reference/keyboard-shortcuts.json">History</a> · <a href="../reference/keyboard-shortcuts.schema.json">Schema</a></p>
+</main>
+</body>
+</html>

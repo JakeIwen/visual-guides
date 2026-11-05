@@ -18,12 +18,15 @@ class BackendContractTests(unittest.TestCase):
             cells = [cell.strip().strip("`") for cell in line.strip().strip("|").split("|")]
             if len(cells) == 3 and cells[0] not in {"Path", "---"}:
                 rows[cells[0]] = (cells[1], cells[2])
-        self.assertEqual(set(rows), {"app.py", "python3 -m local_service", "deploy.py", "hardware_setup.py"})
+        self.assertEqual(set(rows), {"app.py", "python3 -m local_service", "deploy.py",
+                                     "hardware_setup.py", "keyboard_reference.py"})
         expected_owners = {
             "app.py": ("visual_guides_server.py", "visual_guides_cli.py"),
             "python3 -m local_service": ("local_service/__main__.py", "local_service/control.py"),
             "deploy.py": ("deploy.py",),
             "hardware_setup.py": ("hardware_setup.py",),
+            "keyboard_reference.py": ("keyboard_reference.py", "static/reference/keyboard-shortcuts.json",
+                                      "static/reference/keyboard-shortcuts.schema.json"),
         }
         for contract, owners in expected_owners.items():
             self.assertTrue(rows[contract][0], contract)

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Custom keyboard reference",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "notes", "entries"],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "notes": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "provider", "scope", "keys", "action", "status", "conditions", "limitations", "sources", "verified"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+          "provider": {"type": "string", "minLength": 1},
+          "scope": {"type": "string", "minLength": 1},
+          "keys": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "action": {"type": "string", "minLength": 1},
+          "status": {"type": "string", "enum": ["enabled", "conditional", "disabled"]},
+          "conditions": {"type": "string"},
+          "limitations": {"type": "string"},
+          "sources": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "verified": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "format": "date"}
+        }
+      }
+    }
+  }
+}

@@ -21,6 +21,17 @@ guide commits preserved. Do not add a second copy to the scripts repository.
 - `static/assets/site.css`: shared typography, guide primitives and responsive layout.
 - `static/guides/<name>.css`, `<name>.js`: private styles and behavior beside their HTML guide; page URLs remain stable.
 - `static/reference/`: versioned supporting documents, refreshed with their guide.
+- `static/reference/keyboard-shortcuts.json`: the only public-safe custom keyboard
+  catalog; `keyboard-shortcuts.schema.json` owns its versioned record vocabulary.
+  `static/guides/keyboard-shortcuts.{html,js,css}` renders it; the standalone
+  `keyboard_reference.py` validates, filters and prints it (stdlib Python 3.9+).
+  This catalog alone has an approved readable-data size exception: canonical
+  shortcut record table shared by the guide and CLI; keeping complete readable
+  records together avoids duplicate catalogs. The size checker does not measure
+  JSON, so this rationale belongs here rather than in an ineffective config rule.
+- `tests/test_keyboard_reference.py`, `tests/keyboard_reference_cases.cjs`: shared
+  fixture coverage of catalog validation, browser rendering and CLI/filter parity;
+  the Python suite also gates production catalog privacy with tested heuristics.
 - `tests/`, `test_deploy.py`, `test_hardware_setup.py`: behavioral verification.
 - `tests/test_static_contract.py`: local asset references, private/shared ownership,
   palette ownership and syntax checks for every discovered browser script.
@@ -61,6 +72,54 @@ tests use temporary state and mocked launchd boundaries, without installing a
 job. Keep files under 800 lines and functions under 80 unless a reviewed reason
 requires an explicit exception. Reuse existing helpers before adding any.
 
+Whenever BTT, iTerm, zsh or harness mappings change, update the canonical keyboard
+catalog in the same task and verify both the guide and CLI (`npm test`, plus
+browser checks). Keep each `verified` date honest: it records the source check,
+not a live exercise in every app. Publish no full scripts, personal expansion
+payloads, secret URLs or network names. Source references use `~/`, repo-relative
+paths or fixed public system paths such as `/Applications`; never external URLs
+or absolute personal home paths. Privacy tests flag
+URLs, IPs, private hostnames, email addresses and unusually long action text;
+they are regression tripwires, not proof of privacy. Review all strings manually.
+Literal `@` keys are valid. Native macOS built-ins are out of scope.
+The JSON schema declares fields/statuses once; both readers validate its supported
+keywords and enforce unique ids and conditions for conditional entries. `keys`
+contains consecutive chord/sequence steps; `sources` names source-of-truth paths.
+Use `+` between modifiers and keys (`Cmd+X`, `Cmd+-` for the literal minus key),
+not modifier hyphens. Canonical rows sort case-insensitively by provider, scope
+and key steps, with id as a stable tie-breaker; both readers retain that order.
+The CLI accepts text search, `--all`, exact `--provider`/`--scope`, `--json`,
+`--details`, `--notes` and `--catalog PATH`; it resolves default data beside itself,
+not from the caller's cwd. Default text shows grouped keys/actions/statuses, a
+conditional-requirements notice and result count. `--details` adds row conditions,
+limitations and provenance; `--notes` prints all catalog caveats after the rows.
+JSON always retains complete records and notes. The guide keeps all catalog notes
+inside a native, initially collapsed Coverage and limitations disclosure.
+Exit 0 includes an empty result; malformed or missing data exits 2 on stderr.
+Search is a literal case-insensitive phrase; options may be interspersed with its
+words. Both readers also search concatenated sequence steps (`cosnt` matches
+`C`, `O`, `S`, `N`, `T`, `Space`) without exposing private expansion content.
+Both readers reject Unicode control/format and line/paragraph separators;
+a leading UTF-8 BOM in a JSON file is accepted.
+
+The keyboard catalog covers 54 BTT mappings, one hidutil remap and 59 terminal
+mappings (18 global iTerm, eight shared profile, 20 existing zsh, the live Copy
+Mode menu shortcut and 12 installed editing mappings). The 12 `terminal-*` editing
+rows are conditional on new/reloaded zsh sessions, emacs/vi insert mode and their
+stated selection/input requirements. Existing shells need `source ~/.zshrc` or a
+new shell to load the widgets and `keys` function. Authenticated iTerm apply and a
+zero-change post-check verified the two owned keys across 14 profile/session maps;
+no actual keystrokes or clipboard tests were performed. Copy uses the previously
+unused `Cmd+Ctrl+C`; `Cmd+Shift+C` remains iTerm Copy Mode and ordinary `Cmd+C` is
+unchanged. The Ctrl+A dispatcher consumes only already-pending input, with no added
+lookahead delay or partial-Unicode timeout; KEYTIMEOUT is unchanged. Same-write
+or already-pending Ctrl+A then Ctrl+K typeahead is indistinguishable from Cmd+X;
+delayed Ctrl+K keeps its native action. Empty cuts preserve the clipboard; native
+Ctrl+Space regions survive Ctrl+A while Shift-selection ends. Ctrl+Y and harness
+kill/yank behavior are not guaranteed. Outside zsh, Cmd+X is not universally safe:
+Vim normal-mode Ctrl+A increments a number. Source/configuration verification and
+isolated fresh-login/PTY checks never prove a successful live shortcut.
+
 Commit and push (`c/p`) is the default here: Jacob rates this repo low-risk, so
 once a change is finished and tests pass, commit it to `main` and push without
 asking. Deployment goes with it: after every push, run `npm run deploy` without
@@ -81,3 +140,4 @@ from behavioral changes. Never publish private operational context.
 | `python3 -m local_service` | npm service lifecycle commands and installed Mac plist | `local_service/__main__.py`, `local_service/control.py` |
 | `deploy.py` | npm combined and Pi deployment commands | `deploy.py` |
 | `hardware_setup.py` | Documented Pi owner commands | `hardware_setup.py` |
+| `keyboard_reference.py` | Mac zsh keyboard-reference command and direct terminal use | `keyboard_reference.py`, `static/reference/keyboard-shortcuts.json`, `static/reference/keyboard-shortcuts.schema.json` |

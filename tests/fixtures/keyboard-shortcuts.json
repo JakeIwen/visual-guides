@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "notes": ["Test fixture only. Keyboard region selection differs from mouse selection."],
+  "entries": [
+    {"id":"test-copy","provider":"Test BTT","scope":"Test editor","keys":["Cmd+C"],"action":"Copy a test line","status":"conditional","conditions":"Editable test field with no selection","limitations":"Test mouse selection is separate","sources":["tests/fixture-copy.js"],"verified":"2026-11-04"},
+    {"id":"test-sequence","provider":"Test BTT","scope":"Global test","keys":["a","b"],"action":"<script>test-only text</script>","status":"enabled","conditions":"","limitations":"","sources":["tests/fixture-sequence.json"],"verified":"2026-11-04"},
+    {"id":"test-disabled","provider":"Test zsh","scope":"Test terminal","keys":["Ctrl+X"],"action":"Retired test action","status":"disabled","conditions":"Not installed","limitations":"","sources":["tests/fixture-shell.zsh"],"verified":"2026-11-04"}
+  ]
+}

@@ -1,0 +1,1962 @@
+{
+  "schema_version": 1,
+  "notes": [
+    "Coverage: 54 BetterTouchTool mappings, one live hidutil remap and 59 terminal mappings, source-checked 2026-11-04. Terminal editing is installed and conditional on a new or reloaded zsh session; existing shells need reload. Configuration verification is not a successful live-key test.",
+    "BTT coverage retains all 43 shortcuts and 11 typed sequences: 37 enabled, 16 conditional and one disabled. All retained rows belong to active presets and none are Trash-linked. Enabled means the saved binding is on, not that its action passed a live test.",
+    "Consecutive keycaps are sequence steps; plus signs indicate a chord. Alphabetic sequence labels name physical keys, not required uppercase characters. Keyboard region selection and mouse selection are distinct; check each mapping’s conditions.",
+    "Key labels use the US/macOS virtual-key convention. Hardware filters and non-US layouts remain unverified. Seven named targets exist only in inactive presets; explicit dispatch, overlapping seek thresholds and brightness conflicts remain untested. See each row’s limitations.",
+    "Private expansion text, clipboard contents, saved destinations, network identities and executable payloads are withheld. Insert saved text (private) deliberately does not reveal its content.",
+    "No custom global menu accelerators or custom Claude/Codex keybindings were found in the inspected configuration. Per-app menu preferences and built-in shortcuts were not inventoried.",
+    "Action descriptions follow the stored action chains and named targets, not BTT’s container labels. Missing resume targets and unclear Spotify/Chrome behavior are retained and flagged, not repaired or omitted.",
+    "Existing terminal coverage includes 18 global iTerm mappings, eight profile mappings shared by both configured profiles, 20 zsh mappings and the live Copy Mode menu shortcut. Cmd+Shift+C remains Copy Mode; normal Cmd+C is unchanged. Cmd+Ctrl+C was verified unused before installation. Authenticated apply and a zero-change post-check verified the two owned iTerm bindings across 14 profile/session maps; no keystrokes were sent.",
+    "Emacs is the intentional zsh default; vi is optional. Terminal widgets passed fresh-login shell and isolated PTY checks without using the real clipboard. Existing shells must reload their configuration or be replaced by a new shell; installed configuration does not prove live shortcut behavior.",
+    "The Ctrl+A cut dispatcher inspects only already-pending input, with no added lookahead delay. It reads complete Unicode characters without a partial-character timeout and leaves KEYTIMEOUT unchanged. Same-write or already-pending Ctrl+A then Ctrl+K typeahead is indistinguishable from Cmd+X; delayed Ctrl+K keeps its native action.",
+    "Ctrl+Y is not promised to restore a terminal cut. Inspected Claude Code 2.1.314 maps it to chat:defaultToNewerModel; harness and tmux kill/yank behavior remains unverified. No harness bindings were changed."
+  ],
+  "entries": [
+    {
+      "id": "btt-f2f7086b-3f5d-5f4f-a3a9-e6c30f462bbd",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "'"
+      ],
+      "action": "Wrap the selected text in single quotes.",
+      "status": "conditional",
+      "conditions": "Editable, nonempty selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original key passes through.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable selection; unsupported editors may refuse the operation.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#F2F7086B-3F5D-5F4F-A3A9-E6C30F462BBD",
+        "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-3f9d3b67-5756-4576-9797-0c5f446bb6a9",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        ".",
+        "O",
+        "M",
+        ".",
+        "O",
+        "M"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.300 seconds. BTT removes 6 triggering characters before the action. Saved sequence keyboard ID -2052004921; device identity not resolved. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#3F9D3B67-5756-4576-9797-0C5F446BB6A9",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-e35ff44b-2427-466b-9711-28986886e60c",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        ".",
+        "P",
+        "R",
+        "Y"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.300 seconds. BTT removes 4 triggering characters before the action. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#E35FF44B-2427-466B-9711-28986886E60C",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-2d358e8b-9cc9-56d7-a371-4a8744173698",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "["
+      ],
+      "action": "Wrap the selected text in square brackets.",
+      "status": "conditional",
+      "conditions": "Editable, nonempty selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original key passes through.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable selection; unsupported editors may refuse the operation.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#2D358E8B-9CC9-56D7-A371-4A8744173698",
+        "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-99ec0a0b-f2d4-511e-a4da-00735dcd6205",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "`"
+      ],
+      "action": "Wrap the selected text in backticks.",
+      "status": "conditional",
+      "conditions": "Editable, nonempty selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original key passes through.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable selection; unsupported editors may refuse the operation.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#99EC0A0B-F2D4-511E-A4DA-00735DCD6205",
+        "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-0506030f-527f-4db3-b77c-77dfd2b0f9f9",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "A",
+        "Q",
+        "B"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.376 seconds. BTT removes 3 triggering characters before the action. Saved sequence keyboard ID 1715; device identity not resolved. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#0506030F-527F-4DB3-B77C-77DFD2B0F9F9",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-8ed935a9-3465-521c-b504-b9ba61993e1c",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Cmd+C"
+      ],
+      "action": "Copy the current line plus one newline, preserving the caret.",
+      "status": "conditional",
+      "conditions": "Editable caret with no selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original shortcut passes through.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable text; unsupported editors may refuse the operation.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#8ED935A9-3465-521C-B504-B9BA61993E1C",
+        "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-eda649c3-026b-4402-9bf9-ce339233efb2",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Cmd+V"
+      ],
+      "action": "Paste files/text in Finder, or save a clipboard image as a PNG in the current Finder folder.",
+      "status": "conditional",
+      "conditions": "Finder frontmost and no editable text field focused; otherwise Cmd+V passes through.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Image paste writes a new file; normal file/text paste uses Finder native Paste.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#EDA649C3-026B-4402-9BF9-CE339233EFB2",
+        "~/dev/scripts/macbook/bettertouchtool/install_finder_paste.py",
+        "~/dev/scripts/macbook/bettertouchtool/finder_paste.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-a5cfb2ca-2e10-5749-af6b-98d01b2876e0",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Cmd+X"
+      ],
+      "action": "Cut the current line when nothing is selected.",
+      "status": "conditional",
+      "conditions": "Editable caret with no selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original shortcut passes through.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable text; unsupported editors may refuse the operation.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#A5CFB2CA-2E10-5749-AF6B-98D01B2876E0",
+        "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-35fffb80-fa5e-4d6b-96b9-1e04e007e55d",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Cmd+Brightness Down"
+      ],
+      "action": "Decrease volume across the configured Sonos speakers.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 2741; its device identity/filtering semantics were not resolved. Matching named target is stored only in an inactive preset; explicit-dispatch behavior is unverified. Another retained binding uses this chord for a different Sonos action and a different saved keyboard ID.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#35FFFB80-FA5E-4D6B-96B9-1E04E007E55D",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#637C638C-4912-4F34-95B8-6E95D2D3F27B",
+        "~/dev/scripts/macbook/scripts/sns.sh",
+        "~/dev/scripts/shared/python/sonos_tasks.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-f12a6635-7fc0-4c53-b85f-094fb7e77f15",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Cmd+Brightness Down"
+      ],
+      "action": "Group Sonos speakers for party mode and equalize/unmute their volume.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. This changes speaker grouping and may change volume and mute state. Another retained binding uses this chord for a different Sonos action and a different saved keyboard ID.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#F12A6635-7FC0-4C53-B85F-094FB7E77F15",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#259EA29C-C88C-4E75-A617-39EBA480198A",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#CB9F6278-E8EB-4C71-8E24-922CCD1FB881",
+        "~/dev/scripts/macbook/scripts/sns.sh",
+        "~/dev/scripts/shared/python/sonos_tasks.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-29929bd9-9faa-42fe-92c0-c43ee253193d",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Cmd+Brightness Up"
+      ],
+      "action": "Stop Sonos playback and ungroup the configured speakers.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Matching named target is stored only in an inactive preset; explicit-dispatch behavior is unverified.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#29929BD9-9FAA-42FE-92C0-C43EE253193D",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#EA918572-52D0-4131-AC3C-1F47489967C9",
+        "~/dev/scripts/macbook/scripts/sns.sh",
+        "~/dev/scripts/shared/python/sonos_tasks.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-14cc57a9-92e1-4404-b62c-59e1e7c88c33",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Cmd+Mute"
+      ],
+      "action": "Stop Sonos playback and ungroup the configured speakers.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 2741; its device identity/filtering semantics were not resolved. Matching named target is stored only in an inactive preset; explicit-dispatch behavior is unverified.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#14CC57A9-92E1-4404-B62C-59E1E7C88C33",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#EA918572-52D0-4131-AC3C-1F47489967C9",
+        "~/dev/scripts/macbook/scripts/sns.sh",
+        "~/dev/scripts/shared/python/sonos_tasks.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-317cb648-fcca-4774-9e23-750cb2be82c4",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Cmd+P"
+      ],
+      "action": "Open the saved URL (private destination).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Saved destination and browser choice are intentionally withheld.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#317CB648-FCCA-4774-9E23-750CB2BE82C4"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-e595237b-efbb-4583-b10e-da32d3a959d2",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Cmd+Volume Down"
+      ],
+      "action": "Decrease volume across the configured Sonos speakers.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 2741; its device identity/filtering semantics were not resolved. Matching named target is stored only in an inactive preset; explicit-dispatch behavior is unverified.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#E595237B-EFBB-4583-B10E-DA32D3A959D2",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#637C638C-4912-4F34-95B8-6E95D2D3F27B",
+        "~/dev/scripts/macbook/scripts/sns.sh",
+        "~/dev/scripts/shared/python/sonos_tasks.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-41b48be5-775b-4595-bb58-b88947e1fe68",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Cmd+Volume Up"
+      ],
+      "action": "Increase volume across the configured Sonos speakers.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 2741; its device identity/filtering semantics were not resolved. Matching named target is stored only in an inactive preset; explicit-dispatch behavior is unverified.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#41B48BE5-775B-4595-BB58-B88947E1FE68",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#AC6364E9-0A10-4F5E-B70C-8E9897340DF5",
+        "~/dev/scripts/macbook/scripts/sns.sh",
+        "~/dev/scripts/shared/python/sonos_tasks.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-575bd84c-322e-46bc-af9e-e18e115b5e48",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Shift+Cmd+5"
+      ],
+      "action": "Switch Sonos to the movie/optical listening preset.",
+      "status": "conditional",
+      "conditions": "Hold the chord for at least 1.035 seconds.",
+      "limitations": "Saved keyboard ID 2741; its device identity/filtering semantics were not resolved. Movie preset changes grouping, mute state and volume; it is not just play/pause.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#575BD84C-322E-46BC-AF9E-E18E115B5E48",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#51E21D8C-3998-4022-8F10-A3D57C852365",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#BBD1B40D-B609-5C4E-9C04-8352F18B4A5B",
+        "~/dev/scripts/macbook/scripts/sns.sh",
+        "~/dev/scripts/shared/python/sonos_tasks.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-5a6ae315-85f0-4c39-b9d8-7504243909c6",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Shift+Cmd+Fast Forward"
+      ],
+      "action": "Request a 5-minute skip forward in remote video playback.",
+      "status": "conditional",
+      "conditions": "Hold the chord for at least 1.035 seconds.",
+      "limitations": "Saved keyboard ID 2741; its device identity/filtering semantics were not resolved. Uses a remote playback command; remote availability and live behavior were not tested. A second retained binding uses this same chord; overlapping hold thresholds/action ordering were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#5A6AE315-85F0-4C39-B9D8-7504243909C6",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#28677D4A-9839-4794-8CDA-4A8155F01268"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-cad74887-e9d0-42e3-b993-b5099345cb21",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Shift+Cmd+Fast Forward"
+      ],
+      "action": "Request a 20-second skip forward in remote video playback.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 2741; its device identity/filtering semantics were not resolved. Matching named target is stored only in an inactive preset; explicit-dispatch behavior is unverified. Uses a remote playback command; remote availability and live behavior were not tested. A second retained binding uses this same chord; overlapping hold thresholds/action ordering were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#CAD74887-E9D0-42E3-B993-B5099345CB21",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#129396DC-2698-44E1-B932-90C45236B7E5"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-90c2b71a-1cfc-4c6c-8dba-edd505904f7a",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Shift+Cmd+Play/Pause"
+      ],
+      "action": "Toggle remote video playback between play and pause.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Uses a remote playback command; remote availability and live behavior were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#90C2B71A-1CFC-4C6C-8DBA-EDD505904F7A",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#61BB8B93-CDE8-4128-B561-F93D1DD6A077",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#04520ECC-4FA2-445A-9CE6-D5F53D9E1185"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-10633155-82dd-4fa0-ba80-d7fca7f35507",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Shift+Cmd+Rewind"
+      ],
+      "action": "Request a 20-second skip backward in remote video playback.",
+      "status": "conditional",
+      "conditions": "Hold the chord for at least 1.035 seconds.",
+      "limitations": "Saved keyboard ID 2741; its device identity/filtering semantics were not resolved. Matching named target is stored only in an inactive preset; explicit-dispatch behavior is unverified. Uses a remote playback command; remote availability and live behavior were not tested. A second retained binding uses this same chord; overlapping hold thresholds/action ordering were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#10633155-82DD-4FA0-BA80-D7FCA7F35507",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#12EB54AD-11B8-452C-B370-1A873D0EDAE9"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-4628ed29-ebe2-45ee-b84e-3d086c6b0745",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Ctrl+Option+Shift+Cmd+Rewind"
+      ],
+      "action": "Request a 5-minute skip backward in remote video playback.",
+      "status": "conditional",
+      "conditions": "Hold the chord for at least 1.035 seconds.",
+      "limitations": "Saved keyboard ID 2741; its device identity/filtering semantics were not resolved. Uses a remote playback command; remote availability and live behavior were not tested. A second retained binding uses this same chord; overlapping hold thresholds/action ordering were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#4628ED29-EBE2-45EE-B84E-3D086C6B0745",
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#4DFF9D90-B853-4D4B-9F67-E254EF8B1405"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-cb909d4d-3339-438c-8e01-2426de9a46ed",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Fn+Ctrl+Option+Cmd+F8"
+      ],
+      "action": "Invoke the saved resume action; its named target could not be found.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. No matching named trigger exists in the current store; intended effect is unresolved.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#CB909D4D-3339-438C-8E01-2426DE9A46ED"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-b33c40dd-88e8-5934-ae62-eeb3c5a9e4bc",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Fn+Ctrl+Option+Shift+Cmd+Down Arrow"
+      ],
+      "action": "Convert selected text to lowercase.",
+      "status": "conditional",
+      "conditions": "Requires a supported editable text selection at runtime; saved activation predicate is always true.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Does not transform the whole document; unsupported or missing selections are refused.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#B33C40DD-88E8-5934-AE62-EEB3C5A9E4BC",
+        "~/dev/scripts/macbook/bettertouchtool/repair_text_transforms.js",
+        "~/dev/scripts/macbook/bettertouchtool/text_selection.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-624a872a-1435-5369-aeee-a66c97d8a45b",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Fn+Ctrl+Option+Shift+Cmd+Up Arrow"
+      ],
+      "action": "Convert selected text to uppercase.",
+      "status": "conditional",
+      "conditions": "Requires a supported editable text selection at runtime; saved activation predicate is always true.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Does not transform the whole document; unsupported or missing selections are refused.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#624A872A-1435-5369-AEEE-A66C97D8A45B",
+        "~/dev/scripts/macbook/bettertouchtool/repair_text_transforms.js",
+        "~/dev/scripts/macbook/bettertouchtool/text_selection.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-d638c862-0eec-4ea6-99fd-fe3f301ef616",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Fn+Esc"
+      ],
+      "action": "Show the BTT Touch Bar.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 2658; its device identity/filtering semantics were not resolved.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#D638C862-0EEC-4EA6-99FD-FE3F301EF616"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-9fbdf79a-28c1-4063-85ba-5675d07b5aee",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "J",
+        "I",
+        "Shift+2 (@ on US layout)"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.300 seconds. BTT removes 3 triggering characters before the action. Saved sequence keyboard ID -2052004921; device identity not resolved. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#9FBDF79A-28C1-4063-85BA-5675D07B5AEE",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-3929e19f-0dd8-444f-9eba-32d330481570",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "J",
+        "Q",
+        "Q"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.300 seconds. BTT removes 3 triggering characters before the action. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#3929E19F-0DD8-444F-9EBA-32D330481570",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-a0a21ce3-2753-43d4-a998-7c8d4a04b133",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "L",
+        "3",
+        "K"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.300 seconds. BTT removes 3 triggering characters before the action. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#A0A21CE3-2753-43D4-A998-7C8D4A04B133",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-77fdbd40-fc3e-542d-9125-39c84ef98b3b",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "L",
+        "D",
+        "E",
+        "V"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "conditional",
+      "conditions": "Not in Terminal, iTerm2, Ghostty, Warp, Kitty, Alacritty or WezTerm.",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.300 seconds. BTT removes 4 triggering characters before the action. Saved sequence keyboard ID -2052004921; device identity not resolved. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#77FDBD40-FC3E-542D-9125-39C84EF98B3B",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-15d43716-e6bf-4592-a85d-68aa749c6bab",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "L",
+        "F",
+        "D"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.300 seconds. BTT removes 3 triggering characters before the action. Saved sequence keyboard ID -2052004921; device identity not resolved. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#15D43716-E6BF-4592-A85D-68AA749C6BAB",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-2e6816c3-87a3-4533-b3f6-384be37f8e76",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "R",
+        "L",
+        "F"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.300 seconds. BTT removes 3 triggering characters before the action. Saved sequence keyboard ID -2052004921; device identity not resolved. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#2E6816C3-87A3-4533-B3F6-384BE37F8E76",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-cca10bcd-4f76-486c-be0c-8d3e3db2e480",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "S",
+        "H",
+        "R",
+        "G"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.300 seconds. BTT removes 4 triggering characters before the action. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#CCA10BCD-4F76-486C-BE0C-8D3E3DB2E480",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-b2a40d74-5c06-5489-bd06-4614099f516a",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Shift+'"
+      ],
+      "action": "Wrap the selected text in double quotes.",
+      "status": "conditional",
+      "conditions": "Editable, nonempty selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original key passes through.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable selection; unsupported editors may refuse the operation.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#B2A40D74-5C06-5489-BD06-4614099F516A",
+        "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-6ed9aec4-dc77-57c4-a9f9-e90632ef50ed",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Shift+9"
+      ],
+      "action": "Wrap the selected text in parentheses.",
+      "status": "conditional",
+      "conditions": "Editable, nonempty selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original key passes through.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable selection; unsupported editors may refuse the operation.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#6ED9AEC4-DC77-57C4-A9F9-E90632EF50ED",
+        "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-679d6379-cb0a-5d80-8097-44570ac6adc3",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Shift+["
+      ],
+      "action": "Wrap the selected text in braces.",
+      "status": "conditional",
+      "conditions": "Editable, nonempty selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original key passes through.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable selection; unsupported editors may refuse the operation.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#679D6379-CB0A-5D80-8097-44570AC6ADC3",
+        "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-f8df2b59-10f6-45ea-8c61-8d216dba2593",
+      "provider": "BetterTouchTool",
+      "scope": "Atom",
+      "keys": [
+        "C",
+        "O",
+        "S",
+        "N",
+        "T",
+        "Space"
+      ],
+      "action": "Insert saved text (private).",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Type the steps consecutively; saved inter-key pause setting is 0.258 seconds. Saved sequence uses Undo afterwards; replacement/caret details were not tested. Expansion content is intentionally withheld; payload and resulting caret position were not tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#F8DF2B59-10F6-45EA-8C61-8D216DBA2593",
+        "~/dev/scripts/macbook/bettertouchtool/repair_key_sequences.py"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-21c64e4d-040c-40d8-a0f4-b612acc3a4b8",
+      "provider": "BetterTouchTool",
+      "scope": "BTT Clipboard Manager",
+      "keys": [
+        "Cmd+1"
+      ],
+      "action": "Paste clipboard-history item 1 from BTT Clipboard Manager.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 1573; its device identity/filtering semantics were not resolved. Clipboard contents are private and were not read.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#21C64E4D-040C-40D8-A0F4-B612ACC3A4B8"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-3135b50a-11c6-4050-93c5-9220b3808af1",
+      "provider": "BetterTouchTool",
+      "scope": "BTT Clipboard Manager",
+      "keys": [
+        "Cmd+2"
+      ],
+      "action": "Paste clipboard-history item 2 from BTT Clipboard Manager.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 1573; its device identity/filtering semantics were not resolved. Clipboard contents are private and were not read.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#3135B50A-11C6-4050-93C5-9220B3808AF1"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-6e3d0736-44e0-40d0-ac29-81126425a58a",
+      "provider": "BetterTouchTool",
+      "scope": "BTT Clipboard Manager",
+      "keys": [
+        "Cmd+3"
+      ],
+      "action": "Paste clipboard-history item 3 from BTT Clipboard Manager.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 1573; its device identity/filtering semantics were not resolved. Clipboard contents are private and were not read.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#6E3D0736-44E0-40D0-AC29-81126425A58A"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-bc3f3b21-bde4-43b6-8f58-24c8d317d70c",
+      "provider": "BetterTouchTool",
+      "scope": "BTT Clipboard Manager",
+      "keys": [
+        "Cmd+4"
+      ],
+      "action": "Paste clipboard-history item 4 from BTT Clipboard Manager.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 1573; its device identity/filtering semantics were not resolved. Clipboard contents are private and were not read.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#BC3F3B21-BDE4-43B6-8F58-24C8D317D70C"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-c9bc2baf-0d62-4e4d-9e4e-4098057bf1bb",
+      "provider": "BetterTouchTool",
+      "scope": "BTT Clipboard Manager",
+      "keys": [
+        "Cmd+5"
+      ],
+      "action": "Paste clipboard-history item 5 from BTT Clipboard Manager.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 1573; its device identity/filtering semantics were not resolved. Clipboard contents are private and were not read.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#C9BC2BAF-0D62-4E4D-9E4E-4098057BF1BB"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-7d32e73d-53d9-45c6-9cfd-ec051d2822e9",
+      "provider": "BetterTouchTool",
+      "scope": "BTT Clipboard Manager",
+      "keys": [
+        "Cmd+6"
+      ],
+      "action": "Paste clipboard-history item 6 from BTT Clipboard Manager.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 1573; its device identity/filtering semantics were not resolved. Clipboard contents are private and were not read.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#7D32E73D-53D9-45C6-9CFD-EC051D2822E9"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-fe5b68fa-3ed4-4a8c-9916-0afc55b9018b",
+      "provider": "BetterTouchTool",
+      "scope": "BTT Clipboard Manager",
+      "keys": [
+        "Cmd+7"
+      ],
+      "action": "Paste clipboard-history item 7 from BTT Clipboard Manager.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 1573; its device identity/filtering semantics were not resolved. Clipboard contents are private and were not read.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#FE5B68FA-3ED4-4A8C-9916-0AFC55B9018B"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-ccdead26-16ce-4f7e-b9bb-78d3441ff1ab",
+      "provider": "BetterTouchTool",
+      "scope": "BTT Clipboard Manager",
+      "keys": [
+        "Cmd+8"
+      ],
+      "action": "Paste clipboard-history item 8 from BTT Clipboard Manager.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 1573; its device identity/filtering semantics were not resolved. Clipboard contents are private and were not read.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#CCDEAD26-16CE-4F7E-B9BB-78D3441FF1AB"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-3261f89d-e1fd-4718-852b-90ccb8a694df",
+      "provider": "BetterTouchTool",
+      "scope": "BTT Clipboard Manager",
+      "keys": [
+        "Cmd+9"
+      ],
+      "action": "Paste clipboard-history item 9 from BTT Clipboard Manager.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 1573; its device identity/filtering semantics were not resolved. Clipboard contents are private and were not read.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#3261F89D-E1FD-4718-852B-90CCB8A694DF"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-0492e4f2-1795-4995-9f74-73f7de352ba4",
+      "provider": "BetterTouchTool",
+      "scope": "Chrome",
+      "keys": [
+        "Ctrl+Shift+Tab"
+      ],
+      "action": "Switch to Desktop 1.",
+      "status": "disabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 5833; its device identity/filtering semantics were not resolved.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#0492E4F2-1795-4995-9F74-73F7DE352BA4"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-d2be80a9-6977-42f7-964f-6de0abead4b0",
+      "provider": "BetterTouchTool",
+      "scope": "Chrome",
+      "keys": [
+        "Ctrl+Shift+Tab"
+      ],
+      "action": "Send Ctrl+K in Chrome.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 5833; its device identity/filtering semantics were not resolved. The receiving Chrome/extension command was not identified; no built-in meaning is assumed.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#D2BE80A9-6977-42F7-964F-6DE0ABEAD4B0"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-65c2159d-b68a-41be-8d74-761276c4eb7a",
+      "provider": "BetterTouchTool",
+      "scope": "Chrome",
+      "keys": [
+        "Ctrl+Tab"
+      ],
+      "action": "Send Ctrl+J in Chrome.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 5833; its device identity/filtering semantics were not resolved. The receiving Chrome/extension command was not identified; no built-in meaning is assumed.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#65C2159D-B68A-41BE-8D74-761276C4EB7A"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-038bcbd1-49b7-4825-9d4f-a788493a2723",
+      "provider": "BetterTouchTool",
+      "scope": "Chrome",
+      "keys": [
+        "Option+Cmd+X"
+      ],
+      "action": "Cut selected text, or select and cut the current line when nothing is selected.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Falls back to ordinary Cmd+X when selection information is unavailable; line selection uses app keyboard navigation and was not live-tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#038BCBD1-49B7-4825-9D4F-A788493A2723",
+        "~/dev/scripts/macbook/bettertouchtool/presets/Cut Current Line - Notes Pages Browsers.bttpreset"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-2d2e98c0-7a74-4f83-8a12-663503dc4133",
+      "provider": "BetterTouchTool",
+      "scope": "Firefox",
+      "keys": [
+        "Option+Cmd+X"
+      ],
+      "action": "Cut selected text, or select and cut the current line when nothing is selected.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Falls back to ordinary Cmd+X when selection information is unavailable; line selection uses app keyboard navigation and was not live-tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#2D2E98C0-7A74-4F83-8A12-663503DC4133",
+        "~/dev/scripts/macbook/bettertouchtool/presets/Cut Current Line - Notes Pages Browsers.bttpreset"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-8bda2429-5b60-4b72-8e39-1dc9a9b34aa0",
+      "provider": "BetterTouchTool",
+      "scope": "Notes",
+      "keys": [
+        "Option+Cmd+X"
+      ],
+      "action": "Cut selected text, or select and cut the current line when nothing is selected.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Falls back to ordinary Cmd+X when selection information is unavailable; line selection uses app keyboard navigation and was not live-tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#8BDA2429-5B60-4B72-8E39-1DC9A9B34AA0",
+        "~/dev/scripts/macbook/bettertouchtool/presets/Cut Current Line - Notes Pages Browsers.bttpreset"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-348f7804-53f8-4506-96b0-34a4dde8442d",
+      "provider": "BetterTouchTool",
+      "scope": "Pages",
+      "keys": [
+        "Option+Cmd+X"
+      ],
+      "action": "Cut selected text, or select and cut the current line when nothing is selected.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Falls back to ordinary Cmd+X when selection information is unavailable; line selection uses app keyboard navigation and was not live-tested.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#348F7804-53F8-4506-96B0-34A4DDE8442D",
+        "~/dev/scripts/macbook/bettertouchtool/presets/Cut Current Line - Notes Pages Browsers.bttpreset"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "btt-a4d95a2b-90d9-43ff-b9e7-24b6d72a2028",
+      "provider": "BetterTouchTool",
+      "scope": "Spotify",
+      "keys": [
+        "Shift+Cmd+P"
+      ],
+      "action": "Run the saved Spotify navigation/reload macro.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved keyboard ID 5822; its device identity/filtering semantics were not resolved. Sends Cmd+Shift+/, Right twice, Down three times, Return, then Cmd+R twice with delays; intended menu target is unresolved and UI-version-sensitive.",
+      "sources": [
+        "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#A4D95A2B-90D9-43FF-B9E7-24B6D72A2028"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-profile-7f-100000",
+      "provider": "iTerm2",
+      "scope": "Both configured terminal profiles",
+      "keys": [
+        "Cmd+Backspace"
+      ],
+      "action": "Send Ctrl+U: kill from the caret back to logical line start in zsh",
+      "status": "conditional",
+      "conditions": "One of the two configured saved profiles is active.",
+      "limitations": "Other programs or session-specific overrides can interpret the emitted bytes differently.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-profile-f702-300000",
+      "provider": "iTerm2",
+      "scope": "Both configured terminal profiles",
+      "keys": [
+        "Cmd+Left"
+      ],
+      "action": "Send Ctrl+A: move to logical line start in compatible line editors",
+      "status": "conditional",
+      "conditions": "One of the two configured saved profiles is active.",
+      "limitations": "Other programs or session-specific overrides can interpret the emitted bytes differently.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-profile-f703-300000",
+      "provider": "iTerm2",
+      "scope": "Both configured terminal profiles",
+      "keys": [
+        "Cmd+Right"
+      ],
+      "action": "Send Ctrl+E: move to logical line end in compatible line editors",
+      "status": "conditional",
+      "conditions": "One of the two configured saved profiles is active.",
+      "limitations": "Other programs or session-specific overrides can interpret the emitted bytes differently.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-profile-f728-0",
+      "provider": "iTerm2",
+      "scope": "Both configured terminal profiles",
+      "keys": [
+        "Forward Delete"
+      ],
+      "action": "Send Ctrl+D: delete forward, or EOF on an empty shell line",
+      "status": "conditional",
+      "conditions": "One of the two configured saved profiles is active.",
+      "limitations": "Other programs or session-specific overrides can interpret the emitted bytes differently.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-profile-7f-80000",
+      "provider": "iTerm2",
+      "scope": "Both configured terminal profiles",
+      "keys": [
+        "Option+Backspace"
+      ],
+      "action": "Send Escape then Backspace: delete the previous word in compatible line editors",
+      "status": "conditional",
+      "conditions": "One of the two configured saved profiles is active.",
+      "limitations": "Other programs or session-specific overrides can interpret the emitted bytes differently.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-profile-f728-80000",
+      "provider": "iTerm2",
+      "scope": "Both configured terminal profiles",
+      "keys": [
+        "Option+Forward Delete"
+      ],
+      "action": "Send Escape then D: delete the next word in compatible line editors",
+      "status": "conditional",
+      "conditions": "One of the two configured saved profiles is active.",
+      "limitations": "Other programs or session-specific overrides can interpret the emitted bytes differently.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-profile-f702-280000",
+      "provider": "iTerm2",
+      "scope": "Both configured terminal profiles",
+      "keys": [
+        "Option+Left"
+      ],
+      "action": "Send Escape then B: move backward one word in compatible line editors",
+      "status": "conditional",
+      "conditions": "One of the two configured saved profiles is active.",
+      "limitations": "Other programs or session-specific overrides can interpret the emitted bytes differently.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-profile-f703-280000",
+      "provider": "iTerm2",
+      "scope": "Both configured terminal profiles",
+      "keys": [
+        "Option+Right"
+      ],
+      "action": "Send Escape then F: move forward one word in compatible line editors",
+      "status": "conditional",
+      "conditions": "One of the two configured saved profiles is active.",
+      "limitations": "Other programs or session-specific overrides can interpret the emitted bytes differently.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-2d-100000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+-"
+      ],
+      "action": "Decrease font size throughout the current window",
+      "status": "conditional",
+      "conditions": "The font follower is running and its window-font RPC is registered.",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-30-100000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+0"
+      ],
+      "action": "Restore the current window font size for its display",
+      "status": "conditional",
+      "conditions": "The font follower is running and its window-font RPC is registered.",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-3d-100000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+="
+      ],
+      "action": "Increase font size throughout the current window",
+      "status": "conditional",
+      "conditions": "The font follower is running and its window-font RPC is registered.",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f701-300000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Down"
+      ],
+      "action": "Scroll down one line",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f72b-100000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+End"
+      ],
+      "action": "Scroll to bottom",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f729-100000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Home"
+      ],
+      "action": "Scroll to top",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f702-300000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Left"
+      ],
+      "action": "Previous terminal session",
+      "status": "conditional",
+      "conditions": "Only when the current profile does not override this key.",
+      "limitations": "Saved preference inspected; no live keystroke was sent. Both configured saved profiles override this global mapping.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f72d-100000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Page Down"
+      ],
+      "action": "Scroll down one page",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f72c-100000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Page Up"
+      ],
+      "action": "Scroll up one page",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f703-300000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Right"
+      ],
+      "action": "Next terminal session",
+      "status": "conditional",
+      "conditions": "Only when the current profile does not override this key.",
+      "limitations": "Saved preference inspected; no live keystroke was sent. Both configured saved profiles override this global mapping.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-2b-120000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Shift+="
+      ],
+      "action": "Increase font size throughout the current window",
+      "status": "conditional",
+      "conditions": "The font follower is running and its window-font RPC is registered.",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f702-320000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Shift+Left"
+      ],
+      "action": "Move tab left",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f703-320000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Shift+Right"
+      ],
+      "action": "Move tab right",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f700-300000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Cmd+Up"
+      ],
+      "action": "Scroll up one line",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-19-60000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Ctrl+Shift+Tab"
+      ],
+      "action": "Previous recently used tab",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-9-40000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Ctrl+Tab"
+      ],
+      "action": "Next recently used tab",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f72d-20000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Shift+Page Down"
+      ],
+      "action": "Scroll down one page",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-global-f72c-20000",
+      "provider": "iTerm2",
+      "scope": "Global terminal mapping",
+      "keys": [
+        "Shift+Page Up"
+      ],
+      "action": "Scroll up one page",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Saved preference inspected; no live keystroke was sent.",
+      "sources": [
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "iterm-copy-mode",
+      "provider": "iTerm2",
+      "scope": "Terminal window",
+      "keys": [
+        "Cmd+Shift+C"
+      ],
+      "action": "Enter terminal Copy Mode",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "Verified through read-only live menu inspection; no keystroke sent.",
+      "sources": [
+        "/Applications/iTerm.app/Contents/Resources",
+        "~/Library/Preferences/com.googlecode.iterm2.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-clipboard-copy",
+      "provider": "iTerm2 and zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "Cmd+Ctrl+C"
+      ],
+      "action": "Copy active region exactly, or plain caret-line text plus one newline, without changing the field",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. iTerm sends the installed Cmd+Ctrl+C mapping; copies the active keyboard region or logical caret line.",
+      "limitations": "Cmd+C terminal-selection copying and Cmd+Shift+C Copy Mode remain unchanged; the reserved sequence has no guaranteed meaning in other programs.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-clipboard-cut",
+      "provider": "iTerm2 and zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "Cmd+X"
+      ],
+      "action": "Copy active region or logical caret line to system clipboard, then remove only after a successful write",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. iTerm sends the installed Cmd+X mapping; removal requires a successful clipboard write.",
+      "limitations": "Outside zsh this sends Ctrl+A then Ctrl+K; in Vim normal mode Ctrl+A increments a number, so this is not universally safe cut. Ctrl+Y is not promised to restore it. In zsh the dispatcher consumes only already-pending input, with no added lookahead delay; it reads complete Unicode characters and leaves KEYTIMEOUT unchanged. Same-write or already-pending Ctrl+A then Ctrl+K typeahead is indistinguishable from Cmd+X; delayed Ctrl+K keeps its native action. An empty cut range preserves the clipboard. Native Ctrl+Space regions survive Ctrl+A; Shift-selection ends.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "hidutil-dictation-to-f13",
+      "provider": "macOS hidutil",
+      "scope": "System-wide on input services carrying this mapping",
+      "keys": [
+        "Dictation key (F5 position)"
+      ],
+      "action": "Send F13 instead of the dictation/voice-command key.",
+      "status": "enabled",
+      "conditions": "",
+      "limitations": "This remaps the consumer voice-command usage, not every ordinary F5 key. F13 behavior belongs to the receiving application; no built-in shortcut is implied.",
+      "sources": [
+        "~/dev/scripts/macbook/launchagents/com.jacobr.dictation-key-f13.plist"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-external-editor",
+      "provider": "zsh",
+      "scope": "Emacs and vi insert mode",
+      "keys": [
+        "Ctrl+X",
+        "Ctrl+E"
+      ],
+      "action": "Edit the command buffer in the configured external editor",
+      "status": "conditional",
+      "conditions": "The zsh line editor is active and an editor is configured.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-history-ctrl-n",
+      "provider": "zsh",
+      "scope": "Emacs and vi keymaps",
+      "keys": [
+        "Ctrl+N"
+      ],
+      "action": "Search forward through history matching the typed substring",
+      "status": "conditional",
+      "conditions": "The zsh history-substring-search plugin is loaded.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-history-ctrl-p",
+      "provider": "zsh",
+      "scope": "Emacs and vi keymaps",
+      "keys": [
+        "Ctrl+P"
+      ],
+      "action": "Search backward through history matching the typed substring",
+      "status": "conditional",
+      "conditions": "The zsh history-substring-search plugin is loaded.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-history-down",
+      "provider": "zsh",
+      "scope": "Emacs and vi keymaps",
+      "keys": [
+        "Down"
+      ],
+      "action": "Search forward through history matching the typed substring",
+      "status": "conditional",
+      "conditions": "The zsh history-substring-search plugin is loaded.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-end",
+      "provider": "zsh",
+      "scope": "Emacs and vi keymaps",
+      "keys": [
+        "End"
+      ],
+      "action": "Move to logical line end",
+      "status": "conditional",
+      "conditions": "The terminal emits the corresponding Home, End or Delete escape sequence.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-forward-delete",
+      "provider": "zsh",
+      "scope": "Emacs and vi keymaps",
+      "keys": [
+        "Forward Delete"
+      ],
+      "action": "Delete the character under the caret",
+      "status": "conditional",
+      "conditions": "The terminal emits the corresponding Home, End or Delete escape sequence.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-home",
+      "provider": "zsh",
+      "scope": "Emacs and vi keymaps",
+      "keys": [
+        "Home"
+      ],
+      "action": "Move to logical line start",
+      "status": "conditional",
+      "conditions": "The terminal emits the corresponding Home, End or Delete escape sequence.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-history-up",
+      "provider": "zsh",
+      "scope": "Emacs and vi keymaps",
+      "keys": [
+        "Up"
+      ],
+      "action": "Search backward through history matching the typed substring",
+      "status": "conditional",
+      "conditions": "The zsh history-substring-search plugin is loaded.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-ctrl-a",
+      "provider": "zsh",
+      "scope": "Emacs mode and optional vi insert mode",
+      "keys": [
+        "Ctrl+A"
+      ],
+      "action": "Move to logical line start",
+      "status": "conditional",
+      "conditions": "The zsh line editor owns terminal input.",
+      "limitations": "These are shell editor actions, not universal terminal or harness commands. With terminal-editing loaded, already-pending Ctrl+K dispatches clipboard cut; delayed Ctrl+K keeps its native action. This adds no lookahead delay and cannot distinguish queued Ctrl+A then Ctrl+K typeahead from Cmd+X. Native Ctrl+Space regions survive Ctrl+A; Shift-selection ends.",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh",
+        "~/mac-config/zsh/terminal-editing.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-ctrl-e",
+      "provider": "zsh",
+      "scope": "Emacs mode and optional vi insert mode",
+      "keys": [
+        "Ctrl+E"
+      ],
+      "action": "Move to logical line end",
+      "status": "conditional",
+      "conditions": "The zsh line editor owns terminal input.",
+      "limitations": "These are shell editor actions, not universal terminal or harness commands.",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-ctrl-k",
+      "provider": "zsh",
+      "scope": "Emacs mode and optional vi insert mode",
+      "keys": [
+        "Ctrl+K"
+      ],
+      "action": "Kill from caret to logical line end using the shell kill ring",
+      "status": "conditional",
+      "conditions": "The zsh line editor owns terminal input.",
+      "limitations": "These are shell editor actions, not universal terminal or harness commands.",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-ctrl-r",
+      "provider": "zsh",
+      "scope": "Emacs mode and optional vi insert mode",
+      "keys": [
+        "Ctrl+R"
+      ],
+      "action": "Search history backward incrementally",
+      "status": "conditional",
+      "conditions": "The zsh line editor owns terminal input.",
+      "limitations": "These are shell editor actions, not universal terminal or harness commands.",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-ctrl-s",
+      "provider": "zsh",
+      "scope": "Emacs mode and optional vi insert mode",
+      "keys": [
+        "Ctrl+S"
+      ],
+      "action": "Search history forward incrementally",
+      "status": "conditional",
+      "conditions": "The zsh line editor owns terminal input.",
+      "limitations": "These are shell editor actions, not universal terminal or harness commands.",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-ctrl-u",
+      "provider": "zsh",
+      "scope": "Emacs mode and optional vi insert mode",
+      "keys": [
+        "Ctrl+U"
+      ],
+      "action": "Kill from caret back to logical line start",
+      "status": "conditional",
+      "conditions": "The zsh line editor owns terminal input.",
+      "limitations": "These are shell editor actions, not universal terminal or harness commands.",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-ctrl-w",
+      "provider": "zsh",
+      "scope": "Emacs mode and optional vi insert mode",
+      "keys": [
+        "Ctrl+W"
+      ],
+      "action": "Kill the previous word, stopping at slash or equals",
+      "status": "conditional",
+      "conditions": "The zsh line editor owns terminal input.",
+      "limitations": "These are shell editor actions, not universal terminal or harness commands.",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-vi-backspace",
+      "provider": "zsh",
+      "scope": "Vi insert mode",
+      "keys": [
+        "Backspace"
+      ],
+      "action": "Delete the preceding character, including text entered before the current insert session",
+      "status": "conditional",
+      "conditions": "Optional vi mode is selected and the line editor is in insert mode.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-vi-ctrl-h",
+      "provider": "zsh",
+      "scope": "Vi insert mode",
+      "keys": [
+        "Ctrl+H"
+      ],
+      "action": "Delete the preceding character, including text entered before the current insert session",
+      "status": "conditional",
+      "conditions": "Optional vi mode is selected and the line editor is in insert mode.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-vi-j",
+      "provider": "zsh",
+      "scope": "Vi normal mode",
+      "keys": [
+        "j"
+      ],
+      "action": "Search forward through history matching the typed substring",
+      "status": "conditional",
+      "conditions": "Optional vi mode is selected and the line editor is in normal mode; emacs is the default.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-vi-k",
+      "provider": "zsh",
+      "scope": "Vi normal mode",
+      "keys": [
+        "k"
+      ],
+      "action": "Search backward through history matching the typed substring",
+      "status": "conditional",
+      "conditions": "Optional vi mode is selected and the line editor is in normal mode; emacs is the default.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "zsh-vi-v",
+      "provider": "zsh",
+      "scope": "Vi normal mode",
+      "keys": [
+        "v"
+      ],
+      "action": "Edit the command buffer in the configured external editor",
+      "status": "conditional",
+      "conditions": "Optional vi mode is selected and the line editor is in normal mode; emacs is the default.",
+      "limitations": "",
+      "sources": [
+        "~/mac-config/zsh/vi-keys.zsh"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-wrap-double-quote",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "\""
+      ],
+      "action": "Wrap the active nonempty region with matching delimiters and retain the inner selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. A nonempty keyboard region is active.",
+      "limitations": "Without a nonempty region, normal typing and URL escaping remain in effect; vi normal mode is unchanged.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-wrap-single-quote",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "'"
+      ],
+      "action": "Wrap the active nonempty region with matching delimiters and retain the inner selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. A nonempty keyboard region is active.",
+      "limitations": "Without a nonempty region, normal typing and URL escaping remain in effect; vi normal mode is unchanged.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-wrap-parenthesis",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "("
+      ],
+      "action": "Wrap the active nonempty region with matching delimiters and retain the inner selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. A nonempty keyboard region is active.",
+      "limitations": "Without a nonempty region, normal typing and URL escaping remain in effect; vi normal mode is unchanged.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-wrap-bracket",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "["
+      ],
+      "action": "Wrap the active nonempty region with matching delimiters and retain the inner selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. A nonempty keyboard region is active.",
+      "limitations": "Without a nonempty region, normal typing and URL escaping remain in effect; vi normal mode is unchanged.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-wrap-backtick",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "`"
+      ],
+      "action": "Wrap the active nonempty region with matching delimiters and retain the inner selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. A nonempty keyboard region is active.",
+      "limitations": "Without a nonempty region, normal typing and URL escaping remain in effect; vi normal mode is unchanged.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-select-shift-down",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "Shift+Down"
+      ],
+      "action": "Start or extend a keyboard region selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. The terminal emits the corresponding shifted-arrow sequence.",
+      "limitations": "Ordinary navigation ends Shift+selection; terminal must send the standard shifted-arrow sequence.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-select-shift-left",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "Shift+Left"
+      ],
+      "action": "Start or extend a keyboard region selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. The terminal emits the corresponding shifted-arrow sequence.",
+      "limitations": "Ordinary navigation ends Shift+selection; terminal must send the standard shifted-arrow sequence.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-select-shift-right",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "Shift+Right"
+      ],
+      "action": "Start or extend a keyboard region selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. The terminal emits the corresponding shifted-arrow sequence.",
+      "limitations": "Ordinary navigation ends Shift+selection; terminal must send the standard shifted-arrow sequence.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-select-shift-up",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "Shift+Up"
+      ],
+      "action": "Start or extend a keyboard region selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. The terminal emits the corresponding shifted-arrow sequence.",
+      "limitations": "Ordinary navigation ends Shift+selection; terminal must send the standard shifted-arrow sequence.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    },
+    {
+      "id": "terminal-wrap-brace",
+      "provider": "zsh",
+      "scope": "Zsh emacs and vi insert mode",
+      "keys": [
+        "{"
+      ],
+      "action": "Wrap the active nonempty region with matching delimiters and retain the inner selection",
+      "status": "conditional",
+      "conditions": "A new or reloaded zsh session has loaded terminal-editing.zsh; its line editor owns input in emacs or vi insert mode. A nonempty keyboard region is active.",
+      "limitations": "Without a nonempty region, normal typing and URL escaping remain in effect; vi normal mode is unchanged.",
+      "sources": [
+        "~/mac-config/zsh/terminal-editing.zsh",
+        "~/mac-config/terminal_keys/bindings.json"
+      ],
+      "verified": "2026-11-04"
+    }
+  ]
+}

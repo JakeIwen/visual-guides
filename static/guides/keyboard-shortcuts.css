@@ -1,0 +1,34 @@
+/* Private layout; shared site and palette own typography and colors. */
+.keyboard-reference { max-width: 65rem; margin: 0 auto; padding: 1.75rem 1rem 4rem; }
+.keyboard-reference :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+#filters { display: flex; flex-wrap: wrap; gap: .8rem 1rem; align-items: end; }
+#filters label { display: grid; gap: .3rem; font-size: .875rem; min-width: 0; }
+#filters .search-field { flex: 1 1 18rem; }
+#filters select, #filters input[type="search"], .keyboard-reference button {
+  font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: 4px; padding: .5rem;
+  min-height: 2.75rem; max-width: 100%;
+}
+#filters select { width: 12rem; }
+#filters .check-field { display: flex; align-items: center; min-height: 2.75rem; }
+#filters input[type="checkbox"] { width: 1.15rem; height: 1.15rem; accent-color: var(--accent); }
+.keyboard-reference button { cursor: pointer; }
+.keyboard-reference button:disabled { cursor: default; }
+#result-status { margin: 1rem 0 .75rem; }
+#catalog-notes p { margin-bottom: .4rem; }
+#shortcuts { list-style: none; padding: 0; margin: 1rem 0; border-top: 1px solid var(--line-strong); }
+.shortcut { display: grid; grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); gap: .5rem 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.shortcut.disabled { color: var(--muted); }
+.shortcut > * { min-width: 0; overflow-wrap: anywhere; }
+.shortcut-keys { display: flex; flex-wrap: wrap; gap: .4rem; align-items: baseline; align-content: start; }
+kbd { font: .9rem var(--mono); padding: .2rem .45rem; border: 1px solid var(--line-strong); border-bottom-width: 2px; border-radius: 4px; background: var(--surface); overflow-wrap: anywhere; }
+.shortcut h2 { font-size: 1rem; margin: 0 0 .4rem; padding: 0; border: 0; }
+.shortcut p { margin: .35rem 0; }
+.shortcut .tag { white-space: normal; }
+.shortcut details { margin-bottom: 0; }
+.shortcut details ul { padding-left: 1.25rem; margin-top: .4rem; }
+@media (max-width: 40rem) {
+  .shortcut { grid-template-columns: minmax(0, 1fr); gap: .65rem; }
+  #filters > label:not(.check-field) { flex: 1 1 100%; }
+  #filters select { width: 100%; }
+}
