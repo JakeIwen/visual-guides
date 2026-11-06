@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "notes": [
-    "Coverage: 54 BetterTouchTool mappings, one live hidutil remap and 59 terminal mappings, source-checked 2026-11-04. Terminal editing is installed and conditional on a new or reloaded zsh session; existing shells need reload. Configuration verification is not a successful live-key test.",
-    "BTT coverage retains all 43 shortcuts and 11 typed sequences: 37 enabled, 16 conditional and one disabled. All retained rows belong to active presets and none are Trash-linked. Enabled means the saved binding is on, not that its action passed a live test.",
+    "Coverage: 55 BetterTouchTool mappings, one live hidutil remap and 59 terminal mappings, source-checked 2026-11-04. Terminal editing is installed and conditional on a new or reloaded zsh session; existing shells need reload. Configuration verification is not a successful live-key test.",
+    "BTT coverage retains all 44 shortcuts and 11 typed sequences: 37 enabled, 17 conditional and one disabled. All retained rows belong to active presets and none are Trash-linked. Enabled means the saved binding is on, not that its action passed a live test.",
     "Consecutive keycaps are sequence steps; plus signs indicate a chord. Alphabetic sequence labels name physical keys, not required uppercase characters. Keyboard region selection and mouse selection are distinct; check each mapping’s conditions.",
     "Key labels use the US/macOS virtual-key convention. Hardware filters and non-US layouts remain unverified. Seven named targets exist only in inactive presets; explicit dispatch, overlapping seek thresholds and brightness conflicts remain untested. See each row’s limitations.",
     "Private expansion text, clipboard contents, saved destinations, network identities and executable payloads are withheld. Insert saved text (private) deliberately does not reveal its content.",
@@ -11,7 +11,8 @@
     "Existing terminal coverage includes 18 global iTerm mappings, eight profile mappings shared by both configured profiles, 20 zsh mappings and the live Copy Mode menu shortcut. Cmd+Shift+C remains Copy Mode; normal Cmd+C is unchanged. Cmd+Ctrl+C was verified unused before installation. Authenticated apply and a zero-change post-check verified the two owned iTerm bindings across 14 profile/session maps; no keystrokes were sent.",
     "Emacs is the intentional zsh default; vi is optional. Terminal widgets passed fresh-login shell and isolated PTY checks without using the real clipboard. Existing shells must reload their configuration or be replaced by a new shell; installed configuration does not prove live shortcut behavior.",
     "The Ctrl+A cut dispatcher inspects only already-pending input, with no added lookahead delay. It reads complete Unicode characters without a partial-character timeout and leaves KEYTIMEOUT unchanged. Same-write or already-pending Ctrl+A then Ctrl+K typeahead is indistinguishable from Cmd+X; delayed Ctrl+K keeps its native action.",
-    "Ctrl+Y is not promised to restore a terminal cut. Inspected Claude Code 2.1.314 maps it to chat:defaultToNewerModel; harness and tmux kill/yank behavior remains unverified. No harness bindings were changed."
+    "Ctrl+Y is not promised to restore a terminal cut. Inspected Claude Code 2.1.314 maps it to chat:defaultToNewerModel; harness and tmux kill/yank behavior remains unverified. No harness bindings were changed.",
+    "Whole-line paste is enforced at paste time through a clipboard tag plus a BTT variable, matching VS Code and Sublime behavior."
   ],
   "entries": [
     {
@@ -139,7 +140,7 @@
       "keys": [
         "Cmd+C"
       ],
-      "action": "Copy the current line plus one newline, preserving the caret.",
+      "action": "Copy the current line as plain text plus one newline and a private line tag, without moving the caret.",
       "status": "conditional",
       "conditions": "Editable caret with no selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original shortcut passes through.",
       "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable text; unsupported editors may refuse the operation.",
@@ -149,7 +150,7 @@
         "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
         "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
       ],
-      "verified": "2026-11-04"
+      "verified": "2026-11-05"
     },
     {
       "id": "btt-eda649c3-026b-4402-9bf9-ce339233efb2",
@@ -170,23 +171,41 @@
       "verified": "2026-11-04"
     },
     {
+      "id": "btt-paste-line",
+      "provider": "BetterTouchTool",
+      "scope": "All apps (global)",
+      "keys": [
+        "Cmd+V"
+      ],
+      "action": "Paste a copied or cut line above the current line, keeping the caret on the same character.",
+      "status": "conditional",
+      "conditions": "Editable caret with no selection, outside configured code editors and terminals, and a line tagged by Cmd+C or Cmd+X with the BTT line variable set; otherwise the shortcut passes through or an untagged clipboard pastes normally once.",
+      "limitations": "Plain text only. Firefox restores the caret best-effort and refuses blank-only pastes. Coexists with the separate Finder Cmd+V trigger; single-paste in Finder remains unconfirmed live. After reinstall, a fresh line copy or cut is required.",
+      "sources": [
+        "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js",
+        "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py"
+      ],
+      "verified": "2026-11-05"
+    },
+    {
       "id": "btt-a5cfb2ca-2e10-5749-af6b-98d01b2876e0",
       "provider": "BetterTouchTool",
       "scope": "All apps (global)",
       "keys": [
         "Cmd+X"
       ],
-      "action": "Cut the current line when nothing is selected.",
+      "action": "Cut the logical line including its break, confirm removal by the text, then copy plain text plus one newline and a private line tag.",
       "status": "conditional",
       "conditions": "Editable caret with no selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original shortcut passes through.",
-      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable text; unsupported editors may refuse the operation.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable text; unsupported editors may refuse the operation. Firefox blank-line cuts are refused.",
       "sources": [
         "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#A5CFB2CA-2E10-5749-AF6B-98D01B2876E0",
         "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
         "~/dev/scripts/macbook/bettertouchtool/text_editing_conditions.py",
         "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js"
       ],
-      "verified": "2026-11-04"
+      "verified": "2026-11-05"
     },
     {
       "id": "btt-35fffb80-fa5e-4d6b-96b9-1e04e007e55d",
