@@ -179,8 +179,8 @@
       ],
       "action": "Paste a copied or cut line above the current line, keeping the caret on the same character.",
       "status": "conditional",
-      "conditions": "Editable caret with no selection in a multi-line AXTextArea, outside configured code editors and terminals, and a line tagged by Cmd+C or Cmd+X with the BTT line variable set. Single-line fields, including search, URL and Finder rename fields, paste normally.",
-      "limitations": "Line paste uses plain text. Refused pastes fall back to normal Paste once when safe and clear the tag; a failed run clears it. A missing Edit menu disables interception for the next paste. A quick copy or cut may wait up to one second for the tag; a stale tag after ordinary copy can delay the first paste as long. Firefox accepts either break form; contenteditable role and caret restoration remain unconfirmed live. Finder single-paste remains unconfirmed live. After reinstall, a fresh line copy or cut is required.",
+      "conditions": "Editable caret with no selection in a multi-line AXTextArea only, outside configured code editors and terminals, with the BTT line variable set by a line copy or cut. Single-line search, URL and Finder rename fields pass through to the native paste.",
+      "limitations": "A refused or untagged line paste falls back to one normal Edit > Paste and turns the BTT variable off; a failed run also turns it off. The BTT variable, not the clipboard tag, may be stale after an ordinary copy; the tag wait applies only within about 1.5 seconds of a line copy or cut. Cut preserves the app's rich text when the copy matches. A missing Edit menu disables interception for the next paste. A Firefox copied blank line pastes inline. Firefox accepts either break form; contenteditable role and caret restoration remain unconfirmed live. Finder single-paste remains unconfirmed live. After reinstall, a fresh line copy or cut is required.",
       "sources": [
         "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
         "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js",
