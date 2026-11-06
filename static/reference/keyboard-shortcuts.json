@@ -179,8 +179,8 @@
       ],
       "action": "Paste a copied or cut line above the current line, keeping the caret on the same character.",
       "status": "conditional",
-      "conditions": "Editable caret with no selection, outside configured code editors and terminals, and a line tagged by Cmd+C or Cmd+X with the BTT line variable set; otherwise the shortcut passes through or an untagged clipboard pastes normally once.",
-      "limitations": "Plain text only. Firefox restores the caret best-effort and refuses blank-only pastes. Coexists with the separate Finder Cmd+V trigger; single-paste in Finder remains unconfirmed live. After reinstall, a fresh line copy or cut is required.",
+      "conditions": "Editable caret with no selection in a multi-line AXTextArea, outside configured code editors and terminals, and a line tagged by Cmd+C or Cmd+X with the BTT line variable set. Single-line fields, including search, URL and Finder rename fields, paste normally.",
+      "limitations": "Line paste uses plain text. Refused pastes fall back to normal Paste once when safe and clear the tag; a failed run clears it. A missing Edit menu disables interception for the next paste. A quick copy or cut may wait up to one second for the tag; a stale tag after ordinary copy can delay the first paste as long. Firefox accepts either break form; contenteditable role and caret restoration remain unconfirmed live. Finder single-paste remains unconfirmed live. After reinstall, a fresh line copy or cut is required.",
       "sources": [
         "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
         "~/dev/scripts/macbook/bettertouchtool/text_editing_keys.js",
@@ -195,10 +195,10 @@
       "keys": [
         "Cmd+X"
       ],
-      "action": "Cut the logical line including its break, confirm removal by the text, then copy plain text plus one newline and a private line tag.",
+      "action": "Cut the logical line including its break, confirm removal, and tag the clipboard for whole-line paste.",
       "status": "conditional",
       "conditions": "Editable caret with no selection; excludes configured code editors and terminal apps (including JetBrains). Otherwise the original shortcut passes through.",
-      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable text; unsupported editors may refuse the operation. Firefox blank-line cuts are refused.",
+      "limitations": "Saved keyboard ID 0; its device identity/filtering semantics were not resolved. Requires Accessibility-readable/settable text; unsupported editors may refuse the operation. Firefox blank-line cuts are refused. After a confirmed cut, waits up to one second for the app clipboard; if its string matches the line plus one newline, RTF/HTML is retained, otherwise plain text plus one newline is written. A completed cut that cannot be tagged warns and pastes inline.",
       "sources": [
         "~/Library/Application Support/BetterTouchTool/btt_data_store.version_6_990_build_2026102901#A5CFB2CA-2E10-5749-AF6B-98D01B2876E0",
         "~/dev/scripts/macbook/bettertouchtool/install_text_editing_keys.py",
