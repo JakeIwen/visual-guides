@@ -35,6 +35,12 @@
   --ar-accent-ink: #ffffff;
   --ar-info-bg: #e3ecf8;
   --ar-info: #2d62a8;
+  --jumper-red: #d23a2c;
+  --jumper-orange: #e8822a;
+  --jumper-yellow: #e6c229;
+  --jumper-green: #2f9a4a;
+  --jumper-blue: #2f5fd0;
+  --jumper-ink: #111;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
 }
@@ -70,6 +76,11 @@
     --ar-accent-ink: #1a1310;
     --ar-info-bg: #1e2b3e;
     --ar-info: #8db5ef;
+    --jumper-red: #e8624f;
+    --jumper-orange: #f0974a;
+    --jumper-yellow: #edd05a;
+    --jumper-green: #55b86c;
+    --jumper-blue: #6d8ff0;
   }
 }
 

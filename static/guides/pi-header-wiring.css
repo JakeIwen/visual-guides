@@ -1,0 +1,40 @@
+/* Pi header wiring: a 10-column header map and photo layout. */
+
+.header-map.full {
+  grid-template-columns: auto repeat(10, 2.1rem);
+  gap: .2rem;
+  padding: .6rem;
+}
+.header-map.full .pin { height: 1.9rem; font-size: .7rem; }
+@media (max-width: 30rem) {
+  .header-map.full { grid-template-columns: auto repeat(10, 1.55rem); }
+  .header-map.full .row-label { padding-right: .15rem; }
+}
+
+.pin.j-red { background: var(--jumper-red); color: var(--jumper-ink); }
+.pin.j-orange { background: var(--jumper-orange); color: var(--jumper-ink); }
+.pin.j-yellow { background: var(--jumper-yellow); color: var(--jumper-ink); }
+.pin.j-green { background: var(--jumper-green); color: var(--jumper-ink); }
+.pin.j-blue { background: var(--jumper-blue); color: var(--jumper-ink); }
+.pin.j-config { border: 2px dashed var(--line-strong); color: var(--ink); }
+.pin.end { box-shadow: inset 0 0 0 2px var(--ink); }
+
+.chip.j-red { background: var(--jumper-red); }
+.chip.j-orange { background: var(--jumper-orange); }
+.chip.j-yellow { background: var(--jumper-yellow); }
+.chip.j-green { background: var(--jumper-green); }
+.chip.j-blue { background: var(--jumper-blue); }
+
+.photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.photos figure { margin: 0; }
+.photos img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pi header wiring · Visual Guides</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/guides/pi-header-wiring.css">
+</head>
+<body>
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">Visual Guides &amp; Documentation</a><span aria-hidden="true">/</span><span aria-current="page">Pi header wiring</span>
+  </nav>
+
+  <div class="page">
+    <nav class="toc" aria-label="Sections">
+      <a href="#header">Header map</a>
+      <a href="#bme280">BME280 (cab)</a>
+      <a href="#blue">Blue wire</a>
+      <a href="#other">Other GPIO use</a>
+      <a href="#check">Check after replugging</a>
+      <a href="#confidence">Confidence</a>
+      <a href="https://github.com/JakeIwen/visual-guides/blob/main/static/guides/pi-header-wiring.html">Source</a>
+      <a href="https://github.com/JakeIwen/visual-guides/commits/main/static/guides/pi-header-wiring.html">History</a>
+    </nav>
+
+    <main>
+      <h1>Pi header wiring</h1>
+
+      <dl class="facts">
+        <dt>Board</dt>
+        <dd>vanpi, Raspberry Pi 4B, 40-pin header carried out on a grey ribbon cable</dd>
+        <dt>Pin 1</dt>
+        <dd>The ribbon's pink/red edge stripe marks pin 1 at the connector end</dd>
+        <dt>Jumpers</dt>
+        <dd>Four-wire rainbow lead (red, orange, yellow, green) to the BME280, plus one blue wire</dd>
+        <dt>Status</dt>
+        <dd><span class="tag ok">Sensor reading</span> 25.0 °C, 41.8 %, 985.8 hPa published on 2026-11-09</dd>
+        <dt>Updated</dt>
+        <dd>2026-11-09</dd>
+      </dl>
+
+      <div class="caution">
+        <p>Unplug the Pi before moving jumpers. Pin 17 is 3.3 V and pins 2 and 4 are 5 V; a slipped 5 V lead on a GPIO pin can kill that pin.</p>
+      </div>
+
+      <!-- ============================== HEADER ============================== -->
+      <h2 id="header">Header map</h2>
+      <div class="header-map full" role="img" aria-label="Header pins 1 to 20, pin 1 at the left. Blue on pin 14, orange on pin 16, red on pin 17, yellow on pin 18, green on pin 20. Pins 8 and 11 are used by the fan and alert light.">
+        <span class="row-label">even</span>
+        <span class="pin end">2</span><span class="pin">4</span><span class="pin">6</span><span class="pin j-config">8</span><span class="pin">10</span><span class="pin">12</span><span class="pin used j-blue">14</span><span class="pin used j-orange">16</span><span class="pin used j-yellow">18</span><span class="pin used j-green">20</span>
+        <span class="row-label">odd</span>
+        <span class="pin end">1</span><span class="pin">3</span><span class="pin">5</span><span class="pin">7</span><span class="pin">9</span><span class="pin j-config">11</span><span class="pin">13</span><span class="pin">15</span><span class="pin used j-red">17</span><span class="pin">19</span>
+      </div>
+      <ul class="pin-legend">
+        <li><span class="chip j-blue"></span>Pin 14: ground (blue wire, see <a href="#blue">below</a>)</li>
+        <li><span class="chip j-orange"></span>Pin 16: GPIO23, BME280 SDA</li>
+        <li><span class="chip j-red"></span>Pin 17: 3.3 V, BME280 VIN</li>
+        <li><span class="chip j-yellow"></span>Pin 18: GPIO24, BME280 SCL</li>
+        <li><span class="chip j-green"></span>Pin 20: ground, BME280 GND</li>
+        <li><span class="chip"></span>Dashed pins 8 and 11: fan and alert light in the Pi's config, not in these photos</li>
+      </ul>
+      <p class="small">Pins 1–20 shown; nothing is plugged into 21–40. Pin 1 sits at the stripe end of the connector, odd pins on one side, even on the other. The BME280 leads take rows 8–10 counted from that end: orange, yellow and green side by side on the even side, red opposite yellow on the odd side. Blue is one row nearer pin 1 than orange.</p>
+
+      <div class="photos">
+        <figure>
+          <img src="/guides/pi-header-wiring-header.jpg" width="1024" height="768" alt="Ribbon cable connector with green, yellow and orange jumpers in three adjacent holes and a blue jumper one hole below them, toward the end with the pink stripe.">
+          <figcaption>Ribbon end of the lead. The pink stripe at the lower right marks pin 1. Red is behind orange, on the other side of the row.</figcaption>
+        </figure>
+      </div>
+
+      <!-- ============================== BME280 ============================== -->
+      <h2 id="bme280">BME280 in the cab compartment</h2>
+      <p>Purple GY-BME/P280 four-pin breakout, mounted in the compartment above the cab. The Pi reads it by software I²C at 50 kHz, address <code>0x76</code>, through <code>bme280-mqtt.service</code>.</p>
+
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th>Wire</th><th>Sensor pin</th><th>Pi header pin</th><th>Pi signal</th></tr></thead>
+          <tbody>
+            <tr><td class="lead-cell"><span class="chip j-red"></span>Red</td><td data-label="Sensor pin">VIN</td><td data-label="Pi header pin">17</td><td data-label="Pi signal">3.3 V</td></tr>
+            <tr><td class="lead-cell"><span class="chip j-green"></span>Green</td><td data-label="Sensor pin">GND</td><td data-label="Pi header pin">20</td><td data-label="Pi signal">Ground</td></tr>
+            <tr><td class="lead-cell"><span class="chip j-yellow"></span>Yellow</td><td data-label="Sensor pin">SCL</td><td data-label="Pi header pin">18</td><td data-label="Pi signal">GPIO24 (clock)</td></tr>
+            <tr><td class="lead-cell"><span class="chip j-orange"></span>Orange</td><td data-label="Sensor pin">SDA</td><td data-label="Pi header pin">16</td><td data-label="Pi signal">GPIO23 (data)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="photos">
+        <figure>
+          <img src="/guides/pi-header-wiring-sensor.jpg" width="1024" height="768" alt="Purple BME280 board mounted upside down on a black bracket, with orange, yellow, green and red jumpers on its four pins from left to right.">
+          <figcaption>Sensor end. The board is mounted upside down, so from the left the pins read SDA, SCL, GND, VIN: orange, yellow, green, red. Go by the silkscreen labels on the back if the board is ever remounted.</figcaption>
+        </figure>
+      </div>
+
+      <!-- ============================== BLUE ============================== -->
+      <h2 id="blue">Blue wire</h2>
+      <p>The single blue jumper sits one row nearer pin 1 than orange, which is pin 14 (ground) on the even side or pin 13 (GPIO27) on the odd side. GPIO27 is an unused input in the Pi's config, so ground is the likely one. Where its far end goes isn't recorded here; it runs down toward the Pi.</p>
+
+      <!-- ============================== OTHER ============================== -->
+      <h2 id="other">Other GPIO use</h2>
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th>GPIO</th><th>Header pin</th><th>Owner</th></tr></thead>
+          <tbody>
+            <tr><td class="lead-cell">GPIO14</td><td data-label="Header pin">8</td><td data-label="Owner">Fan, <code>dtoverlay=gpio-fan,gpiopin=14,temp=60000</code> (on at 60 °C)</td></tr>
+            <tr><td class="lead-cell">GPIO17</td><td data-label="Header pin">11</td><td data-label="Owner">COP ALERT light (scripts repo)</td></tr>
+            <tr><td class="lead-cell">GPIO18</td><td data-label="Header pin">12</td><td data-label="Owner">Reserved for the <a href="/guides/air-conditioner.html">A/C IR LED</a>; not configured</td></tr>
+            <tr><td class="lead-cell">GPIO23, GPIO24</td><td data-label="Header pin">16, 18</td><td data-label="Owner">BME280; <code>config.txt</code> also declares an <code>i2c-gpio</code> overlay on them, but the service bit-bangs the pins itself</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ============================== CHECK ============================== -->
+      <h2 id="check">Check after replugging</h2>
+      <p>Power the Pi back up, then wait for one reading (the service publishes every 10 s):</p>
+      <pre><code>ssh vanpi 'timeout 30 mosquitto_sub -h 127.0.0.1 -t vanpi/sensors/vanpi_bme280_1/state -C 1'</code></pre>
+      <p>A JSON line with temperature, humidity and pressure means the sensor is wired right. Nothing within 30 s: check the service with <code>ssh vanpi 'journalctl -u bme280-mqtt -n 20'</code>. An I/O error there usually means SDA and SCL are swapped or the sensor lost power.</p>
+
+      <!-- ============================== CONFIDENCE ============================== -->
+      <h2 id="confidence">Confidence</h2>
+      <div class="table-wrap">
+        <table class="stack">
+          <thead><tr><th>Claim</th><th>Basis</th><th>Standing</th></tr></thead>
+          <tbody>
+            <tr><td class="lead-cell">SDA on GPIO23 (pin 16), SCL on GPIO24 (pin 18)</td><td data-label="Basis">Service source and <code>config.txt</code>, checked 2026-11-09</td><td data-label="Standing"><span class="tag ok">Verified</span></td></tr>
+            <tr><td class="lead-cell">Sensor working on current wiring</td><td data-label="Basis">Live MQTT reading, 2026-11-09</td><td data-label="Standing"><span class="tag ok">Verified</span></td></tr>
+            <tr><td class="lead-cell">Orange, yellow, green on pins 16, 18, 20</td><td data-label="Basis">Hole positions in the photo, matching the service's pins</td><td data-label="Standing"><span class="tag ok">Photo and config agree</span></td></tr>
+            <tr><td class="lead-cell">Red on pin 17 (3.3 V)</td><td data-label="Basis">Hidden in the photo; the nearest power pin to the group</td><td data-label="Standing"><span class="tag warn">Inferred</span></td></tr>
+            <tr><td class="lead-cell">Blue on pin 14, and its purpose</td><td data-label="Basis">Hole position in the photo only</td><td data-label="Standing"><span class="tag warn">Unconfirmed</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
