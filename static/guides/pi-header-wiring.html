@@ -36,7 +36,7 @@
         <dt>Jumpers</dt>
         <dd>Four-wire rainbow lead (red, orange, yellow, green) to the BME280, plus one blue wire</dd>
         <dt>Status</dt>
-        <dd><span class="tag ok">Sensor reading</span> 25.0 °C, 41.8 %, 985.8 hPa published on 2026-11-09</dd>
+        <dd><span class="tag ok">Sensor reading</span> 25.0 °C, 42.1 %, 985.9 hPa freshly published on 2026-11-09</dd>
         <dt>Updated</dt>
         <dd>2026-11-09</dd>
       </dl>
@@ -47,16 +47,16 @@
 
       <!-- ============================== HEADER ============================== -->
       <h2 id="header">Header map</h2>
-      <div class="header-map full" role="img" aria-label="Header pins 1 to 20, pin 1 at the left. Blue on pin 14, orange on pin 16, red on pin 17, yellow on pin 18, green on pin 20. Pins 8 and 11 are used by the fan and alert light.">
+      <div class="header-map full" role="img" aria-label="Header pins 1 to 20, pin 1 at the left. Orange on pin 16, red on pin 17 (inferred), yellow on pin 18, green on pin 20. Blue is probably on pin 14, unconfirmed. Pins 8 and 11 are used by the fan and alert light.">
         <span class="row-label">even</span>
-        <span class="pin end">2</span><span class="pin">4</span><span class="pin">6</span><span class="pin j-config">8</span><span class="pin">10</span><span class="pin">12</span><span class="pin used j-blue">14</span><span class="pin used j-orange">16</span><span class="pin used j-yellow">18</span><span class="pin used j-green">20</span>
+        <span class="pin end">2</span><span class="pin">4</span><span class="pin">6</span><span class="pin j-config">8</span><span class="pin">10</span><span class="pin">12</span><span class="pin used j-blue j-unsure">14?</span><span class="pin used j-orange">16</span><span class="pin used j-yellow">18</span><span class="pin used j-green">20</span>
         <span class="row-label">odd</span>
         <span class="pin end">1</span><span class="pin">3</span><span class="pin">5</span><span class="pin">7</span><span class="pin">9</span><span class="pin j-config">11</span><span class="pin">13</span><span class="pin">15</span><span class="pin used j-red">17</span><span class="pin">19</span>
       </div>
       <ul class="pin-legend">
-        <li><span class="chip j-blue"></span>Pin 14: ground (blue wire, see <a href="#blue">below</a>)</li>
+        <li><span class="chip j-blue"></span>Pin 14?: blue wire, probably ground; destination unknown (see <a href="#blue">below</a>)</li>
         <li><span class="chip j-orange"></span>Pin 16: GPIO23, BME280 SDA</li>
-        <li><span class="chip j-red"></span>Pin 17: 3.3 V, BME280 VIN</li>
+        <li><span class="chip j-red"></span>Pin 17: 3.3 V, BME280 VIN (inferred: hidden in the photo)</li>
         <li><span class="chip j-yellow"></span>Pin 18: GPIO24, BME280 SCL</li>
         <li><span class="chip j-green"></span>Pin 20: ground, BME280 GND</li>
         <li><span class="chip"></span>Dashed pins 8 and 11: fan and alert light in the Pi's config, not in these photos</li>
@@ -66,7 +66,7 @@
       <div class="photos">
         <figure>
           <img src="/guides/pi-header-wiring-header.jpg" width="1024" height="768" alt="Ribbon cable connector with green, yellow and orange jumpers in three adjacent holes and a blue jumper one hole below them, toward the end with the pink stripe.">
-          <figcaption>Ribbon end of the lead. The pink stripe at the lower right marks pin 1. Red is behind orange, on the other side of the row.</figcaption>
+          <figcaption>Ribbon end of the lead. The pink stripe at the lower right marks pin 1. The red lead runs behind the orange one; its plug is hidden on the odd side, opposite yellow.</figcaption>
         </figure>
       </div>
 
@@ -78,7 +78,7 @@
         <table class="stack">
           <thead><tr><th>Wire</th><th>Sensor pin</th><th>Pi header pin</th><th>Pi signal</th></tr></thead>
           <tbody>
-            <tr><td class="lead-cell"><span class="chip j-red"></span>Red</td><td data-label="Sensor pin">VIN</td><td data-label="Pi header pin">17</td><td data-label="Pi signal">3.3 V</td></tr>
+            <tr><td class="lead-cell"><span class="chip j-red"></span>Red</td><td data-label="Sensor pin">VIN</td><td data-label="Pi header pin">17 <span class="tag warn">inferred</span></td><td data-label="Pi signal">3.3 V</td></tr>
             <tr><td class="lead-cell"><span class="chip j-green"></span>Green</td><td data-label="Sensor pin">GND</td><td data-label="Pi header pin">20</td><td data-label="Pi signal">Ground</td></tr>
             <tr><td class="lead-cell"><span class="chip j-yellow"></span>Yellow</td><td data-label="Sensor pin">SCL</td><td data-label="Pi header pin">18</td><td data-label="Pi signal">GPIO24 (clock)</td></tr>
             <tr><td class="lead-cell"><span class="chip j-orange"></span>Orange</td><td data-label="Sensor pin">SDA</td><td data-label="Pi header pin">16</td><td data-label="Pi signal">GPIO23 (data)</td></tr>
@@ -95,7 +95,7 @@
 
       <!-- ============================== BLUE ============================== -->
       <h2 id="blue">Blue wire</h2>
-      <p>The single blue jumper sits one row nearer pin 1 than orange, which is pin 14 (ground) on the even side or pin 13 (GPIO27) on the odd side. GPIO27 is an unused input in the Pi's config, so ground is the likely one. Where its far end goes isn't recorded here; it runs down toward the Pi.</p>
+      <p>The single blue jumper sits one row nearer pin 1 than orange, which is pin 14 (ground) on the even side or pin 13 (GPIO27) on the odd side. GPIO27 is an unused input in the Pi's config, so ground is the likely one. Where its far end goes isn't recorded here; it runs down toward the Pi. If it comes loose, trace it before plugging it back in.</p>
 
       <!-- ============================== OTHER ============================== -->
       <h2 id="other">Other GPIO use</h2>
@@ -114,8 +114,8 @@
       <!-- ============================== CHECK ============================== -->
       <h2 id="check">Check after replugging</h2>
       <p>Power the Pi back up, then wait for one reading (the service publishes every 10 s):</p>
-      <pre><code>ssh vanpi 'timeout 30 mosquitto_sub -h 127.0.0.1 -t vanpi/sensors/vanpi_bme280_1/state -C 1'</code></pre>
-      <p>A JSON line with temperature, humidity and pressure means the sensor is wired right. Nothing within 30 s: check the service with <code>ssh vanpi 'journalctl -u bme280-mqtt -n 20'</code>. An I/O error there usually means SDA and SCL are swapped or the sensor lost power.</p>
+      <div class="code"><pre><code>ssh vanpi 'timeout 30 mosquitto_sub -h 127.0.0.1 -R -t vanpi/sensors/vanpi_bme280_1/state -C 1'</code></pre></div>
+      <p><code>-R</code> skips the broker's retained last reading, so only a new publication counts. A JSON line with temperature, humidity and pressure means the sensor is wired right. Nothing within 30 s: check the service with <code>ssh vanpi 'journalctl -u bme280-mqtt -n 20'</code>. An I/O error there usually means SDA and SCL are swapped or the sensor lost power.</p>
 
       <!-- ============================== CONFIDENCE ============================== -->
       <h2 id="confidence">Confidence</h2>
@@ -124,7 +124,7 @@
           <thead><tr><th>Claim</th><th>Basis</th><th>Standing</th></tr></thead>
           <tbody>
             <tr><td class="lead-cell">SDA on GPIO23 (pin 16), SCL on GPIO24 (pin 18)</td><td data-label="Basis">Service source and <code>config.txt</code>, checked 2026-11-09</td><td data-label="Standing"><span class="tag ok">Verified</span></td></tr>
-            <tr><td class="lead-cell">Sensor working on current wiring</td><td data-label="Basis">Live MQTT reading, 2026-11-09</td><td data-label="Standing"><span class="tag ok">Verified</span></td></tr>
+            <tr><td class="lead-cell">Sensor working on current wiring</td><td data-label="Basis">New (non-retained) MQTT reading, 2026-11-09</td><td data-label="Standing"><span class="tag ok">Verified</span></td></tr>
             <tr><td class="lead-cell">Orange, yellow, green on pins 16, 18, 20</td><td data-label="Basis">Hole positions in the photo, matching the service's pins</td><td data-label="Standing"><span class="tag ok">Photo and config agree</span></td></tr>
             <tr><td class="lead-cell">Red on pin 17 (3.3 V)</td><td data-label="Basis">Hidden in the photo; the nearest power pin to the group</td><td data-label="Standing"><span class="tag warn">Inferred</span></td></tr>
             <tr><td class="lead-cell">Blue on pin 14, and its purpose</td><td data-label="Basis">Hole position in the photo only</td><td data-label="Standing"><span class="tag warn">Unconfirmed</span></td></tr>

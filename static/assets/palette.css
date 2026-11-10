@@ -41,6 +41,7 @@
   --jumper-green: #2f9a4a;
   --jumper-blue: #2f5fd0;
   --jumper-ink: #111;
+  --jumper-ink-deep: #fff;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
 }
@@ -81,6 +82,7 @@
     --jumper-yellow: #edd05a;
     --jumper-green: #55b86c;
     --jumper-blue: #6d8ff0;
+    --jumper-ink-deep: #111;
   }
 }
 
