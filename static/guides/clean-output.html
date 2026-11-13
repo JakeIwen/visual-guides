@@ -29,8 +29,8 @@
   <dt>Use</dt><dd>Read or copy your recent Claude Code exchanges, each prompt with its reply, without the <code>Bash(...)</code> calls, collapsed results and search summaries that surround them in the terminal. <code>codexclean</code> does the same for Codex sessions.</dd>
   <dt>Kind</dt><dd>A Claude Code mod (plugin): one slash command, one pane with a rows line under it, and one prompt hook. For Codex, a shell command built from the same modules (<a href="#codex">below</a>).</dd>
   <dt>Source</dt><dd><code>~/dev/scripts/shared/claude-mods/clean-output/</code> · <code>hooks/register.tsx</code> (command, pane, prompt hook) · <code>hooks/clean.ts</code> (filters) · <code>hooks/exchanges.ts</code> and <code>hooks/turn-endings.ts</code> (the two views)</dd>
-  <dt>Loaded by</dt><dd><code>env.CLAUDE_CODE_PLUGIN_DIRS</code> in <code>~/.claude/settings.json</code>, so every interactive Mac session has it. Not on the Pi.</dd>
-  <dt>Status</dt><dd><span class="tag ok">Validated · 25 mod tests and 4 codexclean tests pass · type-checks</span> In daily use. Checked 2026-10-19 in a live terminal: opening on the newest reply, the rows line, running mid-turn, Esc during a turn, and the refresh when a turn ends. <code>codexclean</code> is installed on the Mac and the Pi and was run against real sessions on both; its <code>watch</code> and paged print were checked in a terminal.</dd>
+  <dt>Loaded by</dt><dd><code>env.CLAUDE_CODE_PLUGIN_DIRS</code> in <code>~/.claude/settings.json</code>, so every interactive Mac session has it. The Pi has no checkout: <code>zsh shared/claude-mods/deploy_pi.zsh clean-output</code> copies the mod to <code>~/.local/share/claude-mods/clean-output/</code> there, which its own <code>settings.json</code> loads the same way. Re-run it after a change.</dd>
+  <dt>Status</dt><dd><span class="tag ok">Validated · 45 mod tests and 4 codexclean tests pass · type-checks</span> In daily use. Checked 2026-10-19 in a live terminal: opening on the newest reply, the rows line, running mid-turn, Esc during a turn, and the refresh when a turn ends. <code>codexclean</code> is installed on the Mac and the Pi and was run against real sessions on both; its <code>watch</code> and paged print were checked in a terminal.</dd>
   <dt>Updated</dt><dd>2026-10-19</dd>
 </dl>
 
@@ -91,9 +91,9 @@ being saved will be ignored rather than queued. ...</code></pre></div>
 
 <section id="pane">
   <h2>The pane</h2>
-  <p>Inline above the prompt on a normal terminal, or docked beside the transcript in the fullscreen layout from 110 columns. Each exchange is your prompt on the theme's user-message background, the same tone the transcript puts behind your own messages, then the reply as markdown.</p>
+  <p>Inline above the prompt on a normal terminal. In the fullscreen layout Claude Code would dock a pane beside the transcript from 110 columns, so there <code>/clean</code> draws the same view in the band above the prompt instead: full width, at most half the screen, scrolled by the mouse wheel, closed by <code>x: close</code>. Each exchange is your prompt on the theme's user-message background, the same tone the transcript puts behind your own messages, then the reply as markdown.</p>
   <p>The pane opens on the newest reply, since that is usually what you came for. When worker messages or notices split the reply, it opens at the start of the last turn, the dim <code>after …</code> line on top; otherwise at the newest prompt. The line under the pane says which rows show and which way more lies. The pane's own first row scrolls away with the rest, so it can't carry that.</p>
-  <p>A pane left open keeps up with the session. When each turn ends it rebuilds from the same words you gave <code>/clean</code> and moves to the newest reply. After each prompt you send it takes the keyboard back, because while a turn runs Claude Code gives Esc at the prompt to interrupting the turn. The next key you type goes to the prompt as usual.</p>
+  <p>A pane left open keeps up with the session. When each turn ends it rebuilds from the same words you gave <code>/clean</code> and moves to the newest reply. Once you type, the keys are the prompt's, and while a turn runs Claude Code gives Esc there to interrupting the turn. So a prompt you send closes the pane (run <code>/clean</code> again to reopen it), while a slash command, a worker message, a background-task notice or a wake-up leaves it open and asks for the keyboard back, so Esc during the turn that starts closes the pane first. Claude Code hands it the keys only over an empty prompt box; with text there they stay with the prompt. The fullscreen band never holds the keys: there Esc during a turn a worker message, notice or wake-up started stops that turn.</p>
   <h3>As it opens</h3>
   <div class="code"><pre><code>╭─────────────────────────────────────────────────────────────────────────✕─╮
 │ after a background task finishing                                        │
@@ -206,13 +206,13 @@ Everything shows 0 indexed, marked or not, so I need a control to make sure the 
   <div class="code"><pre><code>cd ~/dev/scripts/shared/claude-mods/clean-output
 claude plugin validate .
 claude plugin test .</code></pre></div>
-  <p class="small">Every file under <code>hooks/</code> except <code>register.tsx</code> imports nothing from the engine, so the same views and filters can run over a Codex rollout file once a loader produces the same <code>{ role, text, toolUses, toolResults }</code> shape.</p>
+  <p class="small">Every file under <code>hooks/</code> except <code>register.tsx</code> and <code>history-store.ts</code> (which saves and loads the compaction history through the engine's files) imports nothing from the engine, so the same views and filters can run over a Codex rollout file once a loader produces the same <code>{ role, text, toolUses, toolResults }</code> shape.</p>
 </section>
 
 <section id="install">
   <h2>Where it lives</h2>
   <ul class="plain-list">
-    <li>Source folder: <code>~/dev/scripts/shared/claude-mods/clean-output/</code> in the <code>JakeIwen/scripts</code> checkout. <code>.claude-plugin/plugin.json</code> names it; <code>hooks/hooks.json</code> points at <code>register.tsx</code>; <code>types/index.d.ts</code> declares the three state values: what the pane shows, the origin of each submitted prompt, and the pane's scroll window.</li>
+    <li>Source folder: <code>~/dev/scripts/shared/claude-mods/clean-output/</code> in the <code>JakeIwen/scripts</code> checkout. <code>.claude-plugin/plugin.json</code> names it; <code>hooks/hooks.json</code> points at <code>register.tsx</code>; <code>types/index.d.ts</code> declares the five state values: what the view shows, the options it was built from (empty once it closes), the origin of each submitted prompt, the pane's scroll window, and where the view is drawn (the pane or the fullscreen band).</li>
     <li>Loaded from <code>~/.claude/settings.json</code>: <code>"env": { "CLAUDE_CODE_PLUGIN_DIRS": "~/dev/scripts/shared/claude-mods/clean-output" }</code>. A second mod joins the value with <code>:</code>.</li>
     <li>Modules: <code>prompt-kinds.ts</code> sorts transcript rows into your prompts, slash commands and injected messages; <code>exchanges.ts</code> and <code>turn-endings.ts</code> build the two views; <code>clean-view.ts</code> holds the pane sections, copy text, drawing budget, where the pane opens and the rows line.</li>
     <li>Interactive sessions watch the folder: a save reloads the module when the folder goes quiet. <code>/reload-plugins</code> forces it.</li>
@@ -253,7 +253,7 @@ claude plugin test .</code></pre></div>
     <li>The mod records where each prompt came from as it is submitted. Rows from before it loaded are sorted by text markers; a scheduled wake-up from that time has no marker and counts as one of your prompts, splitting the exchange.</li>
     <li>One drawing holds 100,000 characters of markdown. The pane keeps about 90,000 and leaves out the oldest exchanges past that; the header row says how many, and <code>copy</code> still copies all of them.</li>
     <li>The rows line lives in the band above the prompt, which surveys also use; while one is up the line steps aside. It shows only when the content is taller than the pane.</li>
-    <li>An inline pane takes about a third of the screen unless you drag or key it taller; the size you set is kept for the session. The dock is used only in the fullscreen layout.</li>
+    <li>An inline pane takes about a third of the screen unless you drag or key it taller; the size you set is kept for the session. The mod never uses the fullscreen dock: in that layout it draws in the band above the prompt.</li>
     <li>Copy goes through Claude Code's clipboard path. Over plain SSH without OSC 52 support the command reports <code>no-clipboard</code>.</li>
     <li>The plain copy reads markdown line by line: fences, headings, lists, tables, quotes and inline marks. Nested lists keep their indent; HTML in a reply is copied as written.</li>
     <li>Codex has no plugin surface that draws in its terminal, so its version is a shell command rather than a pane (<a href="#codex">Codex</a>).</li>
@@ -269,7 +269,8 @@ claude plugin test .</code></pre></div>
     <tr><td><code>clean: copy failed (no-clipboard)</code></td><td>The terminal refused the clipboard write. In iTerm2, allow clipboard access in Preferences › General › Selection.</td></tr>
     <tr><td>A dim line names <code>clean-output</code> and a refused hook</td><td>The API changed under a Claude Code update. Run <code>claude plugin validate .</code> in the mod folder; the message names the call.</td></tr>
     <tr><td>One exchange shows up as two</td><td>A wake-up or message from before the mod loaded was counted as your prompt. Prompts submitted after it loaded are sorted exactly; use <code>/clean 2</code> for that session.</td></tr>
-    <tr><td>Esc stopped the turn and the pane stayed</td><td>You had typed at the prompt since the pane last held the keyboard, so Esc belonged to the turn. Press ctrl+x tab, then Esc. Sending a prompt hands the keys back to the pane on its own.</td></tr>
+    <tr><td>Esc stopped the turn and the pane stayed</td><td>The prompt box held text, so the pane could not take the keyboard back and Esc belonged to the turn. Press ctrl+x tab, then Esc. In the fullscreen band this is always so: the band never holds the keys.</td></tr>
+    <tr><td>The pane closed when I sent a prompt</td><td>By design: an open pane could not keep Esc from stopping the new turn. Run <code>/clean</code> again; it opens on the newest reply.</td></tr>
     <tr><td>The pane opens at the top or the very bottom, not at the newest reply</td><td>The pane draws a moment after it opens, and the mod retries for under a second before falling back to the end. Press Home, End or PgUp to move; the rows line shows where you are.</td></tr>
     <tr><td><code>codexclean: no Codex session started in …</code></td><td>No session file names this folder as its start. Pass <code>--session &lt;id&gt;</code> (the id is in Codex's footer), or run it from the session's folder.</td></tr>
     <tr><td><code>codexclean</code> shows old behaviour after a change</td><td>The installed build doesn't follow the checkout. Run <code>zsh ~/dev/scripts/shared/claude-mods/clean-output/codex/deploy.zsh</code>.</td></tr>
