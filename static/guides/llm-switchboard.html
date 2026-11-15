@@ -37,7 +37,7 @@
   <dt>Open</dt><dd>Use the picker's address over Tailscale. The page is at <code>/</code>; old <code>/next/</code> links redirect there. There is no login: anyone on the tailnet who can reach the service can use it.</dd>
   <dt>Kind</dt><dd>A Pi user service with a tmux supervisor, a FastAPI backend, a React + Mantine page and a CLI. The Mac pushes its own session list while awake.</dd>
   <dt>Source</dt><dd><a href="https://github.com/JakeIwen/llm-switchboard">JakeIwen/llm-switchboard</a> · checkout <code>~/dev/llm-switchboard</code>.</dd>
-  <dt>Updated</dt><dd>2026-10-27</dd>
+  <dt>Updated</dt><dd>2026-11-14</dd>
 </dl>
 
 <section id="page">
@@ -205,7 +205,7 @@
   <h2>New session</h2>
   <p>Choose <strong>New</strong> in the header, then <strong>Tool</strong> (if Codex is enabled and available), <strong>Folder</strong> and <strong>Name</strong>. Codex also requires <strong>First message</strong>. Choose <strong>Create</strong>. These are Pi sessions, even when you were viewing Mac rows.</p>
   <ul class="plain-list">
-    <li>Folders must already exist and have sessions. Claude also requires a folder Claude Code already trusts in <code>~/.claude.json</code>; home itself is not allowed because it would wait at a trust prompt. Codex can use an existing home folder. The form explains unavailable folders.</li>
+    <li>Folders must already exist and have sessions. Claude also requires a folder Claude Code already trusts in <code>~/.claude.json</code>; home itself is not allowed because it would wait at a trust prompt. Codex can use an existing home folder. The form sums up unavailable folders by reason; <strong>Which folders?</strong> lists them. Deleted folders aren't listed.</li>
     <li>Claude starts through <code>claudepd --session-id … --name …</code> with Remote Control and keep-running on. <strong>New</strong> lasts until it writes a transcript; then watch <strong>Starting</strong> and <strong>Remote Control on</strong>. A ready toast offers <strong>Open in Claude</strong>; a problem toast offers <strong>Details</strong>. If notifications are configured, one also announces readiness or attention.</li>
     <li>Codex starts on First message immediately with approval policy <code>never</code>; nobody needs to approve the turn. It saves a session only after receiving a message. Watch <strong>Working</strong>; no readiness notification is sent.</li>
   </ul>
