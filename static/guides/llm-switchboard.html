@@ -37,7 +37,7 @@
   <dt>Open</dt><dd>Use the picker's address over Tailscale. The page is at <code>/</code>; old <code>/next/</code> links redirect there. There is no login: anyone on the tailnet who can reach the service can use it.</dd>
   <dt>Kind</dt><dd>A Pi user service with a tmux supervisor, a FastAPI backend, a React + Mantine page and a CLI. The Mac pushes its own session list while awake.</dd>
   <dt>Source</dt><dd><a href="https://github.com/JakeIwen/llm-switchboard">JakeIwen/llm-switchboard</a> · checkout <code>~/dev/llm-switchboard</code>.</dd>
-  <dt>Updated</dt><dd>2026-11-14</dd>
+  <dt>Updated</dt><dd>2026-11-16</dd>
 </dl>
 
 <section id="page">
@@ -95,7 +95,7 @@
   <div class="table-wrap"><table class="stack"><thead><tr><th>Pill</th><th>Meaning</th></tr></thead><tbody>
     <tr><td class="lead-cell">Remote Control on <small><code>running</code></small></td><td data-label="Meaning">Window up; Claude Code shows an active Remote Control indicator, including a bare <code>/rc</code> while working.</td></tr>
     <tr><td class="lead-cell">Starting <small><code>starting</code></small></td><td data-label="Meaning">Launched less than 45 seconds ago, or Remote Control is connecting or reconnecting.</td></tr>
-    <tr><td class="lead-cell">Needs attention <small><code>attention</code></small></td><td data-label="Meaning">A blocking prompt, a failed connection, or no Remote Control indicator after 45 seconds. Read <strong>Terminal screen</strong>.</td></tr>
+    <tr><td class="lead-cell">Needs attention <small><code>attention</code></small></td><td data-label="Meaning">A blocking prompt, a failed connection, or no Remote Control indicator after 45 seconds. Read <strong>Terminal screen</strong>. Without Remote Control and with no prompt to answer, the supervisor restarts the session itself after 10 minutes, then after 20, 40 and every 60 minutes while it stays off; it waits while a turn is running, a terminal is attached to the window, or another process has the session open.</td></tr>
     <tr><td class="lead-cell">Waiting: open elsewhere <small><code>elsewhere</code></small></td><td data-label="Meaning">Another Claude process owns this session. It starts when that process exits.</td></tr>
     <tr><td class="lead-cell">Waiting for network <small><code>offline</code></small></td><td data-label="Meaning">The API is unreachable. Launch waits for connectivity.</td></tr>
     <tr><td class="lead-cell">Exited, relaunching <small><code>backoff</code></small></td><td data-label="Meaning">A relaunch is scheduled. Expand for the last exit status, runtime and launch count.</td></tr>
@@ -293,7 +293,7 @@ llm-switchboard index [--quiet]   # --quiet: print only if something changed
 llm-switchboard settings
 llm-switchboard settings set folders.depth 3
 llm-switchboard settings set folders.hidden "~/private,~/archive"
-llm-switchboard settings set claude_command claude
+llm-switchboard settings set claude_command claudepd
 llm-switchboard stop-all          # kills the dedicated tmux server
 journalctl --user -u llm-switchboard -f</code></pre></div>
   <p><code>search -B N</code> / <code>--before N</code> and <code>-A N</code> / <code>--after N</code> show that many lines before and after each matching line in the latest matching prompt or reply, not neighboring messages. Counts are non-negative; an omitted side is zero. Overlapping or adjacent windows merge, with a <code>--</code> line between separate groups. Long lines show a 300-character window with <code>…</code> on cut sides, keeping a matching term visible. If no line contains the query text (for example, an accent-insensitive index match), the ordinary excerpt is used. Either flag adds a <code>context</code> string to each JSON result; plain output prints those lines instead of the excerpt. Without the flags, output is unchanged. <code>--session</code> ignores them.</p>
@@ -317,7 +317,7 @@ journalctl --user -u llm-switchboard -f</code></pre></div>
   <div class="table-wrap"><table class="stack"><thead><tr><th>Symptom</th><th>Check or fix</th></tr></thead><tbody>
     <tr><td class="lead-cell">The page will not load</td><td data-label="Check or fix">Connect over Tailscale and use the picker's address, not a LAN address. On the Pi run <code>systemctl --user status llm-switchboard</code>, <code>journalctl --user -u llm-switchboard -n 50</code> and <code>tailscale status</code>. “not listening on Tailscale yet” means its Tailscale interface is unavailable.</td></tr>
     <tr><td class="lead-cell">“Can't reach the service”</td><td data-label="Check or fix">The last list is retained; it is not live status. Check connectivity and service logs, then return to the tab to refresh.</td></tr>
-    <tr><td class="lead-cell">Needs attention</td><td data-label="Check or fix">Open Terminal screen. Answer a trust prompt through <code>llm-switchboard attach &lt;id&gt;</code> in a Pi shell. A failed Remote Control connection often clears with Restart.</td></tr>
+    <tr><td class="lead-cell">Needs attention</td><td data-label="Check or fix">Open Terminal screen. Answer a trust prompt through <code>llm-switchboard attach &lt;id&gt;</code> in a Pi shell. Missing or failed Remote Control usually clears with Restart (the supervisor also tries it on its own while the session is idle). Quit any copy of the session opened without <code>claudepd</code>: one resumed through the model gateway may knock Remote Control off.</td></tr>
     <tr><td class="lead-cell">Waiting: open elsewhere</td><td data-label="Check or fix">Close the Claude process that owns it. <code>is:elsewhere</code> finds those rows. The supervisor starts it after that process exits.</td></tr>
     <tr><td class="lead-cell">Repeated Exited, relaunching or Error</td><td data-label="Check or fix">Expand for exit status, state detail and Terminal screen; check service logs. An unreachable API waits for network; a missing or unresumable transcript needs repair rather than repeated restarts.</td></tr>
     <tr><td class="lead-cell">Not in the Claude app</td><td data-label="Check or fix">Check Keep running and Remote Control on. RC Name… takes effect at next launch, so Restart after saving if you need it now.</td></tr>
